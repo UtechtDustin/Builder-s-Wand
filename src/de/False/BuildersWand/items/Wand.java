@@ -180,6 +180,11 @@ public class Wand implements Listener
         Material blockMaterial = block.getType();
         ItemStack[] itemStacks = inventory.getContents();
 
+        if(player.getGameMode() == GameMode.CREATIVE)
+        {
+            return Integer.MAX_VALUE;
+        }
+
         for (ItemStack itemStack : itemStacks)
         {
             if (itemStack == null)
