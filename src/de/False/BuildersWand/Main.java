@@ -47,7 +47,7 @@ public class Main extends JavaPlugin
 
     private void checkForUpdate()
     {
-        SpigetUpdate updater = new SpigetUpdate(this, 12345);
+        SpigetUpdate updater = new SpigetUpdate(this, 51577);
         updater.setVersionComparator(VersionComparator.EQUAL);
         updater.checkForUpdate(new UpdateCallback() {
             @Override
