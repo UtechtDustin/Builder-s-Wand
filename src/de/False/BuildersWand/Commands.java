@@ -50,7 +50,7 @@ public class Commands implements CommandExecutor
 
     private void reloadCommand(Player player)
     {
-        if(!player.hasPermission("buildsWand.reload"))
+        if(!player.hasPermission("buildersWand.reload"))
         {
             MessageUtil.sendMessage(player, "noPermissions");
             return;
@@ -62,7 +62,7 @@ public class Commands implements CommandExecutor
 
     private void giveCommand(Player player, String[] args)
     {
-        if(!player.hasPermission("buildsWand.give"))
+        if(!player.hasPermission("buildersWand.give"))
         {
             MessageUtil.sendMessage(player, "noPermissions");
             return;
