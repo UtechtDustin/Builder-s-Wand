@@ -30,7 +30,6 @@ public class MessageUtil
 
     private static HashMap<String, String> getMessagesForLocale(String locale)
     {
-        System.out.println(locale);
         if(Locales.messages.containsKey(locale))
         {
             return Locales.messages.get(locale);
