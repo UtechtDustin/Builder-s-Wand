@@ -1,6 +1,7 @@
 package de.False.BuildersWand.utilities;
 
 import de.False.BuildersWand.ConfigurationFiles.Locales;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -8,10 +9,11 @@ import java.util.HashMap;
 public class MessageUtil
 {
     private static String defaultLocale = "en_us";
+    private static String preFix = "&bBuildersWand » &7";
 
     public static void sendMessage(Player player, String messagePath)
     {
-        player.sendMessage(getMessage(messagePath, player));
+        player.sendMessage(colorize(preFix + getMessage(messagePath, player)));
     }
 
     private static String getMessage(String messagePath, Player player)
@@ -25,7 +27,7 @@ public class MessageUtil
             return messages.get(messagePath);
         }
 
-        return messagePath;
+        return preFix + messagePath;
     }
 
     private static HashMap<String, String> getMessagesForLocale(String locale)
@@ -36,6 +38,11 @@ public class MessageUtil
         }
 
         return Locales.messages.get(defaultLocale);
+    }
+
+    public static String colorize(String string)
+    {
+        return ChatColor.translateAlternateColorCodes('&', string);
     }
 
     private static String getPlayerLocale(Player player)

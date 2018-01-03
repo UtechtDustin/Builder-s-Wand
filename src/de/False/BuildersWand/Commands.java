@@ -27,40 +27,65 @@ public class Commands implements CommandExecutor
         }
 
         Player player = (Player) sender;
-
         if(args.length < 1)
         {
-            MessageUtil.sendMessage(player,"/bw reload");
+            helpCommand(player);
             return true;
         }
 
-        if(args[0].equals("reload") && player.hasPermission("buildsWand.reload"))
+        switch (args[0])
         {
-            MessageUtil.sendMessage(player,"reload");
-            config.load();
-            return true;
-        }
-        else if(args[0].equals("give"))
-        {
-            if(args.length == 2 && player.hasPermission("buildsWand.give"))
-            {
-                Player destPlayer = Bukkit.getPlayer(args[1]);
-
-                if(!(destPlayer instanceof Player))
-                {
-                    MessageUtil.sendMessage(player,"playerNotFound");
-                    return true;
-                }
-
-                destPlayer.getInventory().addItem(Wand.getRecipeResult());
-                return true;
-            }
-
-            player.getInventory().addItem(Wand.getRecipeResult());
-
-            return true;
+            case "reload":
+                reloadCommand(player);
+                break;
+            case "give":
+                giveCommand(player, args);
+                break;
+            default:
+                helpCommand(player);
         }
 
         return true;
+    }
+
+    private void reloadCommand(Player player)
+    {
+        if(!player.hasPermission("buildsWand.reload"))
+        {
+            MessageUtil.sendMessage(player, "noPermissions");
+            return;
+        }
+
+        MessageUtil.sendMessage(player,"reload");
+        config.load();
+    }
+
+    private void giveCommand(Player player, String[] args)
+    {
+        if(!player.hasPermission("buildsWand.give"))
+        {
+            MessageUtil.sendMessage(player, "noPermissions");
+            return;
+        }
+
+        if(args.length == 1)
+        {
+            player.getInventory().addItem(Wand.getRecipeResult());
+            return;
+        }
+        Player destPlayer = Bukkit.getPlayer(args[1]);
+
+        if(destPlayer == null)
+        {
+            MessageUtil.sendMessage(player,"playerNotFound");
+            return;
+        }
+
+        destPlayer.getInventory().addItem(Wand.getRecipeResult());
+    }
+
+    private void helpCommand(Player player)
+    {
+        MessageUtil.sendMessage(player,"/bw reload");
     }
 }

@@ -1,2 +1,3 @@
 reload: Die Konfig wurde neugeladen.
 playerNotFound: Der Spieler konnte nicht gefunden werden.
+noPermissions: Du besitzt zu wenige Rechte um dies zu tun.
