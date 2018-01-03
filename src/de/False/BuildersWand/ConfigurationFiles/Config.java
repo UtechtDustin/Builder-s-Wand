@@ -56,8 +56,13 @@ public class Config
     public void load()
     {
         config = YamlConfiguration.loadConfiguration(file);
+
+        addDefaults();
+
         name = MessageUtil.colorize(config.getString("wand.name"));
         material = Material.valueOf(config.getString("wand.material"));
+        maxSize = config.getInt("wand.maxSize");
+        consumeItems = config.getBoolean("wand.consumeItems");
 
         craftingEnabled = config.getBoolean("crafting.enabled");
         craftingShapeless = config.getBoolean("crafting.shapeless");
@@ -72,9 +77,11 @@ public class Config
         particleEnabled = config.getBoolean("particles.enabled");
         particle = Particle.valueOf(config.getString("particles.type"));
         particleCount = config.getInt("particles.count");
+    }
 
-        consumeItems = config.getBoolean("other.consumeItems");
-        maxSize = config.getInt("other.maxSize");
+    private void addDefaults()
+    {
+        config.addDefault("wand.name", );
     }
 
     public void copyDefaultLocales()

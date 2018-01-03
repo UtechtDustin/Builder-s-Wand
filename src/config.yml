@@ -1,9 +1,18 @@
-################################
-#      Item information        #
-################################
+#################################################################################
+#                               Item information                                #
+#                                                                               #
+#   consumeItems:                                                               #
+#     Should the placed blocks consumed ?                                       #
+#                                                                               #
+#   maxSize:                                                                    #
+#     The "radius" of the builders wand.                                        #
+#                                                                               #
+#################################################################################
 wand:
   name: "&3Builders Wand"
   material: "BLAZE_ROD"
+  maxSize: 8
+  consumeItems: true
 
 ################################
 #    Custom crafting recipe    #
@@ -30,21 +39,13 @@ particles:
 #################################################################################
 #                                 Other options                                 #
 #                                                                               #
-#   consumeItems:                                                               #
-#     Should the placed blocks consumed ?                                       #
-#                                                                               #
 #   usePlayerLocale:                                                            #
 #     Use the configured locale (in minecraft) of the player?                   #
 #                                                                               #
 #   locale:                                                                     #
 #     The locale which will used when usePlayerLocale is false.                 #
 #                                                                               #
-#   maxSize:                                                                    #
-#     The "radius" of the builders wand.                                        #
-#                                                                               #
 #################################################################################
 other:
-  consumeItems: true
   usePlayerLocale: true
   locale: "en_us"
-  maxSize: 8

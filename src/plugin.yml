@@ -4,5 +4,5 @@ version: 1.0
 main: de.False.BuildersWand.Main
 commands:
   bw:
-    description: Reloads the config
+    description: The generall bw command.
     usage: /bw
