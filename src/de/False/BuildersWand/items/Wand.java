@@ -247,7 +247,7 @@ public class Wand implements Listener
         List<Block> selection = blockSelection.get(startBlock);
         List<Block> replacementsList = tmpReplacements.get(startBlock);
 
-        if (startLocation.distance(checkLocation) >= 8 || !(startMaterial.equals(blockToCheckMaterial)) || maxLocations <= selection.size() || blockToCheckData != startBlockData || selection.contains(blockToCheck) || !relativeBlock.equals(Material.AIR))
+        if (startLocation.distance(checkLocation) >= config.getMaxSize() || !(startMaterial.equals(blockToCheckMaterial)) || maxLocations <= selection.size() || blockToCheckData != startBlockData || selection.contains(blockToCheck) || !relativeBlock.equals(Material.AIR))
         {
             return;
         }

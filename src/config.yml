@@ -39,8 +39,12 @@ particles:
 #   locale:                                                                     #
 #     The locale which will used when usePlayerLocale is false.                 #
 #                                                                               #
+#   maxSize:                                                                    #
+#     The "radius" of the builders wand.                                        #
+#                                                                               #
 #################################################################################
 other:
   consumeItems: true
   usePlayerLocale: true
   locale: "en_us"
+  maxSize: 8

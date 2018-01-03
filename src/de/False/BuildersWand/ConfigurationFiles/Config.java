@@ -32,6 +32,7 @@ public class Config
     private int particleCount;
 
     private boolean consumeItems;
+    private int maxSize;
 
     public Config(Main plugin)
     {
@@ -73,6 +74,7 @@ public class Config
         particleCount = config.getInt("particles.count");
 
         consumeItems = config.getBoolean("other.consumeItems");
+        maxSize = config.getInt("other.maxSize");
     }
 
     public void copyDefaultLocales()
@@ -178,5 +180,15 @@ public class Config
     public void setConsumeItems(boolean consumeItems)
     {
         this.consumeItems = consumeItems;
+    }
+
+    public int getMaxSize()
+    {
+        return maxSize;
+    }
+
+    public void setMaxSize(int maxSize)
+    {
+        this.maxSize = maxSize;
     }
 }
