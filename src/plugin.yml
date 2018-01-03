@@ -1,0 +1,8 @@
+name: BuildersWand
+author: Wythe
+version: 1.0
+main: de.False.BuildersWand.Main
+commands:
+  bw:
+    description: Reloads the config
+    usage: /bw
