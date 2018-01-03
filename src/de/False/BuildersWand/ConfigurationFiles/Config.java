@@ -1,6 +1,7 @@
 package de.False.BuildersWand.ConfigurationFiles;
 
 import de.False.BuildersWand.Main;
+import de.False.BuildersWand.utilities.MessageUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -54,7 +55,7 @@ public class Config
     public void load()
     {
         config = YamlConfiguration.loadConfiguration(file);
-        name = ChatColor.translateAlternateColorCodes('&', config.getString("wand.name"));
+        name = MessageUtil.colorize(config.getString("wand.name"));
         material = Material.valueOf(config.getString("wand.material"));
 
         craftingEnabled = config.getBoolean("crafting.enabled");
