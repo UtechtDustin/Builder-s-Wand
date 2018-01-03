@@ -86,6 +86,11 @@ public class Commands implements CommandExecutor
 
     private void helpCommand(Player player)
     {
-        MessageUtil.sendMessage(player,"/bw reload");
+        MessageUtil.sendSeperator(player);
+        MessageUtil.sendRawMessage(player,"             &b&lBuildersWand help");
+        player.sendMessage("");
+        MessageUtil.sendRawMessage(player,"&e&l»&r&e /bw reload &7- Reloads the config file.");
+        MessageUtil.sendRawMessage(player,"&e&l»&r&e /bw give <player> &7- Give the builderswand to a player.");
+        MessageUtil.sendSeperator(player);
     }
 }

@@ -16,6 +16,11 @@ public class MessageUtil
         player.sendMessage(colorize(preFix + getMessage(messagePath, player)));
     }
 
+    public static void sendRawMessage(Player player, String messagePath)
+    {
+        player.sendMessage(colorize(getMessage(messagePath, player)));
+    }
+
     private static String getMessage(String messagePath, Player player)
     {
         String locale = getPlayerLocale(player);
@@ -27,7 +32,7 @@ public class MessageUtil
             return messages.get(messagePath);
         }
 
-        return preFix + messagePath;
+        return messagePath;
     }
 
     private static HashMap<String, String> getMessagesForLocale(String locale)
@@ -53,5 +58,12 @@ public class MessageUtil
     public static String getText(String messagePath, Player player)
     {
         return getMessage(messagePath, player);
+    }
+
+    public static void sendSeperator(Player player)
+    {
+        player.sendMessage("");
+        player.sendMessage("");
+        player.sendMessage("");
     }
 }
