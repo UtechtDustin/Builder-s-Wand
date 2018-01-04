@@ -18,7 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.inventivetalent.update.spiget.UpdateCallback;
 import org.inventivetalent.update.spiget.comparator.VersionComparator;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,17 +25,12 @@ import java.util.concurrent.Callable;
 
 public class Main extends JavaPlugin
 {
-    private boolean isFirstStartup = false;
     private Locales locales = new Locales(this);
     private Config config = new Config(this);
 
     @Override
     public void onEnable()
     {
-        if (!new File(this.getDataFolder(), "config.yml").exists()) {
-            isFirstStartup = true;
-        }
-
         loadConfigFiles();
         registerEvents();
         registerCommands();
@@ -94,12 +88,8 @@ public class Main extends JavaPlugin
 
     private void loadConfigFiles()
     {
-        if(isFirstStartup)
-        {
-            config.copyDefaultLocales();
-            locales.copyDefaultLocales();
-        }
-
+        config.copyDefaultConfig();
+        locales.copyDefaultLocales();
         locales.load();
         config.load();
     }

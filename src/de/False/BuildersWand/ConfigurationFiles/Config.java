@@ -100,7 +100,7 @@ public class Config
         save();
     }
 
-    public void copyDefaultLocales()
+    public void copyDefaultConfig()
     {
         plugin.saveResource("config.yml", false);
     }
