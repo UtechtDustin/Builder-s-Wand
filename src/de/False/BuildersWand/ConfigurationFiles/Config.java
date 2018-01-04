@@ -2,7 +2,6 @@ package de.False.BuildersWand.ConfigurationFiles;
 
 import de.False.BuildersWand.Main;
 import de.False.BuildersWand.utilities.MessageUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
@@ -10,6 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,7 +56,6 @@ public class Config
     public void load()
     {
         config = YamlConfiguration.loadConfiguration(file);
-
         addDefaults();
 
         name = MessageUtil.colorize(config.getString("wand.name"));
@@ -81,7 +80,24 @@ public class Config
 
     private void addDefaults()
     {
-        config.addDefault("wand.name", );
+        config.addDefault("wand.name", "&3Builders Wand");
+        config.addDefault("wand.material", "BLAZE_ROD");
+        config.addDefault("wand.maxSize", 8);
+        config.addDefault("wand.consumeItems", true);
+
+        List<String> recipeList = new ArrayList<>();
+        recipeList.add("xxd");
+        recipeList.add("xbx");
+        recipeList.add("bxx");
+        config.addDefault("crafting.enabled", true);
+        config.addDefault("crafting.shapeless", true);
+        config.addDefault("crafting.recipe", recipeList);
+
+        config.addDefault("particles.enabled", true);
+        config.addDefault("particles.type", "REDSTONE");
+        config.addDefault("particles.count", 3);
+
+        save();
     }
 
     public void copyDefaultLocales()
