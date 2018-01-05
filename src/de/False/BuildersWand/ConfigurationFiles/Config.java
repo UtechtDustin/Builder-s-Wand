@@ -38,6 +38,10 @@ public class Config
     {
         this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), "config.yml");
+
+        if (!new File(plugin.getDataFolder(), "config.yml").exists()) {
+            plugin.saveResource("config.yml", false);
+        }
     }
 
     public void save()
@@ -80,6 +84,7 @@ public class Config
 
     private void addDefaults()
     {
+        config.options().copyDefaults(true);
         config.addDefault("wand.name", "&3Builders Wand");
         config.addDefault("wand.material", "BLAZE_ROD");
         config.addDefault("wand.maxSize", 8);
@@ -89,6 +94,15 @@ public class Config
         recipeList.add("xxd");
         recipeList.add("xbx");
         recipeList.add("bxx");
+
+        ConfigurationSection configurationSection = config.getConfigurationSection("crafting.ingredient");
+
+        if(configurationSection == null || configurationSection.getKeys(false).size() <= 0)
+        {
+            config.addDefault("crafting.ingredient.d", "DIAMOND");
+            config.addDefault("crafting.ingredient.b", "BLAZE_ROD");
+        }
+
         config.addDefault("crafting.enabled", true);
         config.addDefault("crafting.shapeless", true);
         config.addDefault("crafting.recipe", recipeList);

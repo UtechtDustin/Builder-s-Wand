@@ -88,8 +88,6 @@ public class Main extends JavaPlugin
 
     private void loadConfigFiles()
     {
-        config.copyDefaultConfig();
-        locales.copyDefaultLocales();
         locales.load();
         config.load();
     }
