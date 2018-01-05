@@ -55,7 +55,7 @@ public class Wand implements Listener
                 {
                     ItemStack mainHand = player.getInventory().getItemInMainHand();
                     Material mainHandMaterial = mainHand.getType();
-                    if (mainHandMaterial == Material.AIR)
+                    if (mainHandMaterial != ITEM_MATERIAL)
                     {
                         continue;
                     }
@@ -64,7 +64,7 @@ public class Wand implements Listener
                     String mainHandDisplayName = mainHandItemMeta.getDisplayName();
 
                     if (
-                            !mainHandMaterial.equals(ITEM_MATERIAL)
+                                    mainHandDisplayName == null
                                     || !mainHandDisplayName.equals(ITEM_NAME)
                                     || player.getLocation().add(0,1,0).getBlock().getType() != Material.AIR
                             )

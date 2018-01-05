@@ -1,22 +1,8 @@
-#################################################################################
-#                               Item information                                #
-#                                                                               #
-#   consumeItems:                                                               #
-#     Should the placed blocks consumed ?                                       #
-#                                                                               #
-#   maxSize:                                                                    #
-#     The "radius" of the builders wand.                                        #
-#                                                                               #
-#################################################################################
 wand:
   name: "&3Builders Wand"
   material: "BLAZE_ROD"
   maxSize: 8
   consumeItems: true
-
-################################
-#    Custom crafting recipe    #
-################################
 crafting:
   enabled: true
   shapeless: true
@@ -27,25 +13,10 @@ crafting:
   ingredient:
     d: "DIAMOND"
     b: "BLAZE_ROD"
-
-################################
-#           Particles          #
-################################
 particles:
   enabled: true
   type: "REDSTONE"
   count: 3
-
-#################################################################################
-#                                 Other options                                 #
-#                                                                               #
-#   usePlayerLocale:                                                            #
-#     Use the configured locale (in minecraft) of the player?                   #
-#                                                                               #
-#   locale:                                                                     #
-#     The locale which will used when usePlayerLocale is false.                 #
-#                                                                               #
-#################################################################################
 other:
   usePlayerLocale: true
   locale: "en_us"
