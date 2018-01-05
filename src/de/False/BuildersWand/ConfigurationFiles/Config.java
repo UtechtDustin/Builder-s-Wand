@@ -114,11 +114,6 @@ public class Config
         save();
     }
 
-    public void copyDefaultConfig()
-    {
-        plugin.saveResource("config.yml", false);
-    }
-
     public String getName()
     {
         return name;

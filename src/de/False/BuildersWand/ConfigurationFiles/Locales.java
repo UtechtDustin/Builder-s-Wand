@@ -8,20 +8,44 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class Locales
 {
     private Main plugin;
     public static HashMap<String, HashMap<String, String>> messages = new HashMap<>();
+    private HashMap<String, HashMap<String, String>> defaults = new HashMap<>();
 
     public Locales(Main plugin)
     {
         this.plugin = plugin;
+
+        setDefaults();
     }
 
     public void load()
     {
+        for (Map.Entry<String, HashMap<String, String>> entry: defaults.entrySet())
+        {
+            String language = entry.getKey();
+            HashMap<String, String> messages = entry.getValue();
+            String filePath = "locales/" + language + ".yml";
+            if (!new File(plugin.getDataFolder(), filePath).exists()) {
+                plugin.saveResource(filePath, false);
+            }
+
+            File localeFile = new File(plugin.getDataFolder(), filePath);
+            FileConfiguration localeConfig = YamlConfiguration.loadConfiguration(localeFile);
+            for (Map.Entry<String, String> messagesEntry: messages.entrySet())
+            {
+                String key = entry.getKey();
+                String message = messagesEntry.getValue();
+
+                localeConfig.addDefault(key, message);
+            }
+        }
+
         File[] files = new File(plugin.getDataFolder() + "/locales").listFiles();
         if (files == null)
         {
@@ -69,10 +93,19 @@ public class Locales
         }
     }
 
-    public void copyDefaultLocales()
+    private void setDefaults()
     {
-        String LOCALES_PATH = "locales/";
-        plugin.saveResource(LOCALES_PATH + "en_us.yml", false);
-        plugin.saveResource(LOCALES_PATH + "de_de.yml", false);
+        HashMap<String, String> en_us = new HashMap<>();
+        en_us.put("reload", "The config has been reloaded.");
+        en_us.put("playerNotFound", "The player can not be found.");
+        en_us.put("noPermissions", "You dont have enough permissions.");
+
+        HashMap<String, String> de_de = new HashMap<>();
+        de_de.put("reload", "Die Konfig wurde neugeladen.");
+        de_de.put("playerNotFound", "Der Spieler konnte nicht gefunden werden.");
+        de_de.put("noPermissions", "Du besitzt zu wenige Rechte um dies zu tun.");
+
+        defaults.put("en_us", en_us);
+        defaults.put("de_de", de_de);
     }
 }
