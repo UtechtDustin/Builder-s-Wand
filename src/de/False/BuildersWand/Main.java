@@ -42,7 +42,7 @@ public class Main extends JavaPlugin
     private void checkForUpdate()
     {
         SpigetUpdate updater = new SpigetUpdate(this, 51577);
-        updater.setVersionComparator(VersionComparator.SEM_VER_SNAPSHOT);
+        updater.setVersionComparator(VersionComparator.SEM_VER);
         updater.checkForUpdate(new UpdateCallback() {
             @Override
             public void updateAvailable(String newVersion, String downloadUrl, boolean hasDirectDownload) {

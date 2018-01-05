@@ -48,6 +48,8 @@ public abstract class VersionComparator {
 		public boolean isNewer(String currentVersion, String checkVersion) {
 			currentVersion = currentVersion.replace(".", "");
 			checkVersion = checkVersion.replace(".", "");
+			currentVersion = currentVersion.replace("v", "");
+			checkVersion = checkVersion.replace("v", "");
 
 			try {
 				int current = Integer.parseInt(currentVersion);
