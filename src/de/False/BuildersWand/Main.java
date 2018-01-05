@@ -47,8 +47,7 @@ public class Main extends JavaPlugin
             @Override
             public void updateAvailable(String newVersion, String downloadUrl, boolean hasDirectDownload) {
                 if (hasDirectDownload) {
-                    if (updater.downloadUpdate()) {
-                    } else {
+                    if (!updater.downloadUpdate()) {
                         getLogger().warning("Update download failed, reason is " + updater.getFailReason());
                     }
                 }
