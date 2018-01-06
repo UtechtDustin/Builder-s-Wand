@@ -1,13 +1,13 @@
-package de.False.BuildersWand.NMS.v_1_8;
+package de.False.BuildersWand.NMS.v_1_9;
 
 import de.False.BuildersWand.NMS.NMS;
-import org.bukkit.Location;
 import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class v_1_8_R1 implements NMS
+public class v_1_9_R1 implements NMS
 {
     @Override
     public void spawnParticle(String particle, Location location){
