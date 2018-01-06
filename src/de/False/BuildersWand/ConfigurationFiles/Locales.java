@@ -112,7 +112,13 @@ public class Locales
         de_de.put("playerNotFound", "Der Spieler konnte nicht gefunden werden.");
         de_de.put("noPermissions", "Du besitzt zu wenige Rechte um dies zu tun.");
 
+        HashMap<String, String> es_es = new HashMap<>();
+        es_es.put("reload", "La configuracion ha sido recargada.");
+        es_es.put("playerNotFound", "No se pudo encontrar al jugador.");
+        es_es.put("noPermissions", "No tienes los permisos suficientes.");
+
         defaults.put("en_us", en_us);
         defaults.put("de_de", de_de);
+        defaults.put("es_es", es_es);
     }
 }
