@@ -229,12 +229,13 @@ public class Wand implements Listener
             }
 
             int itemAmount = inventoryItemStack.getAmount();
-            if (amount > itemAmount)
+            if (amount >= itemAmount)
             {
                 amount -= itemAmount;
-                inventoryItemStack.setAmount(0);
+                inventory.remove(inventoryItemStack);
             } else
             {
+
                 inventoryItemStack.setAmount(itemAmount - amount);
                 return;
             }
