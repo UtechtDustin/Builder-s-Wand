@@ -104,7 +104,7 @@ public class Config
         }
 
         config.addDefault("crafting.enabled", true);
-        config.addDefault("crafting.shapeless", true);
+        config.addDefault("crafting.shapeless", false);
         config.addDefault("crafting.recipe", recipeList);
 
         config.addDefault("particles.enabled", true);
