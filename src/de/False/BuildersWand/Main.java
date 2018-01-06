@@ -11,21 +11,18 @@ import de.False.BuildersWand.NMS.v_1_8.v_1_8_R2;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R3;
 import de.False.BuildersWand.NMS.v_1_9.v_1_9_R1;
 import de.False.BuildersWand.NMS.v_1_9.v_1_9_R2;
+import de.False.BuildersWand.Updater.SpigotUpdater;
 import de.False.BuildersWand.items.Wand;
 import de.False.BuildersWand.utilities.Metrics;
 import de.False.BuildersWand.utilities.ParticleUtil;
-import de.False.BuildersWand.utilities.SpigetUpdate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.inventivetalent.update.spiget.UpdateCallback;
-import org.inventivetalent.update.spiget.comparator.VersionComparator;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,27 +47,7 @@ public class Main extends JavaPlugin
         registerCommands();
         loadRecipes();
         loadMetrics();
-//        checkForUpdate();
-    }
-
-    private void checkForUpdate()
-    {
-        SpigetUpdate updater = new SpigetUpdate(this, 51577);
-        updater.setVersionComparator(VersionComparator.SEM_VER);
-        updater.checkForUpdate(new UpdateCallback() {
-            @Override
-            public void updateAvailable(String newVersion, String downloadUrl, boolean hasDirectDownload) {
-                if (hasDirectDownload) {
-                    if (!updater.downloadUpdate()) {
-                        getLogger().warning("Update download failed, reason is " + updater.getFailReason());
-                    }
-                }
-            }
-
-            @Override
-            public void upToDate() {
-            }
-        });
+        checkForUpdate(this);
     }
 
     private void loadMetrics()
@@ -163,5 +140,18 @@ public class Main extends JavaPlugin
         {
             nms.addShapedRecipe(recipeStrings, ingredients, resultItemStack);
         }
+    }
+
+    private void checkForUpdate(Main plugin) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    new SpigotUpdater(plugin, 51577);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskTimer(this, 20L, 72000L);
     }
 }
