@@ -11,16 +11,13 @@ public class v_1_8_R3 implements NMS
 {
     @Override
     public void spawnParticle(String particle, Location location){
-        float x = (float) location.getX();
-        float y = (float) location.getY();
-        float z = (float) location.getZ();
         location.getWorld().playEffect(location, Effect.valueOf(particle), 0);
     }
 
     @Override
     public ItemStack getItemInHand(Player player)
     {
-        return null;
+        return player.getItemInHand();
     }
 
     @Override
@@ -32,6 +29,6 @@ public class v_1_8_R3 implements NMS
     @Override
     public String getDefaultParticle()
     {
-        return null;
+        return Effect.COLOURED_DUST.toString();
     }
 }

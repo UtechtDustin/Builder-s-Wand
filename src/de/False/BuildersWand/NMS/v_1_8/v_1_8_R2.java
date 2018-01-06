@@ -11,9 +11,6 @@ public class v_1_8_R2 implements NMS
 {
     @Override
     public void spawnParticle(String particle, Location location){
-        float x = (float) location.getX();
-        float y = (float) location.getY();
-        float z = (float) location.getZ();
         location.getWorld().playEffect(location, Effect.valueOf(particle), 0);
     }
 
