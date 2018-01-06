@@ -7,6 +7,7 @@ import de.False.BuildersWand.NMS.v_1_8.v_1_8_R1;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R2;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R3;
 import de.False.BuildersWand.NMS.v_1_9.v_1_9_R1;
+import de.False.BuildersWand.NMS.v_1_9.v_1_9_R2;
 import de.False.BuildersWand.items.Wand;
 import de.False.BuildersWand.utilities.Metrics;
 import de.False.BuildersWand.utilities.ParticleUtil;
@@ -115,9 +116,9 @@ public class Main extends JavaPlugin
                 case "v1_9_R1":
                     nms = new v_1_9_R1();
                     break;
-//                case "v1_9_R2":
-//                    nms = new v_1_9_R2();
-//                    break;
+                case "v1_9_R2":
+                    nms = new v_1_9_R2();
+                    break;
 //                case "v1_10_R1":
 //                    nms = new v_1_10_R1();
 //                    break;
