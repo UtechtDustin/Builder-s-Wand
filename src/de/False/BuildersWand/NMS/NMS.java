@@ -3,6 +3,7 @@ package de.False.BuildersWand.NMS;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public interface NMS
@@ -11,7 +12,7 @@ public interface NMS
 
     ItemStack getItemInHand(Player player);
 
-    boolean isMainHand(PlayerInteractEvent event);
+    boolean isMainHand(EquipmentSlot equipmentSlot);
 
     String getDefaultParticle();
 }

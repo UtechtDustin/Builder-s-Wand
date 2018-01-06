@@ -1,11 +1,10 @@
 package de.False.BuildersWand.NMS.v_1_10;
 
 import de.False.BuildersWand.NMS.NMS;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public class v_1_10_R1 implements NMS
@@ -22,9 +21,9 @@ public class v_1_10_R1 implements NMS
     }
 
     @Override
-    public boolean isMainHand(PlayerInteractEvent event)
+    public boolean isMainHand(EquipmentSlot equipmentSlot)
     {
-        return false;
+        return equipmentSlot == EquipmentSlot.HAND;
     }
 
     @Override
