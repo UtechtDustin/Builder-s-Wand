@@ -20,7 +20,7 @@ public class v_1_8_R2 implements NMS
     @Override
     public ItemStack getItemInHand(Player player)
     {
-        return null;
+        return player.getItemInHand();
     }
 
     @Override
@@ -32,6 +32,6 @@ public class v_1_8_R2 implements NMS
     @Override
     public String getDefaultParticle()
     {
-        return null;
+        return Effect.COLOURED_DUST.toString();
     }
 }
