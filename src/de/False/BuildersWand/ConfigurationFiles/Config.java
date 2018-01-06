@@ -37,11 +37,8 @@ public class Config
     public Config(Main plugin)
     {
         this.plugin = plugin;
-        this.file = new File(plugin.getDataFolder(), "config.yml");
 
-        if (!new File(plugin.getDataFolder(), "config.yml").exists()) {
-            plugin.saveResource("config.yml", false);
-        }
+        this.file = new File(plugin.getDataFolder(), "config.yml");
     }
 
     public void save()

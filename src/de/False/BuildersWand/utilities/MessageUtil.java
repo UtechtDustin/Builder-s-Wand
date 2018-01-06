@@ -52,7 +52,7 @@ public class MessageUtil
 
     private static String getPlayerLocale(Player player)
     {
-        return player.getLocale();
+        return player.spigot().getLocale();
     }
 
     public static String getText(String messagePath, Player player)

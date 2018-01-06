@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -31,18 +32,24 @@ public class Locales
             String language = entry.getKey();
             HashMap<String, String> messages = entry.getValue();
             String filePath = "locales/" + language + ".yml";
-            if (!new File(plugin.getDataFolder(), filePath).exists()) {
-                plugin.saveResource(filePath, false);
-            }
-
             File localeFile = new File(plugin.getDataFolder(), filePath);
             FileConfiguration localeConfig = YamlConfiguration.loadConfiguration(localeFile);
+            localeConfig.options().copyDefaults(true);
+
             for (Map.Entry<String, String> messagesEntry: messages.entrySet())
             {
-                String key = entry.getKey();
+                String key = messagesEntry.getKey();
                 String message = messagesEntry.getValue();
 
                 localeConfig.addDefault(key, message);
+            }
+
+            try
+            {
+                localeConfig.save(localeFile);
+            } catch (IOException e)
+            {
+                e.printStackTrace();
             }
         }
 
