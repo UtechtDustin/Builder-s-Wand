@@ -1,6 +1,7 @@
 package de.False.BuildersWand.ConfigurationFiles;
 
 import de.False.BuildersWand.Main;
+import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.utilities.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -16,6 +17,7 @@ import java.util.List;
 public class Config
 {
     private Main plugin;
+    private NMS nms;
     private File file;
     private FileConfiguration config;
 
@@ -28,15 +30,16 @@ public class Config
     private HashMap<String, Material> ingredient = new HashMap<String, Material>();
 
     private boolean particleEnabled;
-    private Particle particle;
+    private String particle;
     private int particleCount;
 
     private boolean consumeItems;
     private int maxSize;
 
-    public Config(Main plugin)
+    public Config(Main plugin, NMS nms)
     {
         this.plugin = plugin;
+        this.nms = nms;
 
         this.file = new File(plugin.getDataFolder(), "config.yml");
     }
@@ -75,7 +78,7 @@ public class Config
         }
 
         particleEnabled = config.getBoolean("particles.enabled");
-        particle = Particle.valueOf(config.getString("particles.type"));
+        particle = config.getString("particles.type");
         particleCount = config.getInt("particles.count");
     }
 
@@ -101,11 +104,11 @@ public class Config
         }
 
         config.addDefault("crafting.enabled", true);
-        config.addDefault("crafting.shapeless", true);
+        config.addDefault("crafting.shapeless", false);
         config.addDefault("crafting.recipe", recipeList);
 
         config.addDefault("particles.enabled", true);
-        config.addDefault("particles.type", "REDSTONE");
+        config.addDefault("particles.type", nms.getDefaultParticle());
         config.addDefault("particles.count", 3);
 
         save();
@@ -181,12 +184,12 @@ public class Config
         this.particleEnabled = particleEnabled;
     }
 
-    public Particle getParticle()
+    public String getParticle()
     {
         return particle;
     }
 
-    public void setParticle(Particle particle)
+    public void setParticle(String particle)
     {
         this.particle = particle;
     }

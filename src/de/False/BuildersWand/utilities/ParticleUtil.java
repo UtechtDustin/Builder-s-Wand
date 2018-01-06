@@ -1,4 +1,5 @@
 package de.False.BuildersWand.utilities;
+import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.enums.ParticleShapeHidden;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -10,7 +11,14 @@ import java.util.List;
 
 public class ParticleUtil
 {
-    private static void drawLine(Particle particle, Location loc1, Location loc2, int particleAmount)
+    private NMS nms;
+
+    public ParticleUtil(NMS nms)
+    {
+        this.nms = nms;
+    }
+
+    private void drawLine(String particle, Location loc1, Location loc2, int particleAmount)
     {
         Vector loc1Vector = loc1.toVector();
         Vector loc2Vector = loc2.toVector();
@@ -26,11 +34,12 @@ public class ParticleUtil
         double zIncrement = (difference.getZ() / amount);
         for (int i = 0; i < amount; i++)
         {
-            loc1.getWorld().spawnParticle(particle, x -= xIncrement, y -= yIncrement, z -= zIncrement, 0, 128, 0, 0, 10);
+            Location location = new Location(loc1.getWorld(), x -= xIncrement, y -= yIncrement, z -= zIncrement);
+            nms.spawnParticle(particle, location);
         }
     }
 
-    public static void drawBlockOutlines(BlockFace blockFace, List<ParticleShapeHidden> shapes, Location location, Particle particle, int particleAmount)
+    public void drawBlockOutlines(BlockFace blockFace, List<ParticleShapeHidden> shapes, Location location, String particle, int particleAmount)
     {
         Location loc1Clone = location.clone();
         Location loc2Clone = location.clone();
@@ -51,7 +60,7 @@ public class ParticleUtil
         }
     }
 
-    private static void drawBlockOutlinesVerticalSouthNorth(List<ParticleShapeHidden> shapes, Particle particle, int particleAmount, Location location1, Location location2)
+    private void drawBlockOutlinesVerticalSouthNorth(List<ParticleShapeHidden> shapes, String particle, int particleAmount, Location location1, Location location2)
     {
         double loc1X = location1.getX();
         double loc1Y = location1.getY();
@@ -125,7 +134,7 @@ public class ParticleUtil
         }
     }
 
-    private static void drawBlockOutlinesVerticalEastWest(List<ParticleShapeHidden> shapes, Particle particle, int particleAmount, Location location1, Location location2)
+    private void drawBlockOutlinesVerticalEastWest(List<ParticleShapeHidden> shapes, String particle, int particleAmount, Location location1, Location location2)
     {
         double loc1X = location1.getX();
         double loc1Y = location1.getY();
@@ -199,7 +208,7 @@ public class ParticleUtil
         }
     }
 
-    private static void drawBlockOutlinesHorizontal(List<ParticleShapeHidden> shapes, Particle particle, int particleAmount, Location location1, Location location2)
+    private void drawBlockOutlinesHorizontal(List<ParticleShapeHidden> shapes, String particle, int particleAmount, Location location1, Location location2)
     {
         double loc1X = location1.getX();
         double loc1Y = location1.getY();
