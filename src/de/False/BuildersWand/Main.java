@@ -16,12 +16,18 @@ import de.False.BuildersWand.utilities.Metrics;
 import de.False.BuildersWand.utilities.ParticleUtil;
 import de.False.BuildersWand.utilities.SpigetUpdate;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.inventivetalent.update.spiget.UpdateCallback;
 import org.inventivetalent.update.spiget.comparator.VersionComparator;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -129,7 +135,7 @@ public class Main extends JavaPlugin
                     nms = new v_1_11_R1();
                     break;
                 case "v1_12_R1":
-                    nms = new v_1_12_R1();
+                    nms = new v_1_12_R1(this);
                     break;
             }
         } catch (ArrayIndexOutOfBoundsException exn) {
@@ -139,53 +145,24 @@ public class Main extends JavaPlugin
 
     private void loadRecipes()
     {
-//        boolean enabled = config.isCraftingEnabled();
-//
-//        if(!enabled)
-//        {
-//            return;
-//        }
-//
-//        boolean shapeless = config.isCraftingShapeless();
-//        List<String> recipeStrings = config.getCraftingRecipe();
-//        HashMap<String, Material> ingredients = config.getIngredient();
-//        NamespacedKey namespacedKey = new NamespacedKey(this, "buildersWand");
-//        ItemStack resultItemStack = Wand.getRecipeResult();
-//        Recipe recipe;
-//        if(shapeless)
-//        {
-//            ShapelessRecipe shapelessRecipe = new ShapelessRecipe(namespacedKey, resultItemStack);
-//            for (Map.Entry<String, Material> entry: ingredients.entrySet())
-//            {
-//                String materialShortcut = entry.getKey();
-//                Material material = entry.getValue();
-//                StringBuilder fullString = new StringBuilder();
-//
-//                for (String string: recipeStrings)
-//                {
-//                    fullString.append(string);
-//                }
-//
-//                int itemCount = StringUtils.countMatches(fullString.toString(),materialShortcut);
-//                shapelessRecipe.addIngredient(itemCount, material);
-//            }
-//
-//            recipe = shapelessRecipe;
-//        }
-//        else
-//        {
-//            ShapedRecipe shapedRecipe = new ShapedRecipe(namespacedKey, resultItemStack);
-//            shapedRecipe.shape(recipeStrings.toArray(new String[recipeStrings.size()]));
-//            for (Map.Entry<String, Material> entry: ingredients.entrySet())
-//            {
-//                String materialShortcut = entry.getKey();
-//                Material material = entry.getValue();
-//                shapedRecipe.setIngredient(materialShortcut.charAt(0), material);
-//            }
-//
-//            recipe = shapedRecipe;
-//        }
-//
-//        Bukkit.getServer().addRecipe(recipe);
+        boolean enabled = config.isCraftingEnabled();
+
+        if(!enabled)
+        {
+            return;
+        }
+
+        boolean shapeless = config.isCraftingShapeless();
+        List<String> recipeStrings = config.getCraftingRecipe();
+        HashMap<String, Material> ingredients = config.getIngredient();
+        ItemStack resultItemStack = Wand.getRecipeResult();
+        if(shapeless)
+        {
+            nms.addShapelessRecipe(recipeStrings, ingredients, resultItemStack);
+        }
+        else
+        {
+            nms.addShapedRecipe(recipeStrings, ingredients, resultItemStack);
+        }
     }
 }

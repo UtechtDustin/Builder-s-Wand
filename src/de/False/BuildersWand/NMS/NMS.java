@@ -1,10 +1,14 @@
 package de.False.BuildersWand.NMS;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+import java.util.List;
 
 public interface NMS
 {
@@ -12,7 +16,11 @@ public interface NMS
 
     ItemStack getItemInHand(Player player);
 
-    boolean isMainHand(EquipmentSlot equipmentSlot);
+    boolean isMainHand(PlayerInteractEvent event);
 
     String getDefaultParticle();
+
+    void addShapelessRecipe(List<String> recipeStrings, HashMap<String, Material> ingredients, ItemStack resultItemStack);
+
+    void addShapedRecipe(List<String> recipeStrings, HashMap<String, Material> ingredients, ItemStack resultItemStack);
 }

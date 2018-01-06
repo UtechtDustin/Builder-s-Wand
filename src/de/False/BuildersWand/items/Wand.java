@@ -139,7 +139,7 @@ public class Wand implements Listener
         Material mainHandMaterial = mainHand.getType();
         ItemMeta mainHandItemMeta = mainHand.getItemMeta();
 
-        if (mainHandItemMeta == null || nms.isMainHand(event.getHand()))
+        if (mainHandItemMeta == null || !nms.isMainHand(event))
         {
             return;
         }
