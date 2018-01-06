@@ -11,7 +11,7 @@ public class v_1_11_R1 implements NMS
 {
     @Override
     public void spawnParticle(String particle, Location location){
-        location.getWorld().spawnParticle(Particle.valueOf(particle), location, 1);
+        location.getWorld().spawnParticle(Particle.valueOf(particle), location.getX(), location.getY(), location.getZ(), 0, 128, 0, 0, 10);
     }
 
     @Override

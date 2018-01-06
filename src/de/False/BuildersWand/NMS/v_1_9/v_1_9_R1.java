@@ -12,7 +12,7 @@ public class v_1_9_R1 implements NMS
 {
     @Override
     public void spawnParticle(String particle, Location location){
-        location.getWorld().spawnParticle(Particle.valueOf(particle), location, 1);
+        location.getWorld().spawnParticle(Particle.valueOf(particle), location.getX(), location.getY(), location.getZ(), 0, 128, 0, 0, 10);
     }
 
     @Override
@@ -30,6 +30,6 @@ public class v_1_9_R1 implements NMS
     @Override
     public String getDefaultParticle()
     {
-        return Effect.COLOURED_DUST.toString();
+        return Particle.REDSTONE.toString();
     }
 }
