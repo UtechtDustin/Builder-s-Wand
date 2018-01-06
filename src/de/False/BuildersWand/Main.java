@@ -110,7 +110,6 @@ public class Main extends JavaPlugin
         String version;
         try {
             version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-            System.out.println(version);
             switch (version)
             {
                 case "v1_8_R1":
