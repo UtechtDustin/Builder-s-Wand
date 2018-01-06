@@ -4,6 +4,7 @@ import de.False.BuildersWand.ConfigurationFiles.Config;
 import de.False.BuildersWand.ConfigurationFiles.Locales;
 import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.NMS.v_1_10.v_1_10_R1;
+import de.False.BuildersWand.NMS.v_1_11.v_1_11_R1;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R1;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R2;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R3;
@@ -123,9 +124,9 @@ public class Main extends JavaPlugin
                 case "v1_10_R1":
                     nms = new v_1_10_R1();
                     break;
-//                case "v1_11_R1":
-//                    nms = new v_1_11_R1();
-//                    break;
+                case "v1_11_R1":
+                    nms = new v_1_11_R1();
+                    break;
 //                case "v1_12_R1":
 //                    nms = new v_1_12_R1();
 //                    break;
