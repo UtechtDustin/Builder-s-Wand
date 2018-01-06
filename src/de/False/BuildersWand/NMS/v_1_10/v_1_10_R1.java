@@ -18,7 +18,7 @@ public class v_1_10_R1 implements NMS
     @Override
     public ItemStack getItemInHand(Player player)
     {
-        return player.getItemInHand();
+        return player.getInventory().getItemInMainHand();
     }
 
     @Override
