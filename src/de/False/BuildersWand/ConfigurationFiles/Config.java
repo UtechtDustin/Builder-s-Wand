@@ -1,7 +1,8 @@
 package de.False.BuildersWand.ConfigurationFiles;
 
 import de.False.BuildersWand.Main;
-import org.bukkit.ChatColor;
+import de.False.BuildersWand.NMS.NMS;
+import de.False.BuildersWand.utilities.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
@@ -9,12 +10,14 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Config
 {
     private Main plugin;
+    private NMS nms;
     private File file;
     private FileConfiguration config;
 
@@ -27,14 +30,17 @@ public class Config
     private HashMap<String, Material> ingredient = new HashMap<String, Material>();
 
     private boolean particleEnabled;
-    private Particle particle;
+    private String particle;
     private int particleCount;
 
     private boolean consumeItems;
+    private int maxSize;
 
-    public Config(Main plugin)
+    public Config(Main plugin, NMS nms)
     {
         this.plugin = plugin;
+        this.nms = nms;
+
         this.file = new File(plugin.getDataFolder(), "config.yml");
     }
 
@@ -54,8 +60,12 @@ public class Config
     public void load()
     {
         config = YamlConfiguration.loadConfiguration(file);
-        name = ChatColor.translateAlternateColorCodes('&', config.getString("wand.name"));
+        addDefaults();
+
+        name = MessageUtil.colorize(config.getString("wand.name"));
         material = Material.valueOf(config.getString("wand.material"));
+        maxSize = config.getInt("wand.maxSize");
+        consumeItems = config.getBoolean("wand.consumeItems");
 
         craftingEnabled = config.getBoolean("crafting.enabled");
         craftingShapeless = config.getBoolean("crafting.shapeless");
@@ -68,15 +78,40 @@ public class Config
         }
 
         particleEnabled = config.getBoolean("particles.enabled");
-        particle = Particle.valueOf(config.getString("particles.type"));
+        particle = config.getString("particles.type");
         particleCount = config.getInt("particles.count");
-
-        consumeItems = config.getBoolean("other.consumeItems");
     }
 
-    public void copyDefaultLocales()
+    private void addDefaults()
     {
-        plugin.saveResource("config.yml", false);
+        config.options().copyDefaults(true);
+        config.addDefault("wand.name", "&3Builders Wand");
+        config.addDefault("wand.material", "BLAZE_ROD");
+        config.addDefault("wand.maxSize", 8);
+        config.addDefault("wand.consumeItems", true);
+
+        List<String> recipeList = new ArrayList<>();
+        recipeList.add("xxd");
+        recipeList.add("xbx");
+        recipeList.add("bxx");
+
+        ConfigurationSection configurationSection = config.getConfigurationSection("crafting.ingredient");
+
+        if(configurationSection == null || configurationSection.getKeys(false).size() <= 0)
+        {
+            config.addDefault("crafting.ingredient.d", "DIAMOND");
+            config.addDefault("crafting.ingredient.b", "BLAZE_ROD");
+        }
+
+        config.addDefault("crafting.enabled", true);
+        config.addDefault("crafting.shapeless", false);
+        config.addDefault("crafting.recipe", recipeList);
+
+        config.addDefault("particles.enabled", true);
+        config.addDefault("particles.type", nms.getDefaultParticle());
+        config.addDefault("particles.count", 3);
+
+        save();
     }
 
     public String getName()
@@ -149,12 +184,12 @@ public class Config
         this.particleEnabled = particleEnabled;
     }
 
-    public Particle getParticle()
+    public String getParticle()
     {
         return particle;
     }
 
-    public void setParticle(Particle particle)
+    public void setParticle(String particle)
     {
         this.particle = particle;
     }
@@ -177,5 +212,15 @@ public class Config
     public void setConsumeItems(boolean consumeItems)
     {
         this.consumeItems = consumeItems;
+    }
+
+    public int getMaxSize()
+    {
+        return maxSize;
+    }
+
+    public void setMaxSize(int maxSize)
+    {
+        this.maxSize = maxSize;
     }
 }
