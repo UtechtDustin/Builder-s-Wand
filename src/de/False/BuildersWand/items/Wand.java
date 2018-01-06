@@ -2,6 +2,7 @@ package de.False.BuildersWand.items;
 
 import de.False.BuildersWand.ConfigurationFiles.Config;
 import de.False.BuildersWand.Main;
+import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.enums.ParticleShapeHidden;
 import de.False.BuildersWand.utilities.ParticleUtil;
 import org.bukkit.*;
@@ -22,20 +23,26 @@ import org.bukkit.material.MaterialData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+
 public class Wand implements Listener
 {
     private Main plugin;
     private Config config;
+    private ParticleUtil particleUtil;
+    private NMS nms;
     private static String ITEM_NAME = "§3Builders Wand";
     private static Material ITEM_MATERIAL = Material.BLAZE_ROD;
     private HashMap<Block, List<Block>> blockSelection = new HashMap<Block, List<Block>>();
     private HashMap<Block, List<Block>> replacements = new HashMap<Block, List<Block>>();
     private HashMap<Block, List<Block>> tmpReplacements = new HashMap<Block, List<Block>>();
 
-    public Wand(Main plugin, Config config)
+    public Wand(Main plugin, Config config, ParticleUtil particleUtil,NMS nms)
     {
         this.plugin = plugin;
         this.config = config;
+        this.particleUtil = particleUtil;
+        this.nms = nms;
         startScheduler();
 
         ITEM_NAME = config.getName();
@@ -53,7 +60,7 @@ public class Wand implements Listener
                 tmpReplacements.clear();
                 for (Player player : Bukkit.getOnlinePlayers())
                 {
-                    ItemStack mainHand = player.getInventory().getItemInMainHand();
+                    ItemStack mainHand = nms.getItemInHand(player);
                     Material mainHandMaterial = mainHand.getType();
                     if (mainHandMaterial != ITEM_MATERIAL)
                     {
@@ -71,14 +78,14 @@ public class Wand implements Listener
                     {
                         continue;
                     }
-                    Block block = player.getTargetBlock(null, 5);
+                    Block block = player.getTargetBlock((Set<Material>) null, 5);
 
                     if (block.getType().equals(Material.AIR))
                     {
                         continue;
                     }
 
-                    List<Block> lastBlocks = player.getLastTwoTargetBlocks(null, 5);
+                    List<Block> lastBlocks = player.getLastTwoTargetBlocks((Set<Material>) null, 5);
                     BlockFace blockFace = lastBlocks.get(1).getFace(lastBlocks.get(0));
                     Block blockNext = block.getRelative(blockFace);
 
@@ -112,7 +119,7 @@ public class Wand implements Listener
     public void placeBlock(BlockPlaceEvent event)
     {
         Player player = event.getPlayer();
-        ItemStack mainHand = player.getInventory().getItemInMainHand();
+        ItemStack mainHand = nms.getItemInHand(player);
         Material mainHandMaterial = mainHand.getType();
         ItemMeta mainHandItemMeta = mainHand.getItemMeta();
         String mainHandDisplayName = mainHandItemMeta.getDisplayName();
@@ -128,11 +135,11 @@ public class Wand implements Listener
     public void playerInteract(PlayerInteractEvent event)
     {
         Player player = event.getPlayer();
-        ItemStack mainHand = player.getInventory().getItemInMainHand();
+        ItemStack mainHand = nms.getItemInHand(player);
         Material mainHandMaterial = mainHand.getType();
         ItemMeta mainHandItemMeta = mainHand.getItemMeta();
 
-        if (mainHandItemMeta == null || event.getHand() == EquipmentSlot.HAND)
+        if (mainHandItemMeta == null || nms.isMainHand(event))
         {
             return;
         }
@@ -233,10 +240,11 @@ public class Wand implements Listener
             {
                 amount -= itemAmount;
                 inventory.remove(inventoryItemStack);
+                player.updateInventory();
             } else
             {
-
                 inventoryItemStack.setAmount(itemAmount - amount);
+                player.updateInventory();
                 return;
             }
         }
@@ -405,9 +413,9 @@ public class Wand implements Listener
             shapes.add(ParticleShapeHidden.UP_NORTH);
         }
 
-        Particle particle = config.getParticle();
+        String particle = config.getParticle();
         int particleAmount = config.getParticleCount();
-        ParticleUtil.drawBlockOutlines(blockFace, shapes, selectionBlock.getRelative(blockFace).getLocation(), particle, particleAmount);
+        particleUtil.drawBlockOutlines(blockFace, shapes, selectionBlock.getRelative(blockFace).getLocation(), particle, particleAmount);
     }
 
     public static ItemStack getRecipeResult()
