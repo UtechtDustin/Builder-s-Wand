@@ -4,6 +4,7 @@ import de.False.BuildersWand.ConfigurationFiles.Config;
 import de.False.BuildersWand.Main;
 import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.enums.ParticleShapeHidden;
+import de.False.BuildersWand.utilities.MessageUtil;
 import de.False.BuildersWand.utilities.ParticleUtil;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -13,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
@@ -150,6 +152,12 @@ public class Wand implements Listener
             return;
         }
 
+        if(!player.hasPermission("buildersWand.use"))
+        {
+            MessageUtil.sendMessage(player, "noPermissions");
+            return;
+        }
+
         Block against = event.getClickedBlock();
         List<Block> selection = replacements.get(against);
 
@@ -178,6 +186,32 @@ public class Wand implements Listener
         if(config.isConsumeItems())
         {
             removeItemStack(itemStack, selection.size(), player);
+        }
+    }
+
+    @EventHandler
+    private void craftItemEvent(CraftItemEvent event)
+    {
+        if(!(event.getWhoClicked() instanceof Player))
+        {
+            return;
+        }
+
+        Player player = (Player) event.getWhoClicked();
+        ItemStack result = event.getRecipe().getResult();
+        Material material = result.getType();
+        ItemMeta itemMeta = result.getItemMeta();
+        String displayName = itemMeta.getDisplayName();
+
+        if (!material.equals(ITEM_MATERIAL) || !displayName.equals(ITEM_NAME))
+        {
+            return;
+        }
+
+        if(!player.hasPermission("buildersWand.craft"))
+        {
+            MessageUtil.sendMessage(player, "noPermissions");
+            event.setCancelled(true);
         }
     }
 
