@@ -276,8 +276,15 @@ public class Wand implements Listener
             int itemAmount = inventoryItemStack.getAmount();
             if (amount >= itemAmount)
             {
+
+                HashMap<Integer, ItemStack> didntRemovedItems = inventory.removeItem(inventoryItemStack);
+
+                if(didntRemovedItems.size() == 1)
+                {
+                    player.getInventory().setItemInOffHand(null);
+                }
+
                 amount -= itemAmount;
-                inventory.remove(inventoryItemStack);
                 player.updateInventory();
             } else
             {
