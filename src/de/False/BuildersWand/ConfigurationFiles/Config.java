@@ -35,6 +35,7 @@ public class Config
 
     private boolean consumeItems;
     private int maxSize;
+    private long renderTime;
 
     public Config(Main plugin, NMS nms)
     {
@@ -66,6 +67,7 @@ public class Config
         material = Material.valueOf(config.getString("wand.material"));
         maxSize = config.getInt("wand.maxSize");
         consumeItems = config.getBoolean("wand.consumeItems");
+        renderTime = config.getLong("wand.renderInterval");
 
         craftingEnabled = config.getBoolean("crafting.enabled");
         craftingShapeless = config.getBoolean("crafting.shapeless");
@@ -89,6 +91,7 @@ public class Config
         config.addDefault("wand.material", "BLAZE_ROD");
         config.addDefault("wand.maxSize", 8);
         config.addDefault("wand.consumeItems", true);
+        config.addDefault("wand.renderInterval", 2);
 
         List<String> recipeList = new ArrayList<>();
         recipeList.add("xxd");
@@ -222,5 +225,15 @@ public class Config
     public void setMaxSize(int maxSize)
     {
         this.maxSize = maxSize;
+    }
+
+    public long getRenderTime()
+    {
+        return renderTime;
+    }
+
+    public void setRenderTime(long renderTime)
+    {
+        this.renderTime = renderTime;
     }
 }

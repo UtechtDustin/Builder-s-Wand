@@ -116,7 +116,7 @@ public class Wand implements Listener
                     }
                 }
             }
-        }, 0L, 2L);
+        }, 0L, config.getRenderTime());
     }
 
     @EventHandler
