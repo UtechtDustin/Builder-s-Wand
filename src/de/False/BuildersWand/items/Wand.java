@@ -1,5 +1,6 @@
 package de.False.BuildersWand.items;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.False.BuildersWand.ConfigurationFiles.Config;
 import de.False.BuildersWand.Main;
 import de.False.BuildersWand.NMS.NMS;
@@ -16,11 +17,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -152,14 +153,13 @@ public class Wand implements Listener
             return;
         }
 
-        if(!player.hasPermission("buildersWand.use"))
+        Block against = event.getClickedBlock();
+        List<Block> selection = replacements.get(against);
+        if(!player.hasPermission("buildersWand.use") || !checkExternalPlugins(player, selection))
         {
             MessageUtil.sendMessage(player, "noPermissions");
             return;
         }
-
-        Block against = event.getClickedBlock();
-        List<Block> selection = replacements.get(against);
 
         if(selection == null)
         {
@@ -460,5 +460,28 @@ public class Wand implements Listener
         buildersWand.setItemMeta(itemMeta);
 
         return buildersWand;
+    }
+
+    private boolean checkExternalPlugins(Player player, List<Block> selection)
+    {
+        Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
+
+        if (worldGuardPlugin != null && worldGuardPlugin instanceof WorldGuardPlugin) {
+            WorldGuardPlugin worldGuard = (WorldGuardPlugin) worldGuardPlugin;
+            for (Block selectionBlock : selection)
+            {
+                if(!worldGuard.canBuild(player, selectionBlock))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private Plugin getExternalPlugin(String name)
+    {
+        return plugin.getServer().getPluginManager().getPlugin(name);
     }
 }
