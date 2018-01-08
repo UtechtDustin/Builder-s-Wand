@@ -2,6 +2,7 @@ name: BuildersWand
 author: Wythe
 version: 1.2.1
 main: de.False.BuildersWand.Main
+softdepend: [ASkyBlock, WorldGuard]
 commands:
   builderswand:
     description: The generall bw command.

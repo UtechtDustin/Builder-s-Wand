@@ -1,6 +1,7 @@
 package de.False.BuildersWand.items;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import de.False.BuildersWand.ConfigurationFiles.Config;
 import de.False.BuildersWand.Main;
 import de.False.BuildersWand.NMS.NMS;
@@ -102,7 +103,7 @@ public class Wand implements Listener
                     blockSelection.put(block, new ArrayList<>());
                     tmpReplacements.put(block, new ArrayList<>());
 
-                    setBlockSelection(blockFace, itemCount, block, block);
+                    setBlockSelection(player, blockFace, itemCount, block, block);
                     replacements = tmpReplacements;
                     List<Block> selection = blockSelection.get(block);
 
@@ -155,7 +156,10 @@ public class Wand implements Listener
 
         Block against = event.getClickedBlock();
         List<Block> selection = replacements.get(against);
-        if(!player.hasPermission("buildersWand.use") || !checkExternalPlugins(player, selection))
+        if(
+                !player.hasPermission("buildersWand.use")
+                || (!player.hasPermission("buildersWand.bypass") && !isAllowedToBuildForExternalPlugins(player, selection))
+        )
         {
             MessageUtil.sendMessage(player, "noPermissions");
             return;
@@ -284,7 +288,7 @@ public class Wand implements Listener
         }
     }
 
-    private void setBlockSelection(BlockFace blockFace, int maxLocations, Block startBlock, Block blockToCheck)
+    private void setBlockSelection(Player player, BlockFace blockFace, int maxLocations, Block startBlock, Block blockToCheck)
     {
         int blockToCheckData = blockToCheck.getData();
         int startBlockData = startBlock.getData();
@@ -296,7 +300,16 @@ public class Wand implements Listener
         List<Block> selection = blockSelection.get(startBlock);
         List<Block> replacementsList = tmpReplacements.get(startBlock);
 
-        if (startLocation.distance(checkLocation) >= config.getMaxSize() || !(startMaterial.equals(blockToCheckMaterial)) || maxLocations <= selection.size() || blockToCheckData != startBlockData || selection.contains(blockToCheck) || !relativeBlock.equals(Material.AIR))
+        if (
+                    startLocation.distance(checkLocation) >= config.getMaxSize()
+                || !(startMaterial.equals(blockToCheckMaterial))
+                || maxLocations <= selection.size()
+                || blockToCheckData != startBlockData
+                || selection.contains(blockToCheck)
+                || !relativeBlock.equals(Material.AIR)
+                || (!isAllowedToBuildForExternalPlugins(player, checkLocation) && !player.hasPermission("buildersWand.bypass"))
+                || !player.hasPermission("buildersWand.use")
+        )
         {
             return;
         }
@@ -313,22 +326,22 @@ public class Wand implements Listener
         {
             case UP:
             case DOWN:
-                setBlockSelection(blockFace, maxLocations, startBlock, blockEast);
-                setBlockSelection(blockFace, maxLocations, startBlock, blockWest);
-                setBlockSelection(blockFace, maxLocations, startBlock, blockNorth);
-                setBlockSelection(blockFace, maxLocations, startBlock, blockSouth);
+                setBlockSelection(player, blockFace, maxLocations, startBlock, blockEast);
+                setBlockSelection(player, blockFace, maxLocations, startBlock, blockWest);
+                setBlockSelection(player, blockFace, maxLocations, startBlock, blockNorth);
+                setBlockSelection(player, blockFace, maxLocations, startBlock, blockSouth);
             case EAST:
             case WEST:
-                setBlockSelection(blockFace, maxLocations, startBlock, blockNorth);
-                setBlockSelection(blockFace, maxLocations, startBlock, blockSouth);
-                setBlockSelection(blockFace, maxLocations, startBlock, blockDown);
-                setBlockSelection(blockFace, maxLocations, startBlock, blockUp);
+                setBlockSelection(player, blockFace, maxLocations, startBlock, blockNorth);
+                setBlockSelection(player, blockFace, maxLocations, startBlock, blockSouth);
+                setBlockSelection(player, blockFace, maxLocations, startBlock, blockDown);
+                setBlockSelection(player, blockFace, maxLocations, startBlock, blockUp);
             case SOUTH:
             case NORTH:
-                setBlockSelection(blockFace, maxLocations, startBlock, blockWest);
-                setBlockSelection(blockFace, maxLocations, startBlock, blockEast);
-                setBlockSelection(blockFace, maxLocations, startBlock, blockDown);
-                setBlockSelection(blockFace, maxLocations, startBlock, blockUp);
+                setBlockSelection(player, blockFace, maxLocations, startBlock, blockWest);
+                setBlockSelection(player, blockFace, maxLocations, startBlock, blockEast);
+                setBlockSelection(player, blockFace, maxLocations, startBlock, blockDown);
+                setBlockSelection(player, blockFace, maxLocations, startBlock, blockUp);
         }
     }
 
@@ -462,7 +475,32 @@ public class Wand implements Listener
         return buildersWand;
     }
 
-    private boolean checkExternalPlugins(Player player, List<Block> selection)
+    private boolean isAllowedToBuildForExternalPlugins(Player player, Location location)
+    {
+        Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
+
+        if (worldGuardPlugin != null && worldGuardPlugin instanceof WorldGuardPlugin) {
+            WorldGuardPlugin worldGuard = (WorldGuardPlugin) worldGuardPlugin;
+            if(!worldGuard.canBuild(player, location))
+            {
+                return false;
+            }
+        }
+
+        Plugin aSkyBlock = getExternalPlugin("ASkyBlock");
+        if(aSkyBlock != null)
+        {
+            ASkyBlockAPI aSkyBlockAPI = ASkyBlockAPI.getInstance();
+            if(!aSkyBlockAPI.locationIsOnIsland(player, location))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isAllowedToBuildForExternalPlugins(Player player, List<Block> selection)
     {
         Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
 
@@ -471,6 +509,19 @@ public class Wand implements Listener
             for (Block selectionBlock : selection)
             {
                 if(!worldGuard.canBuild(player, selectionBlock))
+                {
+                    return false;
+                }
+            }
+        }
+
+        Plugin aSkyBlock = getExternalPlugin("ASkyBlock");
+        if(aSkyBlock != null)
+        {
+            ASkyBlockAPI aSkyBlockAPI = ASkyBlockAPI.getInstance();
+            for (Block selectionBlock : selection)
+            {
+                if(!aSkyBlockAPI.locationIsOnIsland(player, selectionBlock.getLocation()))
                 {
                     return false;
                 }
