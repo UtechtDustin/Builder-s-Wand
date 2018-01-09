@@ -37,6 +37,10 @@ public class Config
     private int maxSize;
     private long renderTime;
 
+    private boolean durabilityEnabled;
+    private int durability;
+    private String durabilityText;
+
     public Config(Main plugin, NMS nms)
     {
         this.plugin = plugin;
@@ -68,6 +72,9 @@ public class Config
         maxSize = config.getInt("wand.maxSize");
         consumeItems = config.getBoolean("wand.consumeItems");
         renderTime = config.getLong("wand.renderInterval");
+        durability = config.getInt("wand.durability.amount");
+        durabilityEnabled = config.getBoolean("wand.durability.enabled");
+        durabilityText = config.getString("wand.durability.text");
 
         craftingEnabled = config.getBoolean("crafting.enabled");
         craftingShapeless = config.getBoolean("crafting.shapeless");
@@ -92,6 +99,9 @@ public class Config
         config.addDefault("wand.maxSize", 8);
         config.addDefault("wand.consumeItems", true);
         config.addDefault("wand.renderInterval", 2);
+        config.addDefault("wand.durability.amount", 130);
+        config.addDefault("wand.durability.enabled", true);
+        config.addDefault("wand.durability.text", "&5Durability: &e{durability}");
 
         List<String> recipeList = new ArrayList<>();
         recipeList.add("xxd");
@@ -122,11 +132,6 @@ public class Config
         return name;
     }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
     public Material getMaterial()
     {
         return material;
@@ -142,19 +147,9 @@ public class Config
         return craftingEnabled;
     }
 
-    public void setCraftingEnabled(boolean craftingEnabled)
-    {
-        this.craftingEnabled = craftingEnabled;
-    }
-
     public boolean isCraftingShapeless()
     {
         return craftingShapeless;
-    }
-
-    public void setCraftingShapeless(boolean craftingShapeless)
-    {
-        this.craftingShapeless = craftingShapeless;
     }
 
     public List<String> getCraftingRecipe()
@@ -162,29 +157,14 @@ public class Config
         return craftingRecipe;
     }
 
-    public void setCraftingRecipe(List<String> craftingRecipe)
-    {
-        this.craftingRecipe = craftingRecipe;
-    }
-
     public HashMap<String, Material> getIngredient()
     {
         return ingredient;
     }
 
-    public void setIngredient(HashMap<String, Material> ingredient)
-    {
-        this.ingredient = ingredient;
-    }
-
     public boolean isParticleEnabled()
     {
         return particleEnabled;
-    }
-
-    public void setParticleEnabled(boolean particleEnabled)
-    {
-        this.particleEnabled = particleEnabled;
     }
 
     public String getParticle()
@@ -202,19 +182,9 @@ public class Config
         return particleCount;
     }
 
-    public void setParticleCount(int particleCount)
-    {
-        this.particleCount = particleCount;
-    }
-
     public boolean isConsumeItems()
     {
         return consumeItems;
-    }
-
-    public void setConsumeItems(boolean consumeItems)
-    {
-        this.consumeItems = consumeItems;
     }
 
     public int getMaxSize()
@@ -222,18 +192,23 @@ public class Config
         return maxSize;
     }
 
-    public void setMaxSize(int maxSize)
-    {
-        this.maxSize = maxSize;
-    }
-
     public long getRenderTime()
     {
         return renderTime;
     }
 
-    public void setRenderTime(long renderTime)
+    public int getDurability()
     {
-        this.renderTime = renderTime;
+        return durability;
+    }
+
+    public boolean isDurabilityEnabled()
+    {
+        return durabilityEnabled;
+    }
+
+    public String getDurabilityText()
+    {
+        return durabilityText;
     }
 }
