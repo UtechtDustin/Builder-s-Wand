@@ -34,6 +34,7 @@ public class Main extends JavaPlugin
     private Config config;
     private ParticleUtil particleUtil;
     private NMS nms;
+    private Wand wand;
 
     @Override
     public void onEnable()
@@ -67,13 +68,14 @@ public class Main extends JavaPlugin
 
     private void registerCommands()
     {
-        getCommand("bw").setExecutor(new Commands(config));
+        getCommand("bw").setExecutor(new Commands(config, wand));
     }
 
     private void registerEvents()
     {
+        wand = new Wand(this, config, particleUtil, nms);
         PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(new Wand(this, config, particleUtil, nms), this);
+        pluginManager.registerEvents(wand, this);
     }
 
     private void loadConfigFiles()
@@ -131,7 +133,7 @@ public class Main extends JavaPlugin
         boolean shapeless = config.isCraftingShapeless();
         List<String> recipeStrings = config.getCraftingRecipe();
         HashMap<String, Material> ingredients = config.getIngredient();
-        ItemStack resultItemStack = Wand.getRecipeResult();
+        ItemStack resultItemStack = wand.getRecipeResult();
         if(shapeless)
         {
             nms.addShapelessRecipe(recipeStrings, ingredients, resultItemStack);

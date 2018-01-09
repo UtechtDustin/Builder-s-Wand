@@ -8,6 +8,7 @@ import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.enums.ParticleShapeHidden;
 import de.False.BuildersWand.utilities.MessageUtil;
 import de.False.BuildersWand.utilities.ParticleUtil;
+import org.apache.logging.log4j.message.Message;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -187,9 +188,15 @@ public class Wand implements Listener
 
         }, 1L);
 
+        Integer amount = selection.size();
         if(config.isConsumeItems())
         {
-            removeItemStack(itemStack, selection.size(), player);
+            removeItemStack(itemStack, amount, player);
+        }
+
+        if(config.isDurabilityEnabled())
+        {
+            removeDurability(mainHand, player);
         }
     }
 
@@ -248,6 +255,39 @@ public class Wand implements Listener
         }
 
         return count;
+    }
+
+    private void removeDurability(ItemStack wand, Player player)
+    {
+        Inventory inventory = player.getInventory();
+        if (player.getGameMode() == GameMode.CREATIVE)
+        {
+            return;
+        }
+
+        Integer durability = getDurability(wand);
+        Integer newDurability = durability - 1;
+
+        if(newDurability <= 0)
+        {
+            inventory.removeItem(wand);
+        }
+
+        ItemMeta itemMeta = wand.getItemMeta();
+        List<String> lore = itemMeta.getLore();
+        String durabilityText = MessageUtil.colorize(config.getDurabilityText().replace("{durability}", newDurability+""));
+        if(lore == null)
+        {
+            lore = new ArrayList<>();
+            lore.add(durabilityText);
+        }
+        else
+        {
+            lore.set(0, durabilityText);
+        }
+
+        itemMeta.setLore(lore);
+        wand.setItemMeta(itemMeta);
     }
 
     private void removeItemStack(ItemStack itemStack, int amount, Player player)
@@ -472,11 +512,19 @@ public class Wand implements Listener
         particleUtil.drawBlockOutlines(blockFace, shapes, selectionBlock.getRelative(blockFace).getLocation(), particle, particleAmount);
     }
 
-    public static ItemStack getRecipeResult()
+    public ItemStack getRecipeResult()
     {
         ItemStack buildersWand = new ItemStack(ITEM_MATERIAL);
         ItemMeta itemMeta = buildersWand.getItemMeta();
         itemMeta.setDisplayName(ITEM_NAME);
+
+        if(config.isDurabilityEnabled())
+        {
+            List<String> lore = new ArrayList<>();
+            lore.add(MessageUtil.colorize(config.getDurabilityText().replace("{durability}", config.getDurability()+"")));
+            itemMeta.setLore(lore);
+        }
+
         buildersWand.setItemMeta(itemMeta);
 
         return buildersWand;
@@ -541,5 +589,20 @@ public class Wand implements Listener
     private Plugin getExternalPlugin(String name)
     {
         return plugin.getServer().getPluginManager().getPlugin(name);
+    }
+
+    public int getDurability(ItemStack wand)
+    {
+        ItemMeta itemMeta = wand.getItemMeta();
+        List<String> lore = itemMeta.getLore();
+        if(lore == null)
+        {
+            return config.getDurability();
+        }
+        String durabilityString = lore.get(0);
+        durabilityString = ChatColor.stripColor(durabilityString);
+        durabilityString = durabilityString.replaceAll("[^0-9]", "");
+
+        return Integer.parseInt(durabilityString);
     }
 }

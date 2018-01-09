@@ -11,11 +11,13 @@ import org.bukkit.entity.Player;
 
 public class Commands implements CommandExecutor
 {
-    Config config;
+    private Config config;
+    private Wand wand;
 
-    Commands(Config config)
+    Commands(Config config, Wand wand)
     {
         this.config = config;
+        this.wand = wand;
     }
 
     @Override
@@ -70,7 +72,7 @@ public class Commands implements CommandExecutor
 
         if(args.length == 1)
         {
-            player.getInventory().addItem(Wand.getRecipeResult());
+            player.getInventory().addItem(wand.getRecipeResult());
             return;
         }
         Player destPlayer = Bukkit.getPlayer(args[1]);
@@ -81,7 +83,7 @@ public class Commands implements CommandExecutor
             return;
         }
 
-        destPlayer.getInventory().addItem(Wand.getRecipeResult());
+        destPlayer.getInventory().addItem(wand.getRecipeResult());
     }
 
     private void helpCommand(Player player)
