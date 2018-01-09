@@ -33,7 +33,7 @@ public class v_1_8_R1 implements NMS
     @Override
     public boolean isMainHand(PlayerInteractEvent event)
     {
-        return false;
+        return true;
     }
 
     @Override
