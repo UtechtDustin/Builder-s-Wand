@@ -38,8 +38,6 @@ public class WandEvents implements Listener
     private ParticleUtil particleUtil;
     private NMS nms;
     private WandManager wandManager;
-    private static String ITEM_NAME;
-    private static Material ITEM_MATERIAL;
     private HashMap<Block, List<Block>> blockSelection = new HashMap<Block, List<Block>>();
     private HashMap<Block, List<Block>> replacements = new HashMap<Block, List<Block>>();
     private HashMap<Block, List<Block>> tmpReplacements = new HashMap<Block, List<Block>>();
@@ -109,10 +107,8 @@ public class WandEvents implements Listener
     {
         Player player = event.getPlayer();
         ItemStack mainHand = nms.getItemInHand(player);
-        Material mainHandMaterial = mainHand.getType();
-        ItemMeta mainHandItemMeta = mainHand.getItemMeta();
-        String mainHandDisplayName = mainHandItemMeta.getDisplayName();
-        if (!mainHandMaterial.equals(ITEM_MATERIAL) || !mainHandDisplayName.equals(ITEM_NAME))
+        Wand wand = wandManager.getWand(mainHand);
+        if (wand == null)
         {
             return;
         }
@@ -127,7 +123,7 @@ public class WandEvents implements Listener
         ItemStack mainHand = nms.getItemInHand(player);
         Wand wand = wandManager.getWand(mainHand);
 
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || !nms.isMainHand(event))
+        if (wand == null || event.getAction() != Action.RIGHT_CLICK_BLOCK || !nms.isMainHand(event))
         {
             return;
         }
@@ -186,11 +182,8 @@ public class WandEvents implements Listener
 
         Player player = (Player) event.getWhoClicked();
         ItemStack result = event.getRecipe().getResult();
-        Material material = result.getType();
-        ItemMeta itemMeta = result.getItemMeta();
-        String displayName = itemMeta.getDisplayName();
-
-        if (!material.equals(ITEM_MATERIAL) || !displayName.equals(ITEM_NAME))
+        Wand wand = wandManager.getWand(result);
+        if (wand == null)
         {
             return;
         }
