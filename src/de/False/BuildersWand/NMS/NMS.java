@@ -23,4 +23,8 @@ public interface NMS
     void addShapelessRecipe(List<String> recipeStrings, HashMap<String, Material> ingredients, ItemStack resultItemStack);
 
     void addShapedRecipe(List<String> recipeStrings, HashMap<String, Material> ingredients, ItemStack resultItemStack);
+
+    ItemStack setTag(ItemStack itemStack, String path, String value);
+
+    String getTag(ItemStack itemStack, String path);
 }
