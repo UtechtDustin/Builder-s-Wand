@@ -6,62 +6,54 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
-public class MessageUtil
-{
+public class MessageUtil {
     private static String defaultLocale = "en_us";
     private static String preFix = "&bBuildersWand » &7";
 
-    public static void sendMessage(Player player, String messagePath)
-    {
+    public static void sendMessage(Player player, String messagePath) {
         player.sendMessage(colorize(preFix + getMessage(messagePath, player)));
     }
 
-    public static void sendRawMessage(Player player, String messagePath)
-    {
+    public static void sendRawMessage(Player player, String messagePath) {
         player.sendMessage(colorize(getMessage(messagePath, player)));
     }
 
-    private static String getMessage(String messagePath, Player player)
-    {
+    public static void sendRawPrefixMessage(Player player, String message) {
+        player.sendMessage(colorize(preFix + message));
+    }
+
+    private static String getMessage(String messagePath, Player player) {
         String locale = getPlayerLocale(player);
         HashMap<String, String> messages = getMessagesForLocale(locale);
 
-        if(messages.containsKey(messagePath))
-        {
-
+        if (messages.containsKey(messagePath)) {
             return messages.get(messagePath);
         }
 
         return messagePath;
     }
 
-    private static HashMap<String, String> getMessagesForLocale(String locale)
-    {
-        if(Locales.messages.containsKey(locale))
-        {
+    private static HashMap<String, String> getMessagesForLocale(String locale) {
+        if (Locales.messages.containsKey(locale)) {
             return Locales.messages.get(locale);
         }
 
         return Locales.messages.get(defaultLocale);
     }
 
-    public static String colorize(String string)
-    {
+    public static String colorize(String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
-    private static String getPlayerLocale(Player player)
-    {
+    private static String getPlayerLocale(Player player) {
         return player.spigot().getLocale();
     }
 
-    public static String getText(String messagePath, Player player)
-    {
+    public static String getText(String messagePath, Player player) {
         return getMessage(messagePath, player);
     }
 
-    public static void sendSeperator(Player player)
-    {
+    public static void sendSeparator(Player player) {
         player.sendMessage("");
         player.sendMessage("");
         player.sendMessage("");

@@ -1,10 +1,10 @@
 name: BuildersWand
 author: Wythe
 version: 1.4.0
-main: de.False.BuildersWand.Main
+main: de.False.BuildersWand.BuildersWand
 softdepend: [ASkyBlock, WorldGuard]
 commands:
   builderswand:
-    description: The generall bw command.
+    description: The general BuildersWand command.
     usage: /builderswand
     aliases: [bw]

@@ -8,7 +8,6 @@ import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.enums.ParticleShapeHidden;
 import de.False.BuildersWand.utilities.MessageUtil;
 import de.False.BuildersWand.utilities.ParticleUtil;
-import org.apache.logging.log4j.message.Message;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -42,7 +41,7 @@ public class Wand implements Listener
     private HashMap<Block, List<Block>> replacements = new HashMap<Block, List<Block>>();
     private HashMap<Block, List<Block>> tmpReplacements = new HashMap<Block, List<Block>>();
 
-    public Wand(Main plugin, Config config, ParticleUtil particleUtil,NMS nms)
+    public Wand(Main plugin, Config config, ParticleUtil particleUtil, NMS nms)
     {
         this.plugin = plugin;
         this.config = config;

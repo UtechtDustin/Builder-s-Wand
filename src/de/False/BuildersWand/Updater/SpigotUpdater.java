@@ -1,8 +1,11 @@
 package de.False.BuildersWand.Updater;
 
 import de.False.BuildersWand.Main;
+import de.False.BuildersWand.ConfigurationFiles.Config;
+import de.False.BuildersWand.utilities.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,18 +19,27 @@ import java.net.URL;
 
 public class SpigotUpdater extends Thread {
     private final Plugin plugin;
-    private AutoDownload download;
+    private de.False.BuildersWand.Updater.AutoDownload download;
     private ConsoleCommandSender logger = Bukkit.getServer().getConsoleSender();
     private final int id;
+    private boolean autoDownload;
     private boolean enabled = true;
+    private Player player;
+    private Config config;
     private URL url;
 
+    public SpigotUpdater(Main plugin, int resourceID, Player player, Config config) throws IOException {
+        this(plugin, resourceID, false, config);
+        this.player = player;
+    }
 
-    public SpigotUpdater(Main plugin, int resourceID)
+    public SpigotUpdater(Main plugin, int resourceID, boolean autoDownload, Config config)
             throws IOException {
         if (plugin == null) throw new IllegalArgumentException("Plugin cannot be null");
         if (resourceID == 0) throw new IllegalArgumentException("Resource ID cannot be null (0)");
 
+        this.config = config;
+        this.autoDownload = autoDownload;
         this.plugin = plugin;
         this.id = resourceID;
         this.url = new URL("https://api.inventivetalent.org/spigot/resource-simple/" + resourceID);
@@ -77,7 +89,16 @@ public class SpigotUpdater extends Thread {
             int spigotVersion = Integer.parseInt(newVersion.replace(".", ""));
             int actualVersion = Integer.parseInt(oldVersion.replace(".", ""));
             if (actualVersion < spigotVersion) {
-                download.autoDownload(this.id);
+                if (player != null && config.getUpdateNotification()) {
+                    String updateLine1 = MessageUtil.getText("updateLine1", player).replace("{newVer}", currentVersion);
+                    String updateLine2 = MessageUtil.getText("updateLine2", player).replace("{currentVer}", this.plugin.getDescription().getVersion());
+                    String updateLine3 = MessageUtil.getText("updateLine3", player).replace("{url}", "https://www.spigotmc.org/resources/51577/");
+
+                    MessageUtil.sendRawPrefixMessage(player, updateLine1);
+                    MessageUtil.sendRawPrefixMessage(player, updateLine2);
+                    MessageUtil.sendRawPrefixMessage(player, updateLine3);
+                }
+                if (config.getAutoDownload() && autoDownload) download.autoDownload(this.id);
             }
         } catch (IOException e) {
             e.printStackTrace();

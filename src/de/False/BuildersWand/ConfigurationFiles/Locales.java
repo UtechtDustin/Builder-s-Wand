@@ -106,16 +106,25 @@ public class Locales
         en_us.put("reload", "The config has been reloaded.");
         en_us.put("playerNotFound", "The player can not be found.");
         en_us.put("noPermissions", "You dont have enough permissions.");
+        en_us.put("updateLine1", "&eThere is a new update available: &a{newVer}");
+        en_us.put("updateLine2", "&eYour Current version: &a{currentVer}");
+        en_us.put("updateLine3", "&e{url}");
 
         HashMap<String, String> de_de = new HashMap<>();
         de_de.put("reload", "Die Konfig wurde neugeladen.");
         de_de.put("playerNotFound", "Der Spieler konnte nicht gefunden werden.");
         de_de.put("noPermissions", "Du besitzt zu wenige Rechte um dies zu tun.");
+        de_de.put("updateLine1", "&eEin neues Update steht bereit: &a{newVer}");
+        de_de.put("updateLine2", "&eAktuelle Version: &a{currentVer}");
+        de_de.put("updateLine3", "&e{url}");
 
         HashMap<String, String> es_es = new HashMap<>();
         es_es.put("reload", "La configuracion ha sido recargada.");
         es_es.put("playerNotFound", "No se pudo encontrar al jugador.");
         es_es.put("noPermissions", "No tienes los permisos suficientes.");
+        es_es.put("updateLine1", "&eHay una nueva version disponible: &a{newVer}");
+        es_es.put("updateLine2", "&eTu version actual: &a{currentVer}");
+        es_es.put("updateLine3", "&e{url}");
 
         defaults.put("en_us", en_us);
         defaults.put("de_de", de_de);
