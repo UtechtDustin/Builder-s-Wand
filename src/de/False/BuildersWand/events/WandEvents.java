@@ -7,9 +7,11 @@ import de.False.BuildersWand.Main;
 import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.enums.ParticleShapeHidden;
 import de.False.BuildersWand.items.Wand;
+import de.False.BuildersWand.manager.InventoryManager;
 import de.False.BuildersWand.manager.WandManager;
 import de.False.BuildersWand.utilities.MessageUtil;
 import de.False.BuildersWand.utilities.ParticleUtil;
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -26,10 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class WandEvents implements Listener
 {
@@ -38,17 +37,19 @@ public class WandEvents implements Listener
     private ParticleUtil particleUtil;
     private NMS nms;
     private WandManager wandManager;
+    private InventoryManager inventoryManager;
     private HashMap<Block, List<Block>> blockSelection = new HashMap<Block, List<Block>>();
     private HashMap<Block, List<Block>> replacements = new HashMap<Block, List<Block>>();
     private HashMap<Block, List<Block>> tmpReplacements = new HashMap<Block, List<Block>>();
 
-    public WandEvents(Main plugin, Config config, ParticleUtil particleUtil, NMS nms, WandManager wandManager)
+    public WandEvents(Main plugin, Config config, ParticleUtil particleUtil, NMS nms, WandManager wandManager, InventoryManager inventoryManager)
     {
         this.plugin = plugin;
         this.config = config;
         this.particleUtil = particleUtil;
         this.nms = nms;
         this.wandManager = wandManager;
+        this.inventoryManager = inventoryManager;
         startScheduler();
     }
 
@@ -82,7 +83,7 @@ public class WandEvents implements Listener
                         continue;
                     }
 
-                    int itemCount = getItemCount(player, block);
+                    int itemCount = getItemCount(player, block, mainHand);
                     blockSelection.put(block, new ArrayList<>());
                     tmpReplacements.put(block, new ArrayList<>());
 
@@ -164,7 +165,7 @@ public class WandEvents implements Listener
         Integer amount = selection.size();
         if(wand.isConsumeItems())
         {
-            removeItemStack(itemStack, amount, player);
+            removeItemStack(itemStack, amount, player, mainHand);
         }
         if(wand.isDurabilityEnabled() && amount >= 1)
         {
@@ -195,12 +196,13 @@ public class WandEvents implements Listener
         }
     }
 
-    private int getItemCount(Player player, Block block)
+    private int getItemCount(Player player, Block block, ItemStack mainHand)
     {
         int count = 0;
         Inventory inventory = player.getInventory();
         Material blockMaterial = block.getType();
-        ItemStack[] itemStacks = inventory.getContents();
+        String uuid = nms.getTag(mainHand, "uuid");
+        ItemStack[] itemStacks = (ItemStack[])ArrayUtils.addAll(inventory.getContents(), inventoryManager.getInventory(uuid));
 
         if(player.getGameMode() == GameMode.CREATIVE)
         {
@@ -259,7 +261,7 @@ public class WandEvents implements Listener
         wandItemStack.setItemMeta(itemMeta);
     }
 
-    private void removeItemStack(ItemStack itemStack, int amount, Player player)
+    private void removeItemStack(ItemStack itemStack, int amount, Player player, ItemStack mainHand)
     {
         Inventory inventory = player.getInventory();
         Material material = itemStack.getType();
@@ -302,6 +304,36 @@ public class WandEvents implements Listener
                 return;
             }
         }
+
+        String uuid = nms.getTag(mainHand, "uuid");
+        ItemStack[] inventoryItemStacks = inventoryManager.getInventory(uuid);
+        ArrayList<ItemStack> inventoryItemStacksList = new ArrayList<>(Arrays.asList(inventoryItemStacks));
+        for (ItemStack inventoryItemStack : inventoryItemStacks)
+        {
+            if (inventoryItemStack == null)
+            {
+                continue;
+            }
+            Material itemMaterial = inventoryItemStack.getType();
+            if (!itemMaterial.equals(material) || itemStack.getData().getData() != inventoryItemStack.getData().getData())
+            {
+                continue;
+            }
+            int itemAmount = inventoryItemStack.getAmount();
+            if (amount >= itemAmount)
+            {
+                inventoryItemStacksList.remove(inventoryItemStack);
+                amount -= itemAmount;
+            } else
+            {
+                int index = inventoryItemStacksList.indexOf(inventoryItemStack);
+                inventoryItemStack.setAmount(itemAmount - amount);
+                inventoryItemStacksList.set(index, inventoryItemStack);
+                inventoryManager.setInventory(uuid, inventoryItemStacksList.toArray(new ItemStack[inventoryItemStacksList.size()]));
+                return;
+            }
+        }
+        inventoryManager.setInventory(uuid, inventoryItemStacksList.toArray(new ItemStack[inventoryItemStacksList.size()]));
     }
 
     private void setBlockSelection(Player player, BlockFace blockFace, int maxLocations, Block startBlock, Block blockToCheck, Wand wand)

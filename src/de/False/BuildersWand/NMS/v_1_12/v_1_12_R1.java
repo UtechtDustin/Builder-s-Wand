@@ -3,8 +3,10 @@ package de.False.BuildersWand.NMS.v_1_12;
 import de.False.BuildersWand.Main;
 import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.items.Wand;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -88,5 +90,42 @@ public class v_1_12_R1 implements NMS
         }
 
         Bukkit.getServer().addRecipe(shapedRecipe);
+    }
+
+    @Override
+    public ItemStack setTag(ItemStack itemStack, String path, String value)
+    {
+        net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound compound = nmsStack.getTag();
+        if (compound == null) {
+            compound = new NBTTagCompound();
+            nmsStack.setTag(compound);
+            compound = nmsStack.getTag();
+        }
+
+        compound.setString(path, value);
+        nmsStack.setTag(compound);
+        itemStack = CraftItemStack.asBukkitCopy(nmsStack);
+
+        return itemStack;
+    }
+
+    @Override
+    public String getTag(ItemStack itemStack, String path)
+    {
+        net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound compound = nmsStack.getTag();
+        if (compound == null) {
+            compound = new NBTTagCompound();
+            nmsStack.setTag(compound);
+            compound = nmsStack.getTag();
+        }
+
+        if(!compound.hasKey(path))
+        {
+            return null;
+        }
+
+        return compound.getString(path);
     }
 }
