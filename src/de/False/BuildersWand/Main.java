@@ -11,21 +11,19 @@ import de.False.BuildersWand.NMS.v_1_8.v_1_8_R2;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R3;
 import de.False.BuildersWand.NMS.v_1_9.v_1_9_R1;
 import de.False.BuildersWand.NMS.v_1_9.v_1_9_R2;
-import de.False.BuildersWand.Updater.SendNotification;
+import de.False.BuildersWand.Updater.UpdateNotification;
 import de.False.BuildersWand.Updater.SpigotUpdater;
-import de.False.BuildersWand.items.Wand;
+import de.False.BuildersWand.events.WandEvents;
+import de.False.BuildersWand.manager.WandManager;
 import de.False.BuildersWand.utilities.Metrics;
 import de.False.BuildersWand.utilities.ParticleUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -35,19 +33,19 @@ public class Main extends JavaPlugin
     private Config config;
     private ParticleUtil particleUtil;
     private NMS nms;
-    private Wand wand;
+    private WandManager wandManager;
 
     @Override
     public void onEnable()
     {
         setupNMS();
+        wandManager = new WandManager(this, nms);
+
         loadConfigFiles();
 
         particleUtil = new ParticleUtil(nms);
-
         registerEvents();
         registerCommands();
-        loadRecipes();
         loadMetrics();
         checkForUpdate(this);
     }
@@ -69,22 +67,22 @@ public class Main extends JavaPlugin
 
     private void registerCommands()
     {
-        getCommand("builderswand").setExecutor(new Commands(config, wand));
+        getCommand("builderswand").setExecutor(new Commands(config, wandManager));
     }
 
     private void registerEvents()
     {
-        wand = new Wand(this, config, particleUtil, nms);
         PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(wand, this);
-        pluginManager.registerEvents(new SendNotification(this, config), this);
+        pluginManager.registerEvents(new WandEvents(this, config, particleUtil, nms, wandManager), this);
+        pluginManager.registerEvents(new UpdateNotification(this, config), this);
     }
 
     private void loadConfigFiles()
     {
-        config = new Config(this, nms);
+        config = new Config(this);
         locales.load();
         config.load();
+        wandManager.load();
     }
 
     private void setupNMS() {
@@ -123,35 +121,12 @@ public class Main extends JavaPlugin
         }
     }
 
-    private void loadRecipes()
-    {
-        boolean enabled = config.isCraftingEnabled();
-
-        if(!enabled)
-        {
-            return;
-        }
-
-        boolean shapeless = config.isCraftingShapeless();
-        List<String> recipeStrings = config.getCraftingRecipe();
-        HashMap<String, Material> ingredients = config.getIngredient();
-        ItemStack resultItemStack = wand.getRecipeResult();
-        if(shapeless)
-        {
-            nms.addShapelessRecipe(recipeStrings, ingredients, resultItemStack);
-        }
-        else
-        {
-            nms.addShapedRecipe(recipeStrings, ingredients, resultItemStack);
-        }
-    }
-
     private void checkForUpdate(Main plugin) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 try {
-                    new SpigotUpdater(plugin, 51577, true, config);
+                    new SpigotUpdater(plugin, 51577, config.getAutoDownload(), config);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
