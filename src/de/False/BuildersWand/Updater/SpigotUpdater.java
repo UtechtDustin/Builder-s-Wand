@@ -28,7 +28,7 @@ public class SpigotUpdater extends Thread {
     private Config config;
     private URL url;
 
-    public SpigotUpdater(Main plugin, int resourceID, Player player, Config config) throws IOException {
+    SpigotUpdater(Main plugin, int resourceID, Player player, Config config) throws IOException {
         this(plugin, resourceID, false, config);
         this.player = player;
     }

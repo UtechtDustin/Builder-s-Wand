@@ -9,11 +9,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.io.IOException;
 
-public class SendNotification implements Listener {
+public class UpdateNotification implements Listener {
 
     private Config config;
     private Main plugin;
-    public SendNotification(Main plugin, Config config){
+    public UpdateNotification(Main plugin, Config config){
         this.plugin = plugin;
         this.config = config;
     }

@@ -11,22 +11,19 @@ import de.False.BuildersWand.NMS.v_1_8.v_1_8_R2;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R3;
 import de.False.BuildersWand.NMS.v_1_9.v_1_9_R1;
 import de.False.BuildersWand.NMS.v_1_9.v_1_9_R2;
-import de.False.BuildersWand.Updater.SendNotification;
+import de.False.BuildersWand.Updater.UpdateNotification;
 import de.False.BuildersWand.Updater.SpigotUpdater;
 import de.False.BuildersWand.events.WandEvents;
 import de.False.BuildersWand.manager.WandManager;
 import de.False.BuildersWand.utilities.Metrics;
 import de.False.BuildersWand.utilities.ParticleUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -76,7 +73,8 @@ public class Main extends JavaPlugin
     private void registerEvents()
     {
         PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(new SendNotification(this, config), this);
+        pluginManager.registerEvents(new WandEvents(this, config, particleUtil, nms, wandManager), this);
+        pluginManager.registerEvents(new UpdateNotification(this, config), this);
     }
 
     private void loadConfigFiles()
@@ -128,7 +126,7 @@ public class Main extends JavaPlugin
             @Override
             public void run() {
                 try {
-                    new SpigotUpdater(plugin, 51577, true, config);
+                    new SpigotUpdater(plugin, 51577, config.getAutoDownload(), config);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
