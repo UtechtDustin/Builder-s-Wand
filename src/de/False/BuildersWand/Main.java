@@ -11,6 +11,7 @@ import de.False.BuildersWand.NMS.v_1_8.v_1_8_R2;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R3;
 import de.False.BuildersWand.NMS.v_1_9.v_1_9_R1;
 import de.False.BuildersWand.NMS.v_1_9.v_1_9_R2;
+import de.False.BuildersWand.Updater.SendNotification;
 import de.False.BuildersWand.Updater.SpigotUpdater;
 import de.False.BuildersWand.items.Wand;
 import de.False.BuildersWand.utilities.Metrics;
@@ -68,7 +69,7 @@ public class Main extends JavaPlugin
 
     private void registerCommands()
     {
-        getCommand("bw").setExecutor(new Commands(config, wand));
+        getCommand("builderswand").setExecutor(new Commands(config, wand));
     }
 
     private void registerEvents()
@@ -76,6 +77,7 @@ public class Main extends JavaPlugin
         wand = new Wand(this, config, particleUtil, nms);
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(wand, this);
+        pluginManager.registerEvents(new SendNotification(this, config), this);
     }
 
     private void loadConfigFiles()
@@ -149,7 +151,7 @@ public class Main extends JavaPlugin
             @Override
             public void run() {
                 try {
-                    new SpigotUpdater(plugin, 51577);
+                    new SpigotUpdater(plugin, 51577, true, config);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

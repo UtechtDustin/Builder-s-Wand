@@ -4,7 +4,6 @@ import de.False.BuildersWand.Main;
 import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.utilities.MessageUtil;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -40,6 +39,9 @@ public class Config
     private boolean durabilityEnabled;
     private int durability;
     private String durabilityText;
+
+    private boolean updateNotification;
+    private boolean autoDownload;
 
     public Config(Main plugin, NMS nms)
     {
@@ -89,11 +91,16 @@ public class Config
         particleEnabled = config.getBoolean("particles.enabled");
         particle = config.getString("particles.type");
         particleCount = config.getInt("particles.count");
+
+        updateNotification = config.getBoolean("update.notification");
+        autoDownload = config.getBoolean("update.autoDownload");
     }
 
     private void addDefaults()
     {
         config.options().copyDefaults(true);
+        config.addDefault("update.notification", true);
+        config.addDefault("update.autoDownload", true);
         config.addDefault("wand.name", "&3Builders Wand");
         config.addDefault("wand.material", "BLAZE_ROD");
         config.addDefault("wand.maxSize", 8);
@@ -210,5 +217,15 @@ public class Config
     public String getDurabilityText()
     {
         return durabilityText;
+    }
+
+    public boolean getUpdateNotification()
+    {
+        return updateNotification;
+    }
+
+    public boolean getAutoDownload()
+    {
+        return autoDownload;
     }
 }
