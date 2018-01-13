@@ -1,7 +1,7 @@
 name: BuildersWand
 author: Wythe
 version: 1.4.0
-main: de.False.BuildersWand.BuildersWand
+main: de.False.BuildersWand.Main
 softdepend: [ASkyBlock, WorldGuard]
 commands:
   builderswand:
