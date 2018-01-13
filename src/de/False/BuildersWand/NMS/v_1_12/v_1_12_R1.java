@@ -2,6 +2,7 @@ package de.False.BuildersWand.NMS.v_1_12;
 
 import de.False.BuildersWand.Main;
 import de.False.BuildersWand.NMS.NMS;
+import de.False.BuildersWand.items.Wand;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -14,14 +15,17 @@ import org.bukkit.inventory.ShapelessRecipe;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class v_1_12_R1 implements NMS
 {
     private Main plugin;
+    private Random random;
 
     public v_1_12_R1(Main plugin)
     {
         this.plugin = plugin;
+        this.random = new Random();
     }
 
     @Override
@@ -50,7 +54,7 @@ public class v_1_12_R1 implements NMS
     @Override
     public void addShapelessRecipe(List<String> recipeStrings, HashMap<String, Material> ingredients, ItemStack resultItemStack)
     {
-        NamespacedKey namespacedKey = new NamespacedKey(plugin, "buildersWand");
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, "buildersWand" + random.nextInt());
         ShapelessRecipe shapelessRecipe = new ShapelessRecipe(namespacedKey, resultItemStack);
         for (Map.Entry<String, Material> entry: ingredients.entrySet())
         {
@@ -73,7 +77,7 @@ public class v_1_12_R1 implements NMS
     @Override
     public void addShapedRecipe(List<String> recipeStrings, HashMap<String, Material> ingredients, ItemStack resultItemStack)
     {
-        NamespacedKey namespacedKey = new NamespacedKey(plugin, "buildersWand");
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, "buildersWand" + random.nextInt());
         ShapedRecipe shapedRecipe = new ShapedRecipe(namespacedKey, resultItemStack);
         shapedRecipe.shape(recipeStrings.toArray(new String[recipeStrings.size()]));
         for (Map.Entry<String, Material> entry: ingredients.entrySet())
