@@ -70,7 +70,7 @@ public class Main extends JavaPlugin
 
     private void registerCommands()
     {
-        getCommand("builderswand").setExecutor(new Commands(config, wand));
+        getCommand("builderswand").setExecutor(new Commands(config, wandManager));
     }
 
     private void registerEvents()

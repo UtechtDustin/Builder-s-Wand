@@ -27,7 +27,6 @@ public class WandManager
     {
         this.file = new File(plugin.getDataFolder(), "wands.yml");
         this.nms = nms;
-        registerRecipes();
     }
 
     private void loadWands()
@@ -39,6 +38,8 @@ public class WandManager
         {
             wandList.add(getWand(key));
         }
+
+        registerRecipes();
     }
 
     private Wand getWand(String key)
