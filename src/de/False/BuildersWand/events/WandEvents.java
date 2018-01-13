@@ -170,7 +170,7 @@ public class WandEvents implements Listener
         {
             removeItemStack(itemStack, amount, player);
         }
-        if(wand.isDurabilityEnabled())
+        if(wand.isDurabilityEnabled() && amount >= 1)
         {
             removeDurability(mainHand, player, wand);
         }
