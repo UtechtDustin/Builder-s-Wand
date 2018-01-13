@@ -123,7 +123,7 @@ public class v_1_12_R1 implements NMS
 
         if(!compound.hasKey(path))
         {
-            return "sasdasf";
+            return null;
         }
 
         return compound.getString(path);
