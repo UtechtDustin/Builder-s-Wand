@@ -109,6 +109,7 @@ public class Locales
         en_us.put("updateLine1", "&eThere is a new update available: &a{newVer}");
         en_us.put("updateLine2", "&eYour Current version: &a{currentVer}");
         en_us.put("updateLine3", "&e{url}");
+        en_us.put("updateLine3", "The builders wand could not be found.");
 
         HashMap<String, String> de_de = new HashMap<>();
         de_de.put("reload", "Die Konfig wurde neugeladen.");
@@ -117,6 +118,7 @@ public class Locales
         de_de.put("updateLine1", "&eEin neues Update steht bereit: &a{newVer}");
         de_de.put("updateLine2", "&eAktuelle Version: &a{currentVer}");
         de_de.put("updateLine3", "&e{url}");
+        en_us.put("updateLine3", "Der BuildersWand konnte nicht gefunden werden.");
 
         HashMap<String, String> es_es = new HashMap<>();
         es_es.put("reload", "La configuracion ha sido recargada.");
@@ -125,6 +127,7 @@ public class Locales
         es_es.put("updateLine1", "&eHay una nueva version disponible: &a{newVer}");
         es_es.put("updateLine2", "&eTu version actual: &a{currentVer}");
         es_es.put("updateLine3", "&e{url}");
+        es_es.put("updateLine3", "The builders wand could not be found.");
 
         defaults.put("en_us", en_us);
         defaults.put("de_de", de_de);

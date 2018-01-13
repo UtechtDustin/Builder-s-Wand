@@ -14,6 +14,8 @@ import de.False.BuildersWand.NMS.v_1_9.v_1_9_R2;
 import de.False.BuildersWand.Updater.UpdateNotification;
 import de.False.BuildersWand.Updater.SpigotUpdater;
 import de.False.BuildersWand.events.WandEvents;
+import de.False.BuildersWand.events.WandStorageEvents;
+import de.False.BuildersWand.manager.InventoryManager;
 import de.False.BuildersWand.manager.WandManager;
 import de.False.BuildersWand.utilities.Metrics;
 import de.False.BuildersWand.utilities.ParticleUtil;
@@ -34,12 +36,14 @@ public class Main extends JavaPlugin
     private ParticleUtil particleUtil;
     private NMS nms;
     private WandManager wandManager;
+    private InventoryManager inventoryManager;
 
     @Override
     public void onEnable()
     {
         setupNMS();
         wandManager = new WandManager(this, nms);
+        inventoryManager = new InventoryManager(this, nms);
 
         loadConfigFiles();
 
@@ -67,13 +71,14 @@ public class Main extends JavaPlugin
 
     private void registerCommands()
     {
-        getCommand("builderswand").setExecutor(new Commands(config, wandManager));
+        getCommand("builderswand").setExecutor(new Commands(config, wandManager, nms));
     }
 
     private void registerEvents()
     {
         PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(new WandEvents(this, config, particleUtil, nms, wandManager), this);
+        pluginManager.registerEvents(new WandEvents(this, config, particleUtil, nms, wandManager, inventoryManager), this);
+        pluginManager.registerEvents(new WandStorageEvents(this, config, nms, wandManager, inventoryManager), this);
         pluginManager.registerEvents(new UpdateNotification(this, config), this);
     }
 
@@ -83,6 +88,7 @@ public class Main extends JavaPlugin
         locales.load();
         config.load();
         wandManager.load();
+        inventoryManager.load();
     }
 
     private void setupNMS() {

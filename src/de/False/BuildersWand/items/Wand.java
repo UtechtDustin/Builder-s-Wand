@@ -30,6 +30,9 @@ public class Wand
     private int durability;
     private String durabilityText;
 
+    private boolean inventoryEnabled;
+    private int inventorySize;
+
     public ItemStack getRecipeResult()
     {
         ItemStack buildersWand = new ItemStack(getMaterial());
@@ -186,5 +189,25 @@ public class Wand
     public void setDurabilityText(String durabilityText)
     {
         this.durabilityText = durabilityText;
+    }
+
+    public boolean isInventoryEnabled()
+    {
+        return inventoryEnabled;
+    }
+
+    public void setInventoryEnabled(boolean inventoryEnabled)
+    {
+        this.inventoryEnabled = inventoryEnabled;
+    }
+
+    public int getInventorySize()
+    {
+        return inventorySize;
+    }
+
+    public void setInventorySize(int inventorySize)
+    {
+        this.inventorySize = inventorySize;
     }
 }

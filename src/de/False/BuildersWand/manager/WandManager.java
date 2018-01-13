@@ -60,6 +60,8 @@ public class WandManager
         wand.setParticleEnabled(config.getBoolean(configPrefix + "particles.enabled"));
         wand.setParticle(config.getString(configPrefix + "particles.type"));
         wand.setParticleCount(config.getInt(configPrefix + "particles.count"));
+        wand.setInventoryEnabled(config.getBoolean(configPrefix + "storage.enabled"));
+        wand.setInventorySize(config.getInt(configPrefix + "storage.size"));
         return wand;
     }
 
@@ -116,6 +118,8 @@ public class WandManager
         config.addDefault(configPrefix + "particles.enabled", true);
         config.addDefault(configPrefix + "particles.type", nms.getDefaultParticle());
         config.addDefault(configPrefix + "particles.count", 3);
+        config.addDefault(configPrefix + "storage.enabled", true);
+        config.addDefault(configPrefix + "storage.size", 27);
         save();
     }
 
@@ -188,5 +192,10 @@ public class WandManager
         {
             ex.printStackTrace();
         }
+    }
+
+    public boolean isWand(ItemStack itemStack)
+    {
+        return getWand(itemStack) != null;
     }
 }
