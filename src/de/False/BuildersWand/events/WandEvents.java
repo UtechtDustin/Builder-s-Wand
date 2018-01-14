@@ -517,8 +517,14 @@ public class WandEvents implements Listener
 
     private boolean isAllowedToBuildForExternalPlugins(Player player, Location location)
     {
-        Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
+        Plugin townyPlugin = getExternalPlugin("Towny");
+        if(townyPlugin != null)
+        {
+            Block block = location.getBlock();
+            return PlayerCacheUtil.getCachePermission(player, location, 2, (byte)0, TownyPermission.ActionType.BUILD);
+        }
 
+        Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
         if (worldGuardPlugin != null && worldGuardPlugin instanceof WorldGuardPlugin) {
             WorldGuardPlugin worldGuard = (WorldGuardPlugin) worldGuardPlugin;
             if(!worldGuard.canBuild(player, location))
@@ -542,8 +548,19 @@ public class WandEvents implements Listener
 
     private boolean isAllowedToBuildForExternalPlugins(Player player, List<Block> selection)
     {
-        Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
+        Plugin townyPlugin = getExternalPlugin("Towny");
+        if(townyPlugin != null)
+        {
+            for (Block selectionBlock : selection)
+            {
+                if(!PlayerCacheUtil.getCachePermission(player, selectionBlock.getLocation(), 2, (byte)0, TownyPermission.ActionType.BUILD))
+                {
+                    return false;
+                }
+            }
+        }
 
+        Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
         if (worldGuardPlugin != null && worldGuardPlugin instanceof WorldGuardPlugin) {
             WorldGuardPlugin worldGuard = (WorldGuardPlugin) worldGuardPlugin;
             for (Block selectionBlock : selection)
