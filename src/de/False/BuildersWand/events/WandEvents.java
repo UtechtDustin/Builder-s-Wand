@@ -1,5 +1,7 @@
 package de.False.BuildersWand.events;
 
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import de.False.BuildersWand.ConfigurationFiles.Config;
@@ -131,17 +133,17 @@ public class WandEvents implements Listener
 
         Block against = event.getClickedBlock();
         List<Block> selection = replacements.get(against);
+        if(selection == null)
+        {
+            return;
+        }
+
         if(
                 !player.hasPermission("buildersWand.use")
                 || (!player.hasPermission("buildersWand.bypass") && !isAllowedToBuildForExternalPlugins(player, selection))
         )
         {
             MessageUtil.sendMessage(player, "noPermissions");
-            return;
-        }
-
-        if(selection == null)
-        {
             return;
         }
 
