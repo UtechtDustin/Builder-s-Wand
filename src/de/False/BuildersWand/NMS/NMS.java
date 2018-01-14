@@ -14,6 +14,8 @@ public interface NMS
 {
     void spawnParticle(String particle, Location location);
 
+    void spawnParticle(String particle, Location location, Player player);
+
     ItemStack getItemInHand(Player player);
 
     boolean isMainHand(PlayerInteractEvent event);

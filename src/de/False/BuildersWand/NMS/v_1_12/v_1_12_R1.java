@@ -36,6 +36,12 @@ public class v_1_12_R1 implements NMS
     }
 
     @Override
+    public void spawnParticle(String particle, Location location, Player player)
+    {
+        player.spawnParticle(Particle.valueOf(particle), location.getX(), location.getY(), location.getZ(), 0, 128, 0, 0);
+    }
+
+    @Override
     public ItemStack getItemInHand(Player player)
     {
         return player.getInventory().getItemInMainHand();
