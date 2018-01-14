@@ -1,5 +1,7 @@
 package de.False.BuildersWand.events;
 
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import de.False.BuildersWand.ConfigurationFiles.Config;
@@ -131,17 +133,17 @@ public class WandEvents implements Listener
 
         Block against = event.getClickedBlock();
         List<Block> selection = replacements.get(against);
+        if(selection == null)
+        {
+            return;
+        }
+
         if(
                 !player.hasPermission("buildersWand.use")
                 || (!player.hasPermission("buildersWand.bypass") && !isAllowedToBuildForExternalPlugins(player, selection))
         )
         {
             MessageUtil.sendMessage(player, "noPermissions");
-            return;
-        }
-
-        if(selection == null)
-        {
             return;
         }
 
@@ -515,8 +517,14 @@ public class WandEvents implements Listener
 
     private boolean isAllowedToBuildForExternalPlugins(Player player, Location location)
     {
-        Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
+        Plugin townyPlugin = getExternalPlugin("Towny");
+        if(townyPlugin != null)
+        {
+            Block block = location.getBlock();
+            return PlayerCacheUtil.getCachePermission(player, location, 2, (byte)0, TownyPermission.ActionType.BUILD);
+        }
 
+        Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
         if (worldGuardPlugin != null && worldGuardPlugin instanceof WorldGuardPlugin) {
             WorldGuardPlugin worldGuard = (WorldGuardPlugin) worldGuardPlugin;
             if(!worldGuard.canBuild(player, location))
@@ -540,8 +548,19 @@ public class WandEvents implements Listener
 
     private boolean isAllowedToBuildForExternalPlugins(Player player, List<Block> selection)
     {
-        Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
+        Plugin townyPlugin = getExternalPlugin("Towny");
+        if(townyPlugin != null)
+        {
+            for (Block selectionBlock : selection)
+            {
+                if(!PlayerCacheUtil.getCachePermission(player, selectionBlock.getLocation(), 2, (byte)0, TownyPermission.ActionType.BUILD))
+                {
+                    return false;
+                }
+            }
+        }
 
+        Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
         if (worldGuardPlugin != null && worldGuardPlugin instanceof WorldGuardPlugin) {
             WorldGuardPlugin worldGuard = (WorldGuardPlugin) worldGuardPlugin;
             for (Block selectionBlock : selection)
