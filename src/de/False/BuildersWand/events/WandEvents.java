@@ -97,7 +97,7 @@ public class WandEvents implements Listener
                     {
                         for (Block selectionBlock : selection)
                         {
-                            renderBlockOutlines(blockFace, selectionBlock, selection, wand);
+                            renderBlockOutlines(blockFace, selectionBlock, selection, wand, player);
                         }
                     }
                 }
@@ -395,7 +395,7 @@ public class WandEvents implements Listener
         }
     }
 
-    private void renderBlockOutlines(BlockFace blockFace, Block selectionBlock, List<Block> selection, Wand wand)
+    private void renderBlockOutlines(BlockFace blockFace, Block selectionBlock, List<Block> selection, Wand wand, Player player)
     {
         List<ParticleShapeHidden> shapes = new ArrayList<>();
 
@@ -510,7 +510,7 @@ public class WandEvents implements Listener
             shapes.add(ParticleShapeHidden.UP_NORTH);
         }
 
-        particleUtil.drawBlockOutlines(blockFace, shapes, selectionBlock.getRelative(blockFace).getLocation(), wand);
+        particleUtil.drawBlockOutlines(blockFace, shapes, selectionBlock.getRelative(blockFace).getLocation(), wand, player);
     }
 
     private boolean isAllowedToBuildForExternalPlugins(Player player, Location location)
@@ -518,7 +518,6 @@ public class WandEvents implements Listener
         Plugin townyPlugin = getExternalPlugin("Towny");
         if(townyPlugin != null)
         {
-            Block block = location.getBlock();
             return PlayerCacheUtil.getCachePermission(player, location, 2, (byte)0, TownyPermission.ActionType.BUILD);
         }
 

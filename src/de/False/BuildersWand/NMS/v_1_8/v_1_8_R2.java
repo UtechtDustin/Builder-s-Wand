@@ -27,6 +27,12 @@ public class v_1_8_R2 implements NMS
     }
 
     @Override
+    public void spawnParticle(String particle, Location location, Player player)
+    {
+        player.playEffect(location, Effect.valueOf(particle),null);
+    }
+
+    @Override
     public ItemStack getItemInHand(Player player)
     {
         return player.getItemInHand();

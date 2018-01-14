@@ -21,6 +21,7 @@ public class Config
     private long renderTime;
     private boolean updateNotification;
     private boolean autoDownload;
+    private boolean renderForAllPlayers;
 
     public Config(Main plugin)
     {
@@ -48,6 +49,7 @@ public class Config
         renderTime = config.getLong("wand.renderInterval");
         updateNotification = config.getBoolean("update.notification");
         autoDownload = config.getBoolean("update.autoDownload");
+        renderForAllPlayers = config.getBoolean("particle.renderForAllPlayers");
     }
 
     private void addDefaults()
@@ -55,7 +57,8 @@ public class Config
         config.options().copyDefaults(true);
         config.addDefault("update.notification", true);
         config.addDefault("update.autoDownload", true);
-        config.addDefault("general.renderInterval", 2);
+        config.addDefault("particle.renderInterval", 2);
+        config.addDefault("particle.renderForAllPlayers", false);
         save();
     }
 
@@ -72,5 +75,9 @@ public class Config
     public boolean getAutoDownload()
     {
         return autoDownload;
+    }
+    public boolean isRenderForAllPlayers()
+    {
+        return renderForAllPlayers;
     }
 }

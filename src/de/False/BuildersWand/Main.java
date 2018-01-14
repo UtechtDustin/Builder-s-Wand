@@ -46,8 +46,7 @@ public class Main extends JavaPlugin
         inventoryManager = new InventoryManager(this, nms);
 
         loadConfigFiles();
-
-        particleUtil = new ParticleUtil(nms);
+        particleUtil = new ParticleUtil(nms, config);
         registerEvents();
         registerCommands();
         loadMetrics();

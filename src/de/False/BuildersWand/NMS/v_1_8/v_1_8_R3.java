@@ -3,10 +3,7 @@ package de.False.BuildersWand.NMS.v_1_8;
 import de.False.BuildersWand.NMS.NMS;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -24,6 +21,12 @@ public class v_1_8_R3 implements NMS
     @Override
     public void spawnParticle(String particle, Location location){
         location.getWorld().playEffect(location, Effect.valueOf(particle), 0);
+    }
+
+    @Override
+    public void spawnParticle(String particle, Location location, Player player)
+    {
+        player.playEffect(location, Effect.valueOf(particle),null);
     }
 
     @Override
