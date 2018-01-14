@@ -510,9 +510,7 @@ public class WandEvents implements Listener
             shapes.add(ParticleShapeHidden.UP_NORTH);
         }
 
-        String particle = wand.getParticle();
-        int particleAmount = wand.getParticleCount();
-        particleUtil.drawBlockOutlines(blockFace, shapes, selectionBlock.getRelative(blockFace).getLocation(), particle, particleAmount);
+        particleUtil.drawBlockOutlines(blockFace, shapes, selectionBlock.getRelative(blockFace).getLocation(), wand);
     }
 
     private boolean isAllowedToBuildForExternalPlugins(Player player, Location location)
