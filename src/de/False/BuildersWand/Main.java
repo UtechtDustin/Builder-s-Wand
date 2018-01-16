@@ -2,6 +2,9 @@ package de.False.BuildersWand;
 
 import de.False.BuildersWand.ConfigurationFiles.Config;
 import de.False.BuildersWand.ConfigurationFiles.Locales;
+import de.False.BuildersWand.Inventories.CraftingMenu;
+import de.False.BuildersWand.Inventories.EditorMenu;
+import de.False.BuildersWand.Inventories.MainMenu;
 import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.NMS.v_1_10.v_1_10_R1;
 import de.False.BuildersWand.NMS.v_1_11.v_1_11_R1;
@@ -17,6 +20,7 @@ import de.False.BuildersWand.events.WandEvents;
 import de.False.BuildersWand.events.WandStorageEvents;
 import de.False.BuildersWand.manager.InventoryManager;
 import de.False.BuildersWand.manager.WandManager;
+import de.False.BuildersWand.utilities.InventoryBuilder;
 import de.False.BuildersWand.utilities.Metrics;
 import de.False.BuildersWand.utilities.ParticleUtil;
 import org.bukkit.Bukkit;
@@ -37,6 +41,7 @@ public class Main extends JavaPlugin
     private NMS nms;
     private WandManager wandManager;
     private InventoryManager inventoryManager;
+    private InventoryBuilder inventoryBuilder;
 
     @Override
     public void onEnable()
@@ -44,6 +49,7 @@ public class Main extends JavaPlugin
         setupNMS();
         wandManager = new WandManager(this, nms);
         inventoryManager = new InventoryManager(this, nms);
+        inventoryBuilder = new InventoryBuilder(wandManager);
 
         loadConfigFiles();
         particleUtil = new ParticleUtil(nms, config);
@@ -70,7 +76,7 @@ public class Main extends JavaPlugin
 
     private void registerCommands()
     {
-        getCommand("builderswand").setExecutor(new Commands(config, wandManager, nms));
+        getCommand("builderswand").setExecutor(new Commands(config, wandManager, nms, inventoryBuilder));
     }
 
     private void registerEvents()
@@ -79,6 +85,9 @@ public class Main extends JavaPlugin
         pluginManager.registerEvents(new WandEvents(this, config, particleUtil, nms, wandManager, inventoryManager), this);
         pluginManager.registerEvents(new WandStorageEvents(this, config, nms, wandManager, inventoryManager), this);
         pluginManager.registerEvents(new UpdateNotification(this, config), this);
+        pluginManager.registerEvents(new MainMenu(inventoryBuilder), this);
+        pluginManager.registerEvents(new EditorMenu(inventoryBuilder), this);
+        pluginManager.registerEvents(new CraftingMenu(inventoryBuilder), this);
     }
 
     private void loadConfigFiles()

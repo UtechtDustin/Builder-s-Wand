@@ -42,6 +42,10 @@ public class WandManager
         registerRecipes();
     }
 
+    public List<Wand> getWands(){
+        return wandList;
+    }
+
     private Wand getWand(String key)
     {
         String configPrefix = "wands." + key + ".";
