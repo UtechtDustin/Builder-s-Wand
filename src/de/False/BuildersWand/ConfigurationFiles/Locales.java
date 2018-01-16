@@ -127,7 +127,7 @@ public class Locales
         es_es.put("updateLine1", "&eHay una nueva version disponible: &a{newVer}");
         es_es.put("updateLine2", "&eTu version actual: &a{currentVer}");
         es_es.put("updateLine3", "&e{url}");
-        es_es.put("wandNotFound", "The builders wand could not be found.");
+        es_es.put("wandNotFound", "No se pudo encontrar la vara del constructor.");
 
         defaults.put("en_us", en_us);
         defaults.put("de_de", de_de);
