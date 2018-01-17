@@ -1,6 +1,7 @@
 package de.False.BuildersWand.Inventories;
 
 import de.False.BuildersWand.utilities.InventoryBuilder;
+import de.False.BuildersWand.utilities.MessageUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,7 +22,7 @@ public class CraftingMenu implements Listener {
         String inventoryName = event.getView().getTopInventory().getTitle();
         int slot = event.getRawSlot();
 
-        if (inventoryName.equals("§9Change Crafting") && event.getSlotType() != InventoryType.SlotType.OUTSIDE) {
+        if (inventoryName.equals(MessageUtil.colorize("&9Change Crafting")) && event.getSlotType() != InventoryType.SlotType.OUTSIDE) {
             if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) return;
             event.setCancelled(true);
         }

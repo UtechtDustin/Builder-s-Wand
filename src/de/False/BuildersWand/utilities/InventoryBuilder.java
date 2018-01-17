@@ -1,9 +1,10 @@
 package de.False.BuildersWand.utilities;
 
+import com.sun.xml.internal.ws.util.StringUtils;
+import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.items.Wand;
 import de.False.BuildersWand.manager.WandManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -19,27 +20,32 @@ import java.util.List;
 public class InventoryBuilder {
 
     private WandManager wandManager;
+    private NMS nms;
 
-    public InventoryBuilder(WandManager wandManager) {
+    public InventoryBuilder(WandManager wandManager, NMS nms) {
         this.wandManager = wandManager;
+        this.nms = nms;
     }
 
     private void addItem(Inventory inventory, String displayName, Material material, int data, int slot, List<String> lore) {
         ItemStack itemStack = new ItemStack(material, 1, (short) data);
         ItemMeta itemMeta = itemStack.getItemMeta();
+
         List<String> displayLore = new ArrayList<>();
         for (String addToLore : lore) {
-            displayLore.add(ChatColor.translateAlternateColorCodes('&', addToLore));
+            displayLore.add(MessageUtil.colorize(addToLore));
         }
-        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&7" + displayName));
+
+        itemMeta.setDisplayName(MessageUtil.colorize("&7" + displayName));
         itemMeta.setLore(displayLore);
         itemMeta.addItemFlags(ItemFlag.values());
+
         itemStack.setItemMeta(itemMeta);
         inventory.setItem(slot, itemStack);
     }
 
     public void availableWands(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, 54, "§9Wands Settings");
+        Inventory inventory = Bukkit.createInventory(null, 54, MessageUtil.colorize("&9Wands Settings"));
         int slot = -1;
         for (Wand wand : wandManager.getWands()) {
             slot++;
@@ -50,7 +56,7 @@ public class InventoryBuilder {
     }
 
     public void editorMenu(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, 9, "§9Editing a Wand");
+        Inventory inventory = Bukkit.createInventory(null, 9, MessageUtil.colorize("&9Editing a Wand"));
 
         addItem(inventory, "&aDisplay Name", Material.BOOK_AND_QUILL, 0, 0,
                 Arrays.asList("&7Click to edit the current", "&7name of the wand."));
@@ -70,8 +76,8 @@ public class InventoryBuilder {
         player.openInventory(inventory);
     }
 
-    public void cratingMenu(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, 45, "§9Change Crafting");
+    public void cratingMenu(Player player, Wand wand) {
+        Inventory inventory = Bukkit.createInventory(null, 45, MessageUtil.colorize("&9Change Crafting"));
         List<Integer> slots = Arrays.asList(12, 13, 14, 21, 22, 23, 25, 30, 31, 32);
 
         for (int i = 0; i < 45; i++) {
@@ -79,34 +85,32 @@ public class InventoryBuilder {
             addItem(inventory, "", Material.STAINED_GLASS_PANE, 15, i, Arrays.asList(" "));
         }
 
-        // if enabled add this
-        addItem(inventory, "&aEnabled", Material.INK_SACK, 10, 10, Arrays.asList("&7Click to Toggle the crafting."));
-        //else add this: addItem(inventory, "&aEnabled", Material.INK_SACK, 8, 10, Arrays.asList("&7Click to Toggle the crafting."));
-        addItem(inventory, "&eShapeless: "/* BOOLEAN */, Material.WORKBENCH, 10, 28, Arrays.asList("&7Click to Toggle if the recipe.", "&7is shapeless or with shape."));
+        if (wand.isCraftingEnabled()) addItem(inventory, "&aEnabled", Material.INK_SACK, 10, 10, Arrays.asList("&7Click to Toggle the crafting."));
+        else addItem(inventory, "&cDisabled", Material.INK_SACK, 8, 8, Arrays.asList("&7Click to Toggle the crafting."));
+
+        addItem(inventory, "&eShapeless: &a" + StringUtils.capitalize(wand.isCraftingShapeless() + ""), Material.WORKBENCH, 10, 28, Arrays.asList("&7Click to Toggle if the recipe.", "&7is shapeless or with shape."));
 
         player.openInventory(inventory);
     }
 
-    public void durabilityMenu(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, InventoryType.HOPPER, "§9Durability");
+    public void durabilityMenu(Player player, Wand wand) {
+        Inventory inventory = Bukkit.createInventory(null, InventoryType.HOPPER, MessageUtil.colorize("&9Durability"));
 
-        addItem(inventory, "&eAmount", Material.BOOK, 0, 0, Arrays.asList("&7Click to change the amount.", "", "&eCurrent Amount: &f"/* TEXT FROM WAND */));
-        addItem(inventory, "&eText", Material.NAME_TAG, 0, 2, Arrays.asList("&7Click to change the lore text.", "", "&eCurrent Text: &f"/* TEXT FROM WAND */));
-        // if enabled add this:
-        addItem(inventory, "&aEnabled", Material.INK_SACK, 10, 4, Arrays.asList("&7Click to Toggle the durability."));
-        //else add this: addItem(inventory, "&aEnabled", Material.INK_SACK, 8, 10, Arrays.asList("&7Click to Toggle the crafting."));
+        addItem(inventory, "&eAmount", Material.BOOK, 0, 0, Arrays.asList("&7Click to change the amount.", "", "&eCurrent Amount: &f" + wand.getDurability()));
+        addItem(inventory, "&eText", Material.NAME_TAG, 0, 2, Arrays.asList("&7Click to change the lore text.", "", "&eCurrent Text: &f" + wand.getDurabilityText()));
+        if (wand.isDurabilityEnabled()) addItem(inventory, "&aEnabled", Material.INK_SACK, 10, 4, Arrays.asList("&7Click to Toggle the durability."));
+        else addItem(inventory, "&cDisabled", Material.INK_SACK, 8, 10, Arrays.asList("&7Click to Toggle the crafting."));
 
         player.openInventory(inventory);
     }
 
-    public void particleMenu(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, InventoryType.HOPPER, "§9Durability");
+    public void particleMenu(Player player, Wand wand) {
+        Inventory inventory = Bukkit.createInventory(null, InventoryType.HOPPER, MessageUtil.colorize("&9Durability"));
 
-        addItem(inventory, "&eCount", Material.NAME_TAG, 0, 0, Arrays.asList("&7Click to change the count.", "", "&eCurrent Count: &f"/* TEXT FROM WAND */));
-        addItem(inventory, "&eParticle", Material.GLOWSTONE_DUST, 0, 2, Arrays.asList("&7Click to change the particle.", "", "&eCurrent Particle: &f"/* TEXT FROM WAND */));
-        // if enabled add this:
-        addItem(inventory, "&aEnabled", Material.INK_SACK, 10, 4, Arrays.asList("&7Click to Toggle the particles."));
-        //else add this: addItem(inventory, "&aEnabled", Material.INK_SACK, 8, 10, Arrays.asList("&7Click to Toggle the crafting."));
+        addItem(inventory, "&eCount", Material.NAME_TAG, 0, 0, Arrays.asList("&7Click to change the count.", "", "&eCurrent Count: &f" + wand.getParticleCount()));
+        addItem(inventory, "&eParticle", Material.GLOWSTONE_DUST, 0, 2, Arrays.asList("&7Click to change the particle.", "", "&eCurrent Particle: &f" + wand.getParticle()));
+        if (wand.isParticleEnabled()) addItem(inventory, "&aEnabled", Material.INK_SACK, 10, 4, Arrays.asList("&7Click to Toggle the particles."));
+        else addItem(inventory, "&cDisabled", Material.INK_SACK, 8, 10, Arrays.asList("&7Click to Toggle the crafting."));
 
         player.openInventory(inventory);
     }

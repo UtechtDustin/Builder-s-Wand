@@ -49,7 +49,7 @@ public class Main extends JavaPlugin
         setupNMS();
         wandManager = new WandManager(this, nms);
         inventoryManager = new InventoryManager(this, nms);
-        inventoryBuilder = new InventoryBuilder(wandManager);
+        inventoryBuilder = new InventoryBuilder(wandManager, nms);
 
         loadConfigFiles();
         particleUtil = new ParticleUtil(nms, config);
@@ -85,7 +85,7 @@ public class Main extends JavaPlugin
         pluginManager.registerEvents(new WandEvents(this, config, particleUtil, nms, wandManager, inventoryManager), this);
         pluginManager.registerEvents(new WandStorageEvents(this, config, nms, wandManager, inventoryManager), this);
         pluginManager.registerEvents(new UpdateNotification(this, config), this);
-        pluginManager.registerEvents(new MainMenu(inventoryBuilder), this);
+        pluginManager.registerEvents(new MainMenu(inventoryBuilder, wandManager), this);
         pluginManager.registerEvents(new EditorMenu(inventoryBuilder), this);
         pluginManager.registerEvents(new CraftingMenu(inventoryBuilder), this);
     }
