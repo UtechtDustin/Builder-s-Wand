@@ -42,10 +42,14 @@ public class WandManager
         registerRecipes();
     }
 
-    private Wand getWand(String key)
+    public List<Wand> getWands(){
+        return wandList;
+    }
+
+    public Wand getWand(String key)
     {
         String configPrefix = "wands." + key + ".";
-        Wand wand = new Wand();
+        Wand wand = new Wand(nms);
         wand.setName(MessageUtil.colorize(config.getString(configPrefix + "name")));
         wand.setMaterial(Material.valueOf(config.getString(configPrefix + "material")));
         wand.setMaxSize(config.getInt(configPrefix + "maxSize"));
@@ -62,6 +66,7 @@ public class WandManager
         wand.setParticleCount(config.getInt(configPrefix + "particles.count"));
         wand.setInventoryEnabled(config.getBoolean(configPrefix + "storage.enabled"));
         wand.setInventorySize(config.getInt(configPrefix + "storage.size"));
+        wand.setKey(key);
         return wand;
     }
 

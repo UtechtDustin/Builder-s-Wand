@@ -1,5 +1,6 @@
 package de.False.BuildersWand.items;
 
+import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.utilities.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -32,6 +33,14 @@ public class Wand
 
     private boolean inventoryEnabled;
     private int inventorySize;
+
+    private String key;
+
+    private NMS nms;
+
+    public Wand(NMS nms){
+        this.nms = nms;
+    }
 
     public ItemStack getRecipeResult()
     {
@@ -209,5 +218,13 @@ public class Wand
     public void setInventorySize(int inventorySize)
     {
         this.inventorySize = inventorySize;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

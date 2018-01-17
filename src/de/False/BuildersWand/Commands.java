@@ -5,6 +5,7 @@ import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.events.WandEvents;
 import de.False.BuildersWand.items.Wand;
 import de.False.BuildersWand.manager.WandManager;
+import de.False.BuildersWand.utilities.InventoryBuilder;
 import de.False.BuildersWand.utilities.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -20,12 +21,14 @@ public class Commands implements CommandExecutor
     private Config config;
     private WandManager wandManager;
     private NMS nms;
+    private InventoryBuilder invBuilder;
 
-    Commands(Config config, WandManager wandManager, NMS nms)
+    Commands(Config config, WandManager wandManager, NMS nms, InventoryBuilder invBuilder)
     {
         this.nms = nms;
         this.config = config;
         this.wandManager = wandManager;
+        this.invBuilder = invBuilder;
     }
 
     @Override
@@ -50,6 +53,9 @@ public class Commands implements CommandExecutor
                 break;
             case "give":
                 giveCommand(player, args);
+                break;
+            case "config":
+                invBuilder.availableWands(player);
                 break;
             default:
                 helpCommand(player);
