@@ -114,7 +114,7 @@ public class WandStorageEvents implements Listener
         Inventory storage = event.getInventory();
         ItemStack itemStack = event.getCurrentItem();
         InventoryAction action = event.getAction();
-        if(action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD)
+        if((action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD) && storage.getName().equals(INVENTORY_NAME))
         {
             event.setCancelled(true);
         }
