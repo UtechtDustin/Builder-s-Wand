@@ -1,5 +1,6 @@
 package de.False.BuildersWand.items;
 
+import de.False.BuildersWand.NMS.NMS;
 import de.False.BuildersWand.utilities.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -8,9 +9,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class Wand
 {
+    private NMS nms;
+
     private String name;
     private Material material;
 
@@ -33,6 +37,11 @@ public class Wand
     private boolean inventoryEnabled;
     private int inventorySize;
 
+    public Wand(NMS nms)
+    {
+        this.nms = nms;
+    }
+
     public ItemStack getRecipeResult()
     {
         ItemStack buildersWand = new ItemStack(getMaterial());
@@ -47,6 +56,7 @@ public class Wand
         }
 
         buildersWand.setItemMeta(itemMeta);
+        buildersWand = nms.setTag(buildersWand, "uuid", UUID.randomUUID() + "");
 
         return buildersWand;
     }
