@@ -13,6 +13,7 @@ import de.False.BuildersWand.manager.InventoryManager;
 import de.False.BuildersWand.manager.WandManager;
 import de.False.BuildersWand.utilities.MessageUtil;
 import de.False.BuildersWand.utilities.ParticleUtil;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -540,6 +541,16 @@ public class WandEvents implements Listener
             }
         }
 
+        Plugin griefPreventionPlugin = getExternalPlugin("GriefPrevention");
+        if(griefPreventionPlugin != null)
+        {
+            GriefPrevention griefPrevention = GriefPrevention.instance;
+            if(griefPrevention.allowBuild(player, location) != null)
+            {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -581,6 +592,20 @@ public class WandEvents implements Listener
                 }
             }
         }
+
+        Plugin griefPreventionPlugin = getExternalPlugin("GriefPrevention");
+        if(griefPreventionPlugin != null)
+        {
+            GriefPrevention griefPrevention = GriefPrevention.instance;
+            for (Block selectionBlock : selection)
+            {
+                if(griefPrevention.allowBuild(player, selectionBlock.getLocation()) != null)
+                {
+                    return false;
+                }
+            }
+        }
+
 
         return true;
     }
