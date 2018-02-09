@@ -209,6 +209,12 @@ public class WandEvents implements Listener
         int count = 0;
         Inventory inventory = player.getInventory();
         Material blockMaterial = block.getType();
+
+        if(mainHand.getType() == Material.AIR)
+        {
+            return 0;
+        }
+
         String uuid = nms.getTag(mainHand, "uuid");
         ItemStack[] itemStacks = (ItemStack[])ArrayUtils.addAll(inventory.getContents(), inventoryManager.getInventory(uuid));
 

@@ -44,6 +44,12 @@ public class WandStorageEvents implements Listener
         Player player = event.getPlayer();
         ItemStack mainHand = nms.getItemInHand(player);
         Wand wand = wandManager.getWand(mainHand);
+
+        if(mainHand.getType() == Material.AIR)
+        {
+            return;
+        }
+
         String uuid = nms.getTag(mainHand, "uuid");
         Action action = event.getAction();
         if (
@@ -138,7 +144,7 @@ public class WandStorageEvents implements Listener
         Player player = (Player) event.getPlayer();
         Inventory storage = event.getInventory();
         ItemStack mainHand = nms.getItemInHand(player);
-        if(mainHand == null | storage == null || !storage.getName().equals(INVENTORY_NAME))
+        if(mainHand == null || mainHand.getType() == Material.AIR || storage == null || !storage.getName().equals(INVENTORY_NAME))
         {
             return;
         }
