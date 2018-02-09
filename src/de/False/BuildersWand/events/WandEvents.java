@@ -1,5 +1,10 @@
 package de.False.BuildersWand.events;
 
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.entity.BoardColl;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.MPlayer;
+import com.massivecraft.massivecore.ps.PS;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -551,6 +556,18 @@ public class WandEvents implements Listener
             }
         }
 
+        Plugin factionsPlugin = getExternalPlugin("Factions");
+        if(factionsPlugin != null)
+        {
+            MPlayer mPlayer = MPlayer.get(player);
+            Faction faction = BoardColl.get().getFactionAt(PS.valueOf(location));
+            if(faction != mPlayer.getFaction())
+            {
+
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -606,6 +623,19 @@ public class WandEvents implements Listener
             }
         }
 
+        Plugin factionsPlugin = getExternalPlugin("Factions");
+        if(factionsPlugin != null)
+        {
+            MPlayer mPlayer = MPlayer.get(player);
+            for (Block selectionBlock : selection)
+            {
+                Faction faction = BoardColl.get().getFactionAt(PS.valueOf(selectionBlock.getLocation()));
+                if(faction == mPlayer.getFaction())
+                {
+                    return false;
+                }
+            }
+        }
 
         return true;
     }

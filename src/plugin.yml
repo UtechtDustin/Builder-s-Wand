@@ -1,8 +1,8 @@
 name: BuildersWand
 author: Wythe
-version: 2.3.4
+version: 2.3.5
 main: de.False.BuildersWand.Main
-softdepend: [ASkyBlock, WorldGuard, Towny, GriefPrevention]
+softdepend: [ASkyBlock, WorldGuard, Towny, GriefPrevention, Factions]
 commands:
   builderswand:
     description: The general BuildersWand command.
