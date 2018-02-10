@@ -62,6 +62,11 @@ public class WandManager
         wand.setParticleCount(config.getInt(configPrefix + "particles.count"));
         wand.setInventoryEnabled(config.getBoolean(configPrefix + "storage.enabled"));
         wand.setInventorySize(config.getInt(configPrefix + "storage.size"));
+
+        if(config.isSet(configPrefix + "permission"))
+        {
+            wand.setPermission(config.getString(configPrefix + "permission"));
+        }
         return wand;
     }
 

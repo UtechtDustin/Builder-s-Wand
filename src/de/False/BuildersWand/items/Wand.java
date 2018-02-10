@@ -37,6 +37,8 @@ public class Wand
     private boolean inventoryEnabled;
     private int inventorySize;
 
+    private String permission = "";
+
     public Wand(NMS nms)
     {
         this.nms = nms;
@@ -219,5 +221,19 @@ public class Wand
     public void setInventorySize(int inventorySize)
     {
         this.inventorySize = inventorySize;
+    }
+
+    public String getPermission()
+    {
+        return permission;
+    }
+
+    public void setPermission(String permission)
+    {
+        this.permission = permission;
+    }
+
+    public boolean hasPermission(){
+        return getPermission().length() > 0;
     }
 }

@@ -1,6 +1,6 @@
 name: BuildersWand
 author: Wythe
-version: 2.3.6
+version: 2.3.7
 main: de.False.BuildersWand.Main
 softdepend: [ASkyBlock, WorldGuard, Towny, GriefPrevention, Factions]
 commands:

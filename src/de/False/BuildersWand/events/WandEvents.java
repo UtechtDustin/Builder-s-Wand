@@ -147,6 +147,7 @@ public class WandEvents implements Listener
         if(
                 !player.hasPermission("buildersWand.use")
                 || (!player.hasPermission("buildersWand.bypass") && !isAllowedToBuildForExternalPlugins(player, selection))
+                || wand.hasPermission() && !player.hasPermission(wand.getPermission())
         )
         {
             MessageUtil.sendMessage(player, "noPermissions");
@@ -371,6 +372,7 @@ public class WandEvents implements Listener
                 || !relativeBlock.equals(Material.AIR)
                 || (!isAllowedToBuildForExternalPlugins(player, checkLocation) && !player.hasPermission("buildersWand.bypass"))
                 || !player.hasPermission("buildersWand.use")
+                || wand.hasPermission() && !player.hasPermission(wand.getPermission())
         )
         {
             return;
