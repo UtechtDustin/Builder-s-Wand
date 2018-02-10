@@ -1,5 +1,6 @@
 package de.False.BuildersWand.events;
 
+import com.gmail.nossr50.mcMMO;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
@@ -165,6 +166,12 @@ public class WandEvents implements Listener
 
             for (Block selectionBlock : selection)
             {
+                Plugin mcMMOPlugin = getExternalPlugin("mcMMO");
+                if(mcMMOPlugin != null)
+                {
+                    mcMMO.getPlaceStore().setTrue(selectionBlock);
+                }
+
                 selectionBlock.setType(blockType);
                 selectionBlock.setData(blockSubId);
             }
