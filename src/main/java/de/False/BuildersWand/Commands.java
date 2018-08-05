@@ -2,7 +2,6 @@ package de.False.BuildersWand;
 
 import de.False.BuildersWand.ConfigurationFiles.Config;
 import de.False.BuildersWand.NMS.NMS;
-import de.False.BuildersWand.events.WandEvents;
 import de.False.BuildersWand.items.Wand;
 import de.False.BuildersWand.manager.WandManager;
 import de.False.BuildersWand.utilities.MessageUtil;
@@ -15,102 +14,83 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-public class Commands implements CommandExecutor
-{
+public class Commands implements CommandExecutor {
     private Config config;
     private WandManager wandManager;
     private NMS nms;
 
-    Commands(Config config, WandManager wandManager, NMS nms)
-    {
+    Commands(Config config, WandManager wandManager, NMS nms) {
         this.nms = nms;
         this.config = config;
         this.wandManager = wandManager;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args)
-    {
-        if(!(sender instanceof Player))
-        {
+    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+
+        if (args.length < 1) {
+            helpCommand(sender);
             return true;
         }
 
-        Player player = (Player) sender;
-        if(args.length < 1)
-        {
-            helpCommand(player);
-            return true;
-        }
-
-        switch (args[0])
-        {
+        switch (args[0]) {
             case "reload":
-                reloadCommand(player);
+                reloadCommand(sender);
                 break;
             case "give":
-                giveCommand(player, args);
+                giveCommand(sender, args);
                 break;
             default:
-                helpCommand(player);
+                helpCommand(sender);
         }
 
         return true;
     }
 
-    private void reloadCommand(Player player)
-    {
-        if(!player.hasPermission("buildersWand.reload"))
-        {
+    private void reloadCommand(CommandSender player) {
+        if (player instanceof Player && !player.hasPermission("buildersWand.reload")) {
             MessageUtil.sendMessage(player, "noPermissions");
             return;
         }
 
-        MessageUtil.sendMessage(player,"reload");
+        MessageUtil.sendMessage(player, "reload");
         config.load();
         wandManager.load();
     }
 
-    private void giveCommand(Player player, String[] args)
-    {
-        if(!player.hasPermission("buildersWand.give"))
-        {
+    private void giveCommand(CommandSender player, String[] args) {
+        boolean isPlayerInstance = player instanceof Player;
+        if (isPlayerInstance && !player.hasPermission("buildersWand.give")) {
             MessageUtil.sendMessage(player, "noPermissions");
             return;
         }
         Wand wand;
         Player destPlayer;
 
-        if(args.length < 1)
-        {
+        if (args.length < 1) {
             helpCommand(player);
             return;
-        }
-        else if(args.length == 1)
-        {
+        } else if (args.length == 1 && isPlayerInstance) {
             wand = wandManager.getWandTier(1);
-            destPlayer = player;
+            destPlayer = (Player) player;
 
-        }
-        else if(args.length == 2)
-        {
+        } else if (args.length == 2) {
             destPlayer = Bukkit.getPlayer(args[1]);
             wand = wandManager.getWandTier(1);
-        }
-        else
-        {
+        } else {
+            if (!(player instanceof Player)) {
+                MessageUtil.sendMessage(player, "noPermissions");
+                return;
+            }
             wand = wandManager.getWandTier(Integer.parseInt(args[2]));
             destPlayer = Bukkit.getPlayer(args[1]);
         }
 
-        if(destPlayer == null)
-        {
-            MessageUtil.sendMessage(player,"playerNotFound");
+        if (destPlayer == null) {
+            MessageUtil.sendMessage(player, "playerNotFound");
             return;
-        }
-        else if(wand == null)
-        {
-            MessageUtil.sendMessage(player,"wandNotFound");
+        } else if (wand == null) {
+            MessageUtil.sendMessage(player, "wandNotFound");
             return;
         }
 
@@ -119,14 +99,13 @@ public class Commands implements CommandExecutor
         destPlayer.getInventory().addItem(itemStack);
     }
 
-    private void helpCommand(Player player)
-    {
+    private void helpCommand(CommandSender player) {
         MessageUtil.sendSeparator(player);
-        MessageUtil.sendRawMessage(player,"             &b&lBuildersWand help");
+        MessageUtil.sendRawMessage(player, "             &b&lBuildersWand help");
         player.sendMessage("");
-        MessageUtil.sendRawMessage(player,"&e&l»&r&e /bw reload &7- Reloads the config file.");
-        MessageUtil.sendRawMessage(player,"&e&l»&r&e /bw give <player> &7- Give the builderswand tier 1 to a player.");
-        MessageUtil.sendRawMessage(player,"&e&l»&r&e /bw give <player> <tier> &7- Give the builderswand tier X to a player.");
+        MessageUtil.sendRawMessage(player, "&e&l»&r&e /bw reload &7- Reloads the config file.");
+        MessageUtil.sendRawMessage(player, "&e&l»&r&e /bw give <player> &7- Give the builderswand tier 1 to a player.");
+        MessageUtil.sendRawMessage(player, "&e&l»&r&e /bw give <player> <tier> &7- Give the builderswand tier X to a player.");
         MessageUtil.sendSeparator(player);
     }
 }
