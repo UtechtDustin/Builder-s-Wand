@@ -1,6 +1,8 @@
 package de.False.BuildersWand.events;
 
 import com.gmail.nossr50.mcMMO;
+import com.intellectualcrafters.plot.api.PlotAPI;
+import com.intellectualcrafters.plot.object.Plot;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
@@ -40,8 +42,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 
-public class WandEvents implements Listener
-{
+public class WandEvents implements Listener {
     private Main plugin;
     private Config config;
     private ParticleUtil particleUtil;
@@ -53,8 +54,7 @@ public class WandEvents implements Listener
     private HashMap<Block, List<Block>> tmpReplacements = new HashMap<Block, List<Block>>();
     public static ArrayList<canBuildHandler> canBuildHandlers = new ArrayList<canBuildHandler>();
 
-    public WandEvents(Main plugin, Config config, ParticleUtil particleUtil, NMS nms, WandManager wandManager, InventoryManager inventoryManager)
-    {
+    public WandEvents(Main plugin, Config config, ParticleUtil particleUtil, NMS nms, WandManager wandManager, InventoryManager inventoryManager) {
         this.plugin = plugin;
         this.config = config;
         this.particleUtil = particleUtil;
@@ -64,33 +64,27 @@ public class WandEvents implements Listener
         startScheduler();
     }
 
-    private void startScheduler()
-    {
-        Bukkit.getScheduler().runTaskTimer(plugin, new Runnable()
-        {
+    private void startScheduler() {
+        Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 blockSelection.clear();
                 tmpReplacements.clear();
-                for (Player player : Bukkit.getOnlinePlayers())
-                {
+                for (Player player : Bukkit.getOnlinePlayers()) {
 
                     ItemStack mainHand = nms.getItemInHand(player);
                     Wand wand = wandManager.getWand(mainHand);
                     Block block = player.getTargetBlock((Set<Material>) null, 5);
                     if (
-                            block.getType().equals(Material.AIR) || wand == null || player.getLocation().add(0,1,0).getBlock().getType() != Material.AIR
-                    )
-                    {
+                            block.getType().equals(Material.AIR) || wand == null || player.getLocation().add(0, 1, 0).getBlock().getType() != Material.AIR
+                    ) {
                         continue;
                     }
 
                     List<Block> lastBlocks = player.getLastTwoTargetBlocks((Set<Material>) null, 5);
                     BlockFace blockFace = lastBlocks.get(1).getFace(lastBlocks.get(0));
                     Block blockNext = block.getRelative(blockFace);
-                    if (blockNext == null)
-                    {
+                    if (blockNext == null) {
                         continue;
                     }
 
@@ -102,10 +96,8 @@ public class WandEvents implements Listener
                     replacements = tmpReplacements;
                     List<Block> selection = blockSelection.get(block);
 
-                    if(wand.isParticleEnabled())
-                    {
-                        for (Block selectionBlock : selection)
-                        {
+                    if (wand.isParticleEnabled()) {
+                        for (Block selectionBlock : selection) {
                             renderBlockOutlines(blockFace, selectionBlock, selection, wand, player);
                         }
                     }
@@ -115,13 +107,11 @@ public class WandEvents implements Listener
     }
 
     @EventHandler
-    public void placeBlock(BlockPlaceEvent event)
-    {
+    public void placeBlock(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         ItemStack mainHand = nms.getItemInHand(player);
         Wand wand = wandManager.getWand(mainHand);
-        if (wand == null)
-        {
+        if (wand == null) {
             return;
         }
 
@@ -129,25 +119,22 @@ public class WandEvents implements Listener
     }
 
     @EventHandler
-    public void playerInteract(PlayerInteractEvent event)
-    {
+    public void playerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack mainHand = nms.getItemInHand(player);
         Wand wand = wandManager.getWand(mainHand);
 
-        if (wand == null || event.getAction() != Action.RIGHT_CLICK_BLOCK || !nms.isMainHand(event))
-        {
+        if (wand == null || event.getAction() != Action.RIGHT_CLICK_BLOCK || !nms.isMainHand(event)) {
             return;
         }
 
         Block against = event.getClickedBlock();
         List<Block> selection = replacements.get(against);
-        if(selection == null)
-        {
+        if (selection == null) {
             return;
         }
 
-        if(
+        if (
                 !player.hasPermission("buildersWand.use")
                 || (!player.hasPermission("buildersWand.bypass") && !isAllowedToBuildForExternalPlugins(player, selection))
                 || wand.hasPermission() && !player.hasPermission(wand.getPermission())
@@ -166,11 +153,9 @@ public class WandEvents implements Listener
         event.setCancelled(true);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
 
-            for (Block selectionBlock : selection)
-            {
+            for (Block selectionBlock : selection) {
                 Plugin mcMMOPlugin = getExternalPlugin("mcMMO");
-                if(mcMMOPlugin != null)
-                {
+                if (mcMMOPlugin != null) {
                     mcMMO.getPlaceStore().setTrue(selectionBlock);
                 }
 
@@ -181,12 +166,10 @@ public class WandEvents implements Listener
         }, 1L);
 
         Integer amount = selection.size();
-        if(wand.isConsumeItems())
-        {
+        if (wand.isConsumeItems()) {
             removeItemStack(itemStack, amount, player, mainHand);
         }
-        if(wand.isDurabilityEnabled() && amount >= 1)
-        {
+        if (wand.isDurabilityEnabled() && amount >= 1) {
             removeDurability(mainHand, player, wand);
         }
     }
@@ -216,57 +199,47 @@ public class WandEvents implements Listener
     }
 
     @EventHandler
-    private void craftItemEvent(CraftItemEvent event)
-    {
-        if(!(event.getWhoClicked() instanceof Player))
-        {
+    private void craftItemEvent(CraftItemEvent event) {
+        if (!(event.getWhoClicked() instanceof Player)) {
             return;
         }
 
         Player player = (Player) event.getWhoClicked();
         ItemStack result = event.getRecipe().getResult();
         Wand wand = wandManager.getWand(result);
-        if (wand == null)
-        {
+        if (wand == null) {
             return;
         }
 
-        if(!player.hasPermission("buildersWand.craft"))
-        {
+        if (!player.hasPermission("buildersWand.craft")) {
             MessageUtil.sendMessage(player, "noPermissions");
             event.setCancelled(true);
         }
     }
 
-    private int getItemCount(Player player, Block block, ItemStack mainHand)
-    {
+    private int getItemCount(Player player, Block block, ItemStack mainHand) {
         int count = 0;
         Inventory inventory = player.getInventory();
         Material blockMaterial = block.getType();
 
-        if(mainHand.getType() == Material.AIR)
-        {
+        if (mainHand.getType() == Material.AIR) {
             return 0;
         }
 
         String uuid = nms.getTag(mainHand, "uuid");
-        ItemStack[] itemStacks = (ItemStack[])ArrayUtils.addAll(inventory.getContents(), inventoryManager.getInventory(uuid));
+        ItemStack[] itemStacks = (ItemStack[]) ArrayUtils.addAll(inventory.getContents(), inventoryManager.getInventory(uuid));
 
-        if(player.getGameMode() == GameMode.CREATIVE)
-        {
+        if (player.getGameMode() == GameMode.CREATIVE) {
             return Integer.MAX_VALUE;
         }
 
-        for (ItemStack itemStack : itemStacks)
-        {
-            if (itemStack == null)
-            {
+        for (ItemStack itemStack : itemStacks) {
+            if (itemStack == null) {
                 continue;
             }
             Material itemMaterial = itemStack.getType();
 
-            if (!itemMaterial.equals(blockMaterial) || block.getData() != itemStack.getDurability())
-            {
+            if (!itemMaterial.equals(blockMaterial) || block.getData() != itemStack.getDurability()) {
                 continue;
             }
 
@@ -276,32 +249,26 @@ public class WandEvents implements Listener
         return count;
     }
 
-    private void removeDurability(ItemStack wandItemStack, Player player, Wand wand)
-    {
+    private void removeDurability(ItemStack wandItemStack, Player player, Wand wand) {
         Inventory inventory = player.getInventory();
-        if (player.getGameMode() == GameMode.CREATIVE)
-        {
+        if (player.getGameMode() == GameMode.CREATIVE) {
             return;
         }
 
         Integer durability = getDurability(wandItemStack, wand);
         Integer newDurability = durability - 1;
 
-        if(newDurability <= 0)
-        {
+        if (newDurability <= 0) {
             inventory.removeItem(wandItemStack);
         }
 
         ItemMeta itemMeta = wandItemStack.getItemMeta();
         List<String> lore = itemMeta.getLore();
-        String durabilityText = MessageUtil.colorize(wand.getDurabilityText().replace("{durability}", newDurability+""));
-        if(lore == null)
-        {
+        String durabilityText = MessageUtil.colorize(wand.getDurabilityText().replace("{durability}", newDurability + ""));
+        if (lore == null) {
             lore = new ArrayList<>();
             lore.add(durabilityText);
-        }
-        else
-        {
+        } else {
             lore.set(0, durabilityText);
         }
 
@@ -309,44 +276,36 @@ public class WandEvents implements Listener
         wandItemStack.setItemMeta(itemMeta);
     }
 
-    private void removeItemStack(ItemStack itemStack, int amount, Player player, ItemStack mainHand)
-    {
+    private void removeItemStack(ItemStack itemStack, int amount, Player player, ItemStack mainHand) {
         Inventory inventory = player.getInventory();
         Material material = itemStack.getType();
         ItemStack[] itemStacks = inventory.getContents();
 
-        if (player.getGameMode() == GameMode.CREATIVE)
-        {
+        if (player.getGameMode() == GameMode.CREATIVE) {
             return;
         }
 
-        for (ItemStack inventoryItemStack : itemStacks)
-        {
-            if (inventoryItemStack == null)
-            {
+        for (ItemStack inventoryItemStack : itemStacks) {
+            if (inventoryItemStack == null) {
                 continue;
             }
             Material itemMaterial = inventoryItemStack.getType();
-            if (!itemMaterial.equals(material) || itemStack.getData().getData() != inventoryItemStack.getData().getData())
-            {
+            if (!itemMaterial.equals(material) || itemStack.getData().getData() != inventoryItemStack.getData().getData()) {
                 continue;
             }
 
             int itemAmount = inventoryItemStack.getAmount();
-            if (amount >= itemAmount)
-            {
+            if (amount >= itemAmount) {
 
                 HashMap<Integer, ItemStack> didntRemovedItems = inventory.removeItem(inventoryItemStack);
 
-                if(didntRemovedItems.size() == 1)
-                {
+                if (didntRemovedItems.size() == 1) {
                     player.getInventory().setItemInOffHand(null);
                 }
 
                 amount -= itemAmount;
                 player.updateInventory();
-            } else
-            {
+            } else {
                 inventoryItemStack.setAmount(itemAmount - amount);
                 player.updateInventory();
                 return;
@@ -356,24 +315,19 @@ public class WandEvents implements Listener
         String uuid = nms.getTag(mainHand, "uuid");
         ItemStack[] inventoryItemStacks = inventoryManager.getInventory(uuid);
         ArrayList<ItemStack> inventoryItemStacksList = new ArrayList<>(Arrays.asList(inventoryItemStacks));
-        for (ItemStack inventoryItemStack : inventoryItemStacks)
-        {
-            if (inventoryItemStack == null)
-            {
+        for (ItemStack inventoryItemStack : inventoryItemStacks) {
+            if (inventoryItemStack == null) {
                 continue;
             }
             Material itemMaterial = inventoryItemStack.getType();
-            if (!itemMaterial.equals(material) || itemStack.getData().getData() != inventoryItemStack.getData().getData())
-            {
+            if (!itemMaterial.equals(material) || itemStack.getData().getData() != inventoryItemStack.getData().getData()) {
                 continue;
             }
             int itemAmount = inventoryItemStack.getAmount();
-            if (amount >= itemAmount)
-            {
+            if (amount >= itemAmount) {
                 inventoryItemStacksList.remove(inventoryItemStack);
                 amount -= itemAmount;
-            } else
-            {
+            } else {
                 int index = inventoryItemStacksList.indexOf(inventoryItemStack);
                 inventoryItemStack.setAmount(itemAmount - amount);
                 inventoryItemStacksList.set(index, inventoryItemStack);
@@ -384,8 +338,7 @@ public class WandEvents implements Listener
         inventoryManager.setInventory(uuid, inventoryItemStacksList.toArray(new ItemStack[inventoryItemStacksList.size()]));
     }
 
-    private void setBlockSelection(Player player, BlockFace blockFace, int maxLocations, Block startBlock, Block blockToCheck, Wand wand)
-    {
+    private void setBlockSelection(Player player, BlockFace blockFace, int maxLocations, Block startBlock, Block blockToCheck, Wand wand) {
         int blockToCheckData = blockToCheck.getData();
         int startBlockData = startBlock.getData();
         Location startLocation = startBlock.getLocation();
@@ -419,8 +372,7 @@ public class WandEvents implements Listener
         Block blockSouth = blockToCheck.getRelative(BlockFace.SOUTH);
         Block blockUp = blockToCheck.getRelative(BlockFace.UP);
         Block blockDown = blockToCheck.getRelative(BlockFace.DOWN);
-        switch (blockFace)
-        {
+        switch (blockFace) {
             case UP:
             case DOWN:
                 setBlockSelection(player, blockFace, maxLocations, startBlock, blockEast, wand);
@@ -442,8 +394,7 @@ public class WandEvents implements Listener
         }
     }
 
-    private void renderBlockOutlines(BlockFace blockFace, Block selectionBlock, List<Block> selection, Wand wand, Player player)
-    {
+    private void renderBlockOutlines(BlockFace blockFace, Block selectionBlock, List<Block> selection, Wand wand, Player player) {
         List<ParticleShapeHidden> shapes = new ArrayList<>();
 
         Block blockEast = selectionBlock.getRelative(BlockFace.EAST);
@@ -484,126 +435,108 @@ public class WandEvents implements Listener
         Boolean blockDownNorthContains = selection.contains(blockDownNorth);
         Boolean blockUpNorthContains = selection.contains(blockUpNorth);
 
-        if (blockEastContains)
-        {
+        if (blockEastContains) {
             shapes.add(ParticleShapeHidden.EAST);
         }
-        if (blockWestContains)
-        {
+        if (blockWestContains) {
             shapes.add(ParticleShapeHidden.WEST);
         }
-        if (blockNorthContains)
-        {
+        if (blockNorthContains) {
             shapes.add(ParticleShapeHidden.NORTH);
         }
-        if (blockSouthContains)
-        {
+        if (blockSouthContains) {
             shapes.add(ParticleShapeHidden.SOUTH);
         }
-        if (blockUpContains)
-        {
+        if (blockUpContains) {
             shapes.add(ParticleShapeHidden.UP);
         }
-        if (blockDownContains)
-        {
+        if (blockDownContains) {
             shapes.add(ParticleShapeHidden.DOWN);
         }
-        if (blockNorthWestContains)
-        {
+        if (blockNorthWestContains) {
             shapes.add(ParticleShapeHidden.NORTH_WEST);
         }
-        if (blockNorthEastContains)
-        {
+        if (blockNorthEastContains) {
             shapes.add(ParticleShapeHidden.NORTH_EAST);
         }
-        if (blockSouthEastContains)
-        {
+        if (blockSouthEastContains) {
             shapes.add(ParticleShapeHidden.SOUTH_EAST);
         }
-        if (blockSouthWestContains)
-        {
+        if (blockSouthWestContains) {
             shapes.add(ParticleShapeHidden.SOUTH_WEST);
         }
-        if (blockDownEastContains)
-        {
+        if (blockDownEastContains) {
             shapes.add(ParticleShapeHidden.DOWN_EAST);
         }
-        if (blockUpEastContains)
-        {
+        if (blockUpEastContains) {
             shapes.add(ParticleShapeHidden.UP_EAST);
         }
-        if (blockDownWestContains)
-        {
+        if (blockDownWestContains) {
             shapes.add(ParticleShapeHidden.DOWN_WEST);
         }
-        if (blockUpWestContains)
-        {
+        if (blockUpWestContains) {
             shapes.add(ParticleShapeHidden.UP_WEST);
         }
-        if (blockDownSouthContains)
-        {
+        if (blockDownSouthContains) {
             shapes.add(ParticleShapeHidden.DOWN_SOUTH);
         }
-        if (blockUpSouthContains)
-        {
+        if (blockUpSouthContains) {
             shapes.add(ParticleShapeHidden.UP_SOUTH);
         }
-        if (blockDownNorthContains)
-        {
+        if (blockDownNorthContains) {
             shapes.add(ParticleShapeHidden.DOWN_NORTH);
         }
-        if (blockUpNorthContains)
-        {
+        if (blockUpNorthContains) {
             shapes.add(ParticleShapeHidden.UP_NORTH);
         }
 
         particleUtil.drawBlockOutlines(blockFace, shapes, selectionBlock.getRelative(blockFace).getLocation(), wand, player);
     }
 
-    private boolean isAllowedToBuildForExternalPlugins(Player player, Location location)
-    {
+    private boolean isAllowedToBuildForExternalPlugins(Player player, Location location) {
         Plugin townyPlugin = getExternalPlugin("Towny");
-        if(townyPlugin != null)
-        {
-            return PlayerCacheUtil.getCachePermission(player, location, 2, (byte)0, TownyPermission.ActionType.BUILD);
+        if (townyPlugin != null) {
+            return PlayerCacheUtil.getCachePermission(player, location, 2, (byte) 0, TownyPermission.ActionType.BUILD);
         }
 
         Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
         if (worldGuardPlugin != null && worldGuardPlugin instanceof WorldGuardPlugin) {
             WorldGuardPlugin worldGuard = (WorldGuardPlugin) worldGuardPlugin;
-            if(!worldGuard.canBuild(player, location))
-            {
+            if (!worldGuard.canBuild(player, location)) {
+                return false;
+            }
+        }
+
+        Plugin plotSquared = getExternalPlugin("PlotSquared");
+        if (plotSquared != null) {
+            PlotAPI api = new PlotAPI();
+            Plot plot = api.getPlot(location);
+            if (!plot.isAdded(player.getUniqueId())) {
                 return false;
             }
         }
 
         Plugin aSkyBlock = getExternalPlugin("ASkyBlock");
-        if(aSkyBlock != null)
-        {
+        if (aSkyBlock != null) {
             ASkyBlockAPI aSkyBlockAPI = ASkyBlockAPI.getInstance();
-            if(!aSkyBlockAPI.locationIsOnIsland(player, location))
-            {
+            if (!aSkyBlockAPI.locationIsOnIsland(player, location)) {
                 return false;
             }
         }
 
         Plugin griefPreventionPlugin = getExternalPlugin("GriefPrevention");
-        if(griefPreventionPlugin != null)
-        {
+        if (griefPreventionPlugin != null) {
             GriefPrevention griefPrevention = GriefPrevention.instance;
-            if(griefPrevention.allowBuild(player, location) != null)
-            {
+            if (griefPrevention.allowBuild(player, location) != null) {
                 return false;
             }
         }
 
         Plugin factionsPlugin = getExternalPlugin("Factions");
-        if(factionsPlugin != null)
-        {
+        if (factionsPlugin != null) {
             MPlayer mPlayer = MPlayer.get(player);
             Faction faction = BoardColl.get().getFactionAt(PS.valueOf(location));
-            if(faction != mPlayer.getFaction())
-            {
+            if (faction != mPlayer.getFaction()) {
 
                 return false;
             }
@@ -612,15 +545,11 @@ public class WandEvents implements Listener
         return true;
     }
 
-    private boolean isAllowedToBuildForExternalPlugins(Player player, List<Block> selection)
-    {
+    private boolean isAllowedToBuildForExternalPlugins(Player player, List<Block> selection) {
         Plugin townyPlugin = getExternalPlugin("Towny");
-        if(townyPlugin != null)
-        {
-            for (Block selectionBlock : selection)
-            {
-                if(!PlayerCacheUtil.getCachePermission(player, selectionBlock.getLocation(), 2, (byte)0, TownyPermission.ActionType.BUILD))
-                {
+        if (townyPlugin != null) {
+            for (Block selectionBlock : selection) {
+                if (!PlayerCacheUtil.getCachePermission(player, selectionBlock.getLocation(), 2, (byte) 0, TownyPermission.ActionType.BUILD)) {
                     return false;
                 }
             }
@@ -629,50 +558,50 @@ public class WandEvents implements Listener
         Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
         if (worldGuardPlugin != null && worldGuardPlugin instanceof WorldGuardPlugin) {
             WorldGuardPlugin worldGuard = (WorldGuardPlugin) worldGuardPlugin;
-            for (Block selectionBlock : selection)
-            {
-                if(!worldGuard.canBuild(player, selectionBlock))
-                {
+            for (Block selectionBlock : selection) {
+                if (!worldGuard.canBuild(player, selectionBlock)) {
+                    return false;
+                }
+            }
+        }
+
+        Plugin plotSquared = getExternalPlugin("PlotSquared");
+        if (plotSquared != null) {
+            PlotAPI api = new PlotAPI();
+            for (Block selectionBlock : selection) {
+                Plot plot = api.getPlot(selectionBlock.getLocation());
+                if (!plot.isAdded(player.getUniqueId())) {
                     return false;
                 }
             }
         }
 
         Plugin aSkyBlock = getExternalPlugin("ASkyBlock");
-        if(aSkyBlock != null)
-        {
+        if (aSkyBlock != null) {
             ASkyBlockAPI aSkyBlockAPI = ASkyBlockAPI.getInstance();
-            for (Block selectionBlock : selection)
-            {
-                if(!aSkyBlockAPI.locationIsOnIsland(player, selectionBlock.getLocation()))
-                {
+            for (Block selectionBlock : selection) {
+                if (!aSkyBlockAPI.locationIsOnIsland(player, selectionBlock.getLocation())) {
                     return false;
                 }
             }
         }
 
         Plugin griefPreventionPlugin = getExternalPlugin("GriefPrevention");
-        if(griefPreventionPlugin != null)
-        {
+        if (griefPreventionPlugin != null) {
             GriefPrevention griefPrevention = GriefPrevention.instance;
-            for (Block selectionBlock : selection)
-            {
-                if(griefPrevention.allowBuild(player, selectionBlock.getLocation()) != null)
-                {
+            for (Block selectionBlock : selection) {
+                if (griefPrevention.allowBuild(player, selectionBlock.getLocation()) != null) {
                     return false;
                 }
             }
         }
 
         Plugin factionsPlugin = getExternalPlugin("Factions");
-        if(factionsPlugin != null)
-        {
+        if (factionsPlugin != null) {
             MPlayer mPlayer = MPlayer.get(player);
-            for (Block selectionBlock : selection)
-            {
+            for (Block selectionBlock : selection) {
                 Faction faction = BoardColl.get().getFactionAt(PS.valueOf(selectionBlock.getLocation()));
-                if(faction == mPlayer.getFaction())
-                {
+                if (faction == mPlayer.getFaction()) {
                     return false;
                 }
             }
@@ -681,17 +610,14 @@ public class WandEvents implements Listener
         return true;
     }
 
-    private Plugin getExternalPlugin(String name)
-    {
+    private Plugin getExternalPlugin(String name) {
         return plugin.getServer().getPluginManager().getPlugin(name);
     }
 
-    private int getDurability(ItemStack wandItemStack, Wand wand)
-    {
+    private int getDurability(ItemStack wandItemStack, Wand wand) {
         ItemMeta itemMeta = wandItemStack.getItemMeta();
         List<String> lore = itemMeta.getLore();
-        if(lore == null)
-        {
+        if (lore == null) {
             return wand.getDurability();
         }
         String durabilityString = lore.get(0);
