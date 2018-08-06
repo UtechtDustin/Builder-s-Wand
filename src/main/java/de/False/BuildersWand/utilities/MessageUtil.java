@@ -2,6 +2,7 @@ package de.False.BuildersWand.utilities;
 
 import de.False.BuildersWand.ConfigurationFiles.Locales;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -10,11 +11,11 @@ public class MessageUtil {
     private static String defaultLocale = "en_us";
     private static String preFix = "&bBuildersWand » &7";
 
-    public static void sendMessage(Player player, String messagePath) {
+    public static void sendMessage(CommandSender player, String messagePath) {
         player.sendMessage(colorize(preFix + getMessage(messagePath, player)));
     }
 
-    public static void sendRawMessage(Player player, String messagePath) {
+    public static void sendRawMessage(CommandSender player, String messagePath) {
         player.sendMessage(colorize(getMessage(messagePath, player)));
     }
 
@@ -22,7 +23,7 @@ public class MessageUtil {
         player.sendMessage(colorize(preFix + message));
     }
 
-    private static String getMessage(String messagePath, Player player) {
+    private static String getMessage(String messagePath, CommandSender player) {
         String locale = getPlayerLocale(player);
         HashMap<String, String> messages = getMessagesForLocale(locale);
 
@@ -45,15 +46,19 @@ public class MessageUtil {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
-    private static String getPlayerLocale(Player player) {
-        return player.spigot().getLocale();
+    private static String getPlayerLocale(CommandSender player) {
+        if (player instanceof Player) {
+            return ((Player) player).spigot().getLocale();
+        }
+
+        return defaultLocale;
     }
 
     public static String getText(String messagePath, Player player) {
         return getMessage(messagePath, player);
     }
 
-    public static void sendSeparator(Player player) {
+    public static void sendSeparator(CommandSender player) {
         player.sendMessage("");
         player.sendMessage("");
         player.sendMessage("");
