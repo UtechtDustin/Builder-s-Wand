@@ -13,6 +13,7 @@ import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import de.False.BuildersWand.ConfigurationFiles.Config;
 import de.False.BuildersWand.Main;
 import de.False.BuildersWand.NMS.NMS;
+import de.False.BuildersWand.api.canBuildHandler;
 import de.False.BuildersWand.enums.ParticleShapeHidden;
 import de.False.BuildersWand.items.Wand;
 import de.False.BuildersWand.manager.InventoryManager;
@@ -50,6 +51,7 @@ public class WandEvents implements Listener
     private HashMap<Block, List<Block>> blockSelection = new HashMap<Block, List<Block>>();
     private HashMap<Block, List<Block>> replacements = new HashMap<Block, List<Block>>();
     private HashMap<Block, List<Block>> tmpReplacements = new HashMap<Block, List<Block>>();
+    public static ArrayList<canBuildHandler> canBuildHandlers = new ArrayList<canBuildHandler>();
 
     public WandEvents(Main plugin, Config config, ParticleUtil particleUtil, NMS nms, WandManager wandManager, InventoryManager inventoryManager)
     {
@@ -149,8 +151,8 @@ public class WandEvents implements Listener
                 !player.hasPermission("buildersWand.use")
                 || (!player.hasPermission("buildersWand.bypass") && !isAllowedToBuildForExternalPlugins(player, selection))
                 || wand.hasPermission() && !player.hasPermission(wand.getPermission())
-        )
-        {
+                || !canBuildHandlerCheck(player, selection)
+        ) {
             MessageUtil.sendMessage(player, "noPermissions");
             return;
         }
@@ -187,6 +189,30 @@ public class WandEvents implements Listener
         {
             removeDurability(mainHand, player, wand);
         }
+    }
+
+    private boolean canBuildHandlerCheck(Player player, List<Block> selection) {
+        for( canBuildHandler canBuildHandler: canBuildHandlers )
+        {
+            for (Block selectionBlock : selection) {
+                if(!canBuildHandler.canBuild(player, selectionBlock.getLocation())) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private boolean canBuildHandlerCheck(Player player, Location location) {
+        for( canBuildHandler canBuildHandler: canBuildHandlers )
+        {
+            if(!canBuildHandler.canBuild(player, location)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @EventHandler
@@ -371,17 +397,17 @@ public class WandEvents implements Listener
         List<Block> replacementsList = tmpReplacements.get(startBlock);
 
         if (
-                    startLocation.distance(checkLocation) >= wand.getMaxSize()
-                || !(startMaterial.equals(blockToCheckMaterial))
-                || maxLocations <= selection.size()
-                || blockToCheckData != startBlockData
-                || selection.contains(blockToCheck)
-                || !relativeBlock.equals(Material.AIR)
-                || (!isAllowedToBuildForExternalPlugins(player, checkLocation) && !player.hasPermission("buildersWand.bypass"))
-                || !player.hasPermission("buildersWand.use")
-                || wand.hasPermission() && !player.hasPermission(wand.getPermission())
-        )
-        {
+                startLocation.distance(checkLocation) >= wand.getMaxSize()
+                        || !(startMaterial.equals(blockToCheckMaterial))
+                        || maxLocations <= selection.size()
+                        || blockToCheckData != startBlockData
+                        || selection.contains(blockToCheck)
+                        || !relativeBlock.equals(Material.AIR)
+                        || (!isAllowedToBuildForExternalPlugins(player, checkLocation) && !player.hasPermission("buildersWand.bypass"))
+                        || !canBuildHandlerCheck(player, checkLocation)
+                        || !player.hasPermission("buildersWand.use")
+                        || wand.hasPermission() && !player.hasPermission(wand.getPermission())
+        ) {
             return;
         }
 
