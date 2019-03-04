@@ -13,19 +13,17 @@ public class UpdateNotification implements Listener {
 
     private Config config;
     private Main plugin;
-    public UpdateNotification(Main plugin, Config config){
+    private Update update;
+    public UpdateNotification(Main plugin, Config config, Update update){
         this.plugin = plugin;
         this.config = config;
+        this.update = update;
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (!player.hasPermission("buildersWand.updateNotification")) return;
-        try {
-            new SpigotUpdater(plugin, 51577, player, config);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        update.sendUpdateMessage(player);
     }
 }
