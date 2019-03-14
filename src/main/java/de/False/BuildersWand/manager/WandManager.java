@@ -110,7 +110,7 @@ public class WandManager
         recipeList.add("xxd");
         recipeList.add("xbx");
         recipeList.add("bxx");
-        ConfigurationSection configurationSection = config.getConfigurationSection("crafting.ingredient");
+        ConfigurationSection configurationSection = config.getConfigurationSection(configPrefix + "crafting.ingredient");
         if(configurationSection == null || configurationSection.getKeys(false).size() <= 0)
         {
             config.addDefault(configPrefix + "crafting.ingredient.d", "DIAMOND");
