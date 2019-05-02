@@ -1,7 +1,6 @@
 package de.False.BuildersWand.ConfigurationFiles;
 
 import de.False.BuildersWand.Main;
-import org.apache.commons.io.FilenameUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -65,7 +64,7 @@ public class Locales
             {
 
                 FileConfiguration localeFile = YamlConfiguration.loadConfiguration(file);
-                String locale = FilenameUtils.getBaseName(file.getName());
+                String locale = file.getName().replaceFirst("[.][^.]+$", "");
                 ConfigurationSection configurationSection = localeFile.getConfigurationSection("");
                 if (configurationSection == null)
                 {

@@ -47,7 +47,7 @@ public class v_1_8_R1 implements NMS
     @Override
     public String getDefaultParticle()
     {
-        return Effect.COLOURED_DUST.toString();
+        return Effect.valueOf("COLOURED_DUST").toString();
     }
 
     @Override
