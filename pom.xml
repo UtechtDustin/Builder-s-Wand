@@ -27,7 +27,7 @@
 
         <repository>
             <id>factions</id>
-            <url>https://repo.dustplanet.de/artifactory/ext-release-local/</url>
+            <url>https://repo.minebench.de/</url>
         </repository>
 
         <repository>
@@ -75,15 +75,15 @@
 
         <dependency>
             <groupId>com.massivecraft.factions</groupId>
-            <artifactId>Factions</artifactId>
-            <version>2.14.0</version>
+            <artifactId>factions</artifactId>
+            <version>2.12.0</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.massivecraft.massivecore</groupId>
-            <artifactId>MassiveCore</artifactId>
-            <version>2.14.0</version>
+            <artifactId>massivecore</artifactId>
+            <version>2.12.0</version>
             <scope>provided</scope>
         </dependency>
 
