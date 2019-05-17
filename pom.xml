@@ -109,8 +109,8 @@
         <!-- NMS -->
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.14</artifactId>
-            <version>1.14</version>
+            <artifactId>spigot-1.14.1</artifactId>
+            <version>1.14.1</version>
             <systemPath>${spigot.jars}/spigot-1.14.1.jar</systemPath>
             <scope>system</scope>
         </dependency>
