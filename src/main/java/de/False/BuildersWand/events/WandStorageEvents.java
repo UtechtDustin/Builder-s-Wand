@@ -81,7 +81,7 @@ public class WandStorageEvents implements Listener
         Player player = event.getPlayer();
         InventoryView openInventory = player.getOpenInventory();
         Inventory storage = openInventory.getTopInventory();
-        if(storage == null || !(storage.getHolder() instanceof BWHolder))
+        if(storage == null)
         {
             return;
         }
@@ -101,7 +101,7 @@ public class WandStorageEvents implements Listener
     {
         Player player = (Player) event.getWhoClicked();
         Inventory storage = event.getInventory();
-        if(storage == null || !(storage.getHolder() instanceof BWHolder))
+        if(storage == null)
         {
             return;
         }
@@ -121,15 +121,13 @@ public class WandStorageEvents implements Listener
         Inventory storage = event.getInventory();
         ItemStack itemStack = event.getCurrentItem();
         InventoryAction action = event.getAction();
-        if((action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD) &&
-                storage.getHolder() instanceof BWHolder)
+        if((action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD))
         {
             event.setCancelled(true);
         }
 
         if(
                 storage == null
-                || !(storage.getHolder() instanceof BWHolder)
                 || itemStack == null
                 || itemStack.getType().isBlock()
         )
@@ -146,7 +144,7 @@ public class WandStorageEvents implements Listener
         Player player = (Player) event.getPlayer();
         Inventory storage = event.getInventory();
         ItemStack mainHand = nms.getItemInHand(player);
-        if(mainHand == null || mainHand.getType() == Material.AIR || storage == null || !(storage.getHolder() instanceof BWHolder))
+        if(mainHand == null || mainHand.getType() == Material.AIR || storage == null)
         {
             return;
         }

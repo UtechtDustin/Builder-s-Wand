@@ -111,7 +111,7 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-1.14</artifactId>
             <version>1.14</version>
-            <systemPath>${spigot.jars}/spigot-1.14.jar</systemPath>
+            <systemPath>${spigot.jars}/spigot-1.14.1.jar</systemPath>
             <scope>system</scope>
         </dependency>
 
