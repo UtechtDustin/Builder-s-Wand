@@ -8,6 +8,7 @@ import de.False.BuildersWand.NMS.v_1_11.v_1_11_R1;
 import de.False.BuildersWand.NMS.v_1_12.v_1_12_R1;
 import de.False.BuildersWand.NMS.v_1_13.v_1_13_R1;
 import de.False.BuildersWand.NMS.v_1_13.v_1_13_R2;
+import de.False.BuildersWand.NMS.v_1_14.v_1_14_R1;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R1;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R2;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R3;
@@ -44,8 +45,13 @@ public class Main extends JavaPlugin
         setupNMS();
         wandManager = new WandManager(this, nms);
         inventoryManager = new InventoryManager(this, nms);
-        update = new Update(this, 51577);
-        update.sendUpdateMessage();
+        try {
+            Class.forName("com.google.gson.JsonParser");
+            update = new Update(this, 51577);
+            update.sendUpdateMessage();
+        } catch (ClassNotFoundException e) {
+            getLogger().warning("Skipping version Check, because the Gson Library couldn't be found!");
+        }
 
         loadConfigFiles();
         particleUtil = new ParticleUtil(nms, config);
@@ -79,7 +85,8 @@ public class Main extends JavaPlugin
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new WandEvents(this, config, particleUtil, nms, wandManager, inventoryManager), this);
         pluginManager.registerEvents(new WandStorageEvents(this, config, nms, wandManager, inventoryManager), this);
-        pluginManager.registerEvents(new UpdateNotification(this, config, update), this);
+        if (update != null)
+            pluginManager.registerEvents(new UpdateNotification(this, config, update), this);
     }
 
     private void loadConfigFiles()
@@ -126,6 +133,9 @@ public class Main extends JavaPlugin
                     break;
                 case "v1_13_R2":
                     nms = new v_1_13_R2(this);
+                    break;
+                case "v1_14_R1":
+                    nms = new v_1_14_R1(this);
                     break;
             }
         } catch (ArrayIndexOutOfBoundsException exn) {

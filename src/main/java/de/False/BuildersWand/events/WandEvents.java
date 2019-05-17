@@ -20,6 +20,8 @@ import de.False.BuildersWand.manager.InventoryManager;
 import de.False.BuildersWand.manager.WandManager;
 import de.False.BuildersWand.utilities.MessageUtil;
 import de.False.BuildersWand.utilities.ParticleUtil;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
@@ -175,7 +177,12 @@ public class WandEvents implements Listener
                 }
 
                 selectionBlock.setType(blockType);
-                selectionBlock.setData(blockSubId);
+                try {
+                    Method m = Block.class.getMethod("setData", byte.class);
+                    m.invoke(selectionBlock, blockSubId);
+                } catch (NoSuchMethodException | IllegalAccessException
+                        | InvocationTargetException e) {
+                }
             }
 
         }, 1L);
@@ -265,7 +272,7 @@ public class WandEvents implements Listener
             }
             Material itemMaterial = itemStack.getType();
 
-            if (!itemMaterial.equals(blockMaterial) || block.getData() != itemStack.getDurability())
+            if (!itemMaterial.equals(blockMaterial) || block.getData() != itemStack.getData().getData())
             {
                 continue;
             }

@@ -1,10 +1,19 @@
-package de.False.BuildersWand.NMS.v_1_8;
+package de.False.BuildersWand.NMS.v_1_14;
 
+import de.False.BuildersWand.Main;
 import de.False.BuildersWand.NMS.NMS;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -12,45 +21,51 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class v_1_8_R3 implements NMS
+public class v_1_14_R1 implements NMS
 {
+    private Main plugin;
+    private Random random;
+
+    public v_1_14_R1(Main plugin)
+    {
+        this.plugin = plugin;
+        this.random = new Random();
+    }
+
     @Override
     public void spawnParticle(String particle, Location location){
-        location.getWorld().playEffect(location, Effect.valueOf(particle), 0);
+        location.getWorld().spawnParticle(Particle.valueOf(particle), location.getX(), location.getY(), location.getZ(), 0, 128, 0, 0, 10);
     }
 
     @Override
     public void spawnParticle(String particle, Location location, Player player)
     {
-        player.playEffect(location, Effect.valueOf(particle),null);
+        player.spawnParticle(Particle.valueOf(particle), location.getX(), location.getY(), location.getZ(), 0, 0, 0, 0);
     }
 
     @Override
     public ItemStack getItemInHand(Player player)
     {
-        return player.getItemInHand();
+        return player.getInventory().getItemInMainHand();
     }
 
     @Override
     public boolean isMainHand(PlayerInteractEvent event)
     {
-        return true;
+        return event.getHand() == EquipmentSlot.HAND;
     }
 
     @Override
     public String getDefaultParticle()
     {
-        return Effect.valueOf("COLOURED_DUST").toString();
+        return Particle.FLAME.toString();
     }
 
     @Override
     public void addShapelessRecipe(List<String> recipeStrings, HashMap<String, Material> ingredients, ItemStack resultItemStack)
     {
-        ShapelessRecipe shapelessRecipe = new ShapelessRecipe(resultItemStack);
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, "buildersWand" + random.nextInt());
+        ShapelessRecipe shapelessRecipe = new ShapelessRecipe(namespacedKey, resultItemStack);
         for (Map.Entry<String, Material> entry: ingredients.entrySet())
         {
             String materialShortcut = entry.getKey();
@@ -72,7 +87,8 @@ public class v_1_8_R3 implements NMS
     @Override
     public void addShapedRecipe(List<String> recipeStrings, HashMap<String, Material> ingredients, ItemStack resultItemStack)
     {
-        ShapedRecipe shapedRecipe = new ShapedRecipe(resultItemStack);
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, "buildersWand" + random.nextInt());
+        ShapedRecipe shapedRecipe = new ShapedRecipe(namespacedKey, resultItemStack);
         shapedRecipe.shape(recipeStrings.toArray(new String[recipeStrings.size()]));
         for (Map.Entry<String, Material> entry: ingredients.entrySet())
         {
@@ -87,7 +103,7 @@ public class v_1_8_R3 implements NMS
     @Override
     public ItemStack setTag(ItemStack itemStack, String path, String value)
     {
-        net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound compound = nmsStack.getTag();
         if (compound == null) {
             compound = new NBTTagCompound();
@@ -105,7 +121,7 @@ public class v_1_8_R3 implements NMS
     @Override
     public String getTag(ItemStack itemStack, String path)
     {
-        net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound compound = nmsStack.getTag();
         if (compound == null) {
             compound = new NBTTagCompound();

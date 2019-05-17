@@ -3,6 +3,7 @@ package de.False.BuildersWand.events;
 import de.False.BuildersWand.ConfigurationFiles.Config;
 import de.False.BuildersWand.Main;
 import de.False.BuildersWand.NMS.NMS;
+import de.False.BuildersWand.inventory.BWHolder;
 import de.False.BuildersWand.items.Wand;
 import de.False.BuildersWand.manager.InventoryManager;
 import de.False.BuildersWand.manager.WandManager;
@@ -80,7 +81,7 @@ public class WandStorageEvents implements Listener
         Player player = event.getPlayer();
         InventoryView openInventory = player.getOpenInventory();
         Inventory storage = openInventory.getTopInventory();
-        if(storage == null || !storage.getName().equals(INVENTORY_NAME))
+        if(storage == null)
         {
             return;
         }
@@ -100,7 +101,7 @@ public class WandStorageEvents implements Listener
     {
         Player player = (Player) event.getWhoClicked();
         Inventory storage = event.getInventory();
-        if(storage == null || !storage.getName().equals(INVENTORY_NAME))
+        if(storage == null)
         {
             return;
         }
@@ -120,14 +121,13 @@ public class WandStorageEvents implements Listener
         Inventory storage = event.getInventory();
         ItemStack itemStack = event.getCurrentItem();
         InventoryAction action = event.getAction();
-        if((action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD) && storage.getName().equals(INVENTORY_NAME))
+        if((action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD))
         {
             event.setCancelled(true);
         }
 
         if(
                 storage == null
-                || !storage.getName().equals(INVENTORY_NAME)
                 || itemStack == null
                 || itemStack.getType().isBlock()
         )
@@ -144,7 +144,7 @@ public class WandStorageEvents implements Listener
         Player player = (Player) event.getPlayer();
         Inventory storage = event.getInventory();
         ItemStack mainHand = nms.getItemInHand(player);
-        if(mainHand == null || mainHand.getType() == Material.AIR || storage == null || !storage.getName().equals(INVENTORY_NAME))
+        if(mainHand == null || mainHand.getType() == Material.AIR || storage == null)
         {
             return;
         }

@@ -3,6 +3,7 @@ author: Wythe
 version: 2.6.1
 main: de.False.BuildersWand.Main
 softdepend: [ASkyBlock, WorldGuard, Towny, GriefPrevention, Factions, mcMMO]
+api-version: 1.13
 commands:
   builderswand:
     description: The general BuildersWand command.
