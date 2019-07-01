@@ -39,6 +39,11 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+
+        <repository>
+            <id>articdive-repo</id>
+            <url>https://nexus.articdive.de/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -101,9 +106,10 @@
 
         <!-- Add this yourself to your local Maven repo! -->
         <dependency>
-            <groupId>towny</groupId>
-            <artifactId>towny</artifactId>
-            <version>0.93</version>
+            <groupId>com.palmergames</groupId>
+            <artifactId>Towny</artifactId>
+            <version>0.93.0.5</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- NMS -->
