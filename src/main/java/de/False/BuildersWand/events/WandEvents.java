@@ -1,14 +1,17 @@
 package de.False.BuildersWand.events;
 
 import com.gmail.nossr50.mcMMO;
-import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MPlayer;
 import com.massivecraft.massivecore.ps.PS;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.regions.RegionQuery;
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import de.False.BuildersWand.ConfigurationFiles.Config;
 import de.False.BuildersWand.Main;
@@ -572,15 +575,29 @@ public class WandEvents implements Listener
         Plugin townyPlugin = getExternalPlugin("Towny");
         if(townyPlugin != null)
         {
-            return PlayerCacheUtil.getCachePermission(player, location, 2, (byte)0, TownyPermission.ActionType.BUILD);
+            return PlayerCacheUtil.getCachePermission(player, location, Material.STONE, TownyPermission.ActionType.BUILD);
         }
 
         Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
-        if (worldGuardPlugin != null && worldGuardPlugin instanceof WorldGuardPlugin) {
+        if (worldGuardPlugin instanceof WorldGuardPlugin) {
             WorldGuardPlugin worldGuard = (WorldGuardPlugin) worldGuardPlugin;
-            if(!worldGuard.canBuild(player, location))
-            {
-                return false;
+            int version = Integer.parseInt(worldGuard.getDescription().getVersion().substring(0, 1));
+            if (version >= 7) {
+                RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+                com.sk89q.worldedit.util.Location loc = BukkitAdapter.adapt(location);
+                com.sk89q.worldedit.world.World world = BukkitAdapter.adapt(location.getWorld());
+
+                if (
+                        !WorldGuard.getInstance().getPlatform().getSessionManager().hasBypass(WorldGuardPlugin.inst().wrapPlayer(player), world)
+                        && !query.testState(loc, WorldGuardPlugin.inst().wrapPlayer(player), Flags.BUILD)
+                ) {
+                    return false;
+                }
+            } else {
+                if(!worldGuard.canBuild(player, location))
+                {
+                    return false;
+                }
             }
         }
 
@@ -626,7 +643,7 @@ public class WandEvents implements Listener
         {
             for (Block selectionBlock : selection)
             {
-                if(!PlayerCacheUtil.getCachePermission(player, selectionBlock.getLocation(), 2, (byte)0, TownyPermission.ActionType.BUILD))
+                if(!PlayerCacheUtil.getCachePermission(player, selectionBlock.getLocation(), Material.STONE, TownyPermission.ActionType.BUILD))
                 {
                     return false;
                 }
@@ -634,13 +651,26 @@ public class WandEvents implements Listener
         }
 
         Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
-        if (worldGuardPlugin != null && worldGuardPlugin instanceof WorldGuardPlugin) {
+        if (worldGuardPlugin instanceof WorldGuardPlugin) {
             WorldGuardPlugin worldGuard = (WorldGuardPlugin) worldGuardPlugin;
             for (Block selectionBlock : selection)
             {
-                if(!worldGuard.canBuild(player, selectionBlock))
-                {
-                    return false;
+                int version = Integer.parseInt(worldGuard.getDescription().getVersion().substring(0, 1));
+                if (version >= 7) {
+                    RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+                    com.sk89q.worldedit.util.Location loc = BukkitAdapter.adapt(selectionBlock.getLocation());
+                    com.sk89q.worldedit.world.World world = BukkitAdapter.adapt(selectionBlock.getWorld());
+                    if (
+                            !WorldGuard.getInstance().getPlatform().getSessionManager().hasBypass(WorldGuardPlugin.inst().wrapPlayer(player), world)
+                            && !query.testState(loc, WorldGuardPlugin.inst().wrapPlayer(player), Flags.BUILD)
+                    ) {
+                        return false;
+                    }
+                } else  {
+                    if(!worldGuard.canBuild(player, location))
+                    {
+                        return false;
+                    }
                 }
             }
         }
