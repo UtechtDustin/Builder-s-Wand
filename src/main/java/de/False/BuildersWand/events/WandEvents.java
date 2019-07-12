@@ -41,6 +41,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
+import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.api.flags.Flag;
+import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.database.objects.Island;
+import world.bentobox.bentobox.database.objects.Players;
+import world.bentobox.bentobox.lists.Flags;
 
 import java.util.*;
 
@@ -511,6 +517,16 @@ public class WandEvents implements Listener {
             }
         }
 
+        Plugin bentoBox = getExternalPlugin("BentoBox");
+        if (bentoBox != null) {
+            BentoBox bentoBoxapi = BentoBox.getInstance();
+            User user = User.getInstance(player);
+            Optional<Island> island = bentoBoxapi.getIslands().getIslandAt(location);
+            if(island.isPresent() && !island.get().isAllowed(user, Flags.PLACE_BLOCKS)) {
+                return false;
+            }
+        }
+
         Plugin aSkyBlock = getExternalPlugin("ASkyBlock");
         if (aSkyBlock != null) {
             ASkyBlockAPI aSkyBlockAPI = ASkyBlockAPI.getInstance();
@@ -554,6 +570,18 @@ public class WandEvents implements Listener {
         if (worldGuardPlugin instanceof WorldGuardPlugin) {
             for (Block selectionBlock : selection) {
                 if (!WorldGuardAPI.getWorldGuardAPI().allows(player, selectionBlock.getLocation())) {
+                    return false;
+                }
+            }
+        }
+
+        Plugin bentoBox = getExternalPlugin("BentoBox");
+        if (bentoBox != null) {
+            BentoBox bentoBoxapi = BentoBox.getInstance();
+            User user = User.getInstance(player);
+            for (Block selectionBlock : selection) {
+                Optional<Island> island = bentoBoxapi.getIslands().getIslandAt(selectionBlock.getLocation());
+                if(island.isPresent() && !island.get().isAllowed(user, Flags.PLACE_BLOCKS)) {
                     return false;
                 }
             }
