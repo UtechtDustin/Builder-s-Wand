@@ -78,10 +78,6 @@ public class Commands implements CommandExecutor {
             destPlayer = Bukkit.getPlayer(args[1]);
             wand = wandManager.getWandTier(1);
         } else {
-            if (!(player instanceof Player)) {
-                MessageUtil.sendMessage(player, "noPermissions");
-                return;
-            }
             wand = wandManager.getWandTier(Integer.parseInt(args[2]));
             destPlayer = Bukkit.getPlayer(args[1]);
         }
