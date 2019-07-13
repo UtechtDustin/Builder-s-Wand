@@ -1,5 +1,7 @@
 package de.False.BuildersWand.events;
 
+import com.github.intellectualsites.plotsquared.api.PlotAPI;
+import com.github.intellectualsites.plotsquared.plot.object.Plot;
 import com.gmail.nossr50.mcMMO;
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
@@ -527,6 +529,16 @@ public class WandEvents implements Listener {
             }
         }
 
+        Plugin plotSquared = getExternalPlugin("PlotSquared");
+        if (plotSquared != null) {
+            PlotAPI plotAPI = new PlotAPI();
+            com.github.intellectualsites.plotsquared.plot.object.Location plotSquaredLocation = new com.github.intellectualsites.plotsquared.plot.object.Location(location.getWorld().toString(), (int)location.getX(), (int)location.getY(), (int)location.getZ());
+            Plot plot = plotAPI.getPlotSquared().getApplicablePlotArea(plotSquaredLocation).getPlot(plotSquaredLocation);
+            if(plot != null && !plot.isAdded(player.getUniqueId())) {
+                return false;
+            }
+        }
+
         Plugin aSkyBlock = getExternalPlugin("ASkyBlock");
         if (aSkyBlock != null) {
             ASkyBlockAPI aSkyBlockAPI = ASkyBlockAPI.getInstance();
@@ -582,6 +594,19 @@ public class WandEvents implements Listener {
             for (Block selectionBlock : selection) {
                 Optional<Island> island = bentoBoxapi.getIslands().getIslandAt(selectionBlock.getLocation());
                 if(island.isPresent() && !island.get().isAllowed(user, Flags.PLACE_BLOCKS)) {
+                    return false;
+                }
+            }
+        }
+
+        Plugin plotSquared = getExternalPlugin("PlotSquared");
+        if (plotSquared != null) {
+            PlotAPI plotAPI = new PlotAPI();
+            for (Block selectionBlock : selection) {
+                Location location = selectionBlock.getLocation();
+                com.github.intellectualsites.plotsquared.plot.object.Location plotSquaredLocation = new com.github.intellectualsites.plotsquared.plot.object.Location(location.getWorld().toString(), (int)location.getX(), (int)location.getY(), (int)location.getZ());
+                Plot plot = plotAPI.getPlotSquared().getApplicablePlotArea(plotSquaredLocation).getPlot(plotSquaredLocation);
+                if(plot != null && !plot.isAdded(player.getUniqueId())) {
                     return false;
                 }
             }

@@ -50,6 +50,11 @@
             <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
 
+        <repository>
+            <id>p2-repo</id>
+            <url>http://ci.athion.net/job/PlotSquared-Breaking/ws/mvn/</url>
+        </repository>
+
     </repositories>
 
     <dependencies>
@@ -232,6 +237,12 @@
             <version>1.8</version>
             <systemPath>${spigot.jars}/spigot-1.8.jar</systemPath>
             <scope>system</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.intellectualsites.plotsquared</groupId>
+            <artifactId>PlotSquared-API</artifactId>
+            <version>latest</version>
         </dependency>
 
     </dependencies>
