@@ -27,6 +27,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
+import net.coreprotect.CoreProtect;
+import net.coreprotect.CoreProtectAPI;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -170,6 +172,15 @@ public class WandEvents implements Listener {
                 }
 
                 selectionBlock.setType(blockType);
+
+                Plugin coreProtect = getExternalPlugin("CoreProtect");
+                if (coreProtect != null) {
+                    CoreProtectAPI coreProtectAPI = ((CoreProtect) coreProtect).getAPI();
+                    if (coreProtectAPI.isEnabled()) {
+                        coreProtectAPI.logPlacement(player.getName(), selectionBlock.getLocation(), blockType, selectionBlock.getData());
+                    }
+                }
+
                 try {
                     Method m = Block.class.getMethod("setData", byte.class);
                     m.invoke(selectionBlock, blockSubId);
@@ -524,7 +535,7 @@ public class WandEvents implements Listener {
             BentoBox bentoBoxapi = BentoBox.getInstance();
             User user = User.getInstance(player);
             Optional<Island> island = bentoBoxapi.getIslands().getIslandAt(location);
-            if(island.isPresent() && !island.get().isAllowed(user, Flags.PLACE_BLOCKS)) {
+            if (island.isPresent() && !island.get().isAllowed(user, Flags.PLACE_BLOCKS)) {
                 return false;
             }
         }
@@ -532,9 +543,9 @@ public class WandEvents implements Listener {
         Plugin plotSquared = getExternalPlugin("PlotSquared");
         if (plotSquared != null) {
             PlotAPI plotAPI = new PlotAPI();
-            com.github.intellectualsites.plotsquared.plot.object.Location plotSquaredLocation = new com.github.intellectualsites.plotsquared.plot.object.Location(location.getWorld().toString(), (int)location.getX(), (int)location.getY(), (int)location.getZ());
+            com.github.intellectualsites.plotsquared.plot.object.Location plotSquaredLocation = new com.github.intellectualsites.plotsquared.plot.object.Location(location.getWorld().toString(), (int) location.getX(), (int) location.getY(), (int) location.getZ());
             Plot plot = plotAPI.getPlotSquared().getApplicablePlotArea(plotSquaredLocation).getPlot(plotSquaredLocation);
-            if(plot != null && !plot.isAdded(player.getUniqueId())) {
+            if (plot != null && !plot.isAdded(player.getUniqueId())) {
                 return false;
             }
         }
@@ -593,7 +604,7 @@ public class WandEvents implements Listener {
             User user = User.getInstance(player);
             for (Block selectionBlock : selection) {
                 Optional<Island> island = bentoBoxapi.getIslands().getIslandAt(selectionBlock.getLocation());
-                if(island.isPresent() && !island.get().isAllowed(user, Flags.PLACE_BLOCKS)) {
+                if (island.isPresent() && !island.get().isAllowed(user, Flags.PLACE_BLOCKS)) {
                     return false;
                 }
             }
@@ -604,9 +615,9 @@ public class WandEvents implements Listener {
             PlotAPI plotAPI = new PlotAPI();
             for (Block selectionBlock : selection) {
                 Location location = selectionBlock.getLocation();
-                com.github.intellectualsites.plotsquared.plot.object.Location plotSquaredLocation = new com.github.intellectualsites.plotsquared.plot.object.Location(location.getWorld().toString(), (int)location.getX(), (int)location.getY(), (int)location.getZ());
+                com.github.intellectualsites.plotsquared.plot.object.Location plotSquaredLocation = new com.github.intellectualsites.plotsquared.plot.object.Location(location.getWorld().toString(), (int) location.getX(), (int) location.getY(), (int) location.getZ());
                 Plot plot = plotAPI.getPlotSquared().getApplicablePlotArea(plotSquaredLocation).getPlot(plotSquaredLocation);
-                if(plot != null && !plot.isAdded(player.getUniqueId())) {
+                if (plot != null && !plot.isAdded(player.getUniqueId())) {
                     return false;
                 }
             }
