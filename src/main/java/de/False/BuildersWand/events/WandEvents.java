@@ -520,7 +520,7 @@ public class WandEvents implements Listener {
     private boolean isAllowedToBuildForExternalPlugins(Player player, Location location) {
         Plugin townyPlugin = getExternalPlugin("Towny");
         if (townyPlugin != null) {
-            if (PlayerCacheUtil.getCachePermission(player, location, Material.STONE, TownyPermission.ActionType.BUILD)) {
+            if (!PlayerCacheUtil.getCachePermission(player, location, Material.STONE, TownyPermission.ActionType.BUILD)) {
                 return false;
             }
         }
