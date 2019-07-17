@@ -3,6 +3,10 @@ package de.False.BuildersWand.events;
 import com.github.intellectualsites.plotsquared.api.PlotAPI;
 import com.github.intellectualsites.plotsquared.plot.object.Plot;
 import com.gmail.nossr50.mcMMO;
+import com.massivecraft.factions.Board;
+import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MPlayer;
@@ -22,10 +26,6 @@ import de.False.BuildersWand.manager.InventoryManager;
 import de.False.BuildersWand.manager.WandManager;
 import de.False.BuildersWand.utilities.MessageUtil;
 import de.False.BuildersWand.utilities.ParticleUtil;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.coreprotect.CoreProtect;
 import net.coreprotect.CoreProtectAPI;
@@ -46,12 +46,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
 import world.bentobox.bentobox.BentoBox;
-import world.bentobox.bentobox.api.flags.Flag;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
-import world.bentobox.bentobox.database.objects.Players;
 import world.bentobox.bentobox.lists.Flags;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class WandEvents implements Listener {
@@ -520,7 +520,9 @@ public class WandEvents implements Listener {
     private boolean isAllowedToBuildForExternalPlugins(Player player, Location location) {
         Plugin townyPlugin = getExternalPlugin("Towny");
         if (townyPlugin != null) {
-            return PlayerCacheUtil.getCachePermission(player, location, Material.STONE, TownyPermission.ActionType.BUILD);
+            if (PlayerCacheUtil.getCachePermission(player, location, Material.STONE, TownyPermission.ActionType.BUILD)) {
+                return false;
+            }
         }
 
         Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
@@ -568,14 +570,22 @@ public class WandEvents implements Listener {
 
         Plugin factionsPlugin = getExternalPlugin("Factions");
         if (factionsPlugin != null) {
-            MPlayer mPlayer = MPlayer.get(player);
-            Faction faction = BoardColl.get().getFactionAt(PS.valueOf(location));
-            if (faction != mPlayer.getFaction()) {
-
-                return false;
+            String mainClass = factionsPlugin.getDescription().getMain();
+            if (mainClass.equals("com.massivecraft.factions.Factions")) {
+                MPlayer mPlayer = MPlayer.get(player);
+                Faction faction = BoardColl.get().getFactionAt(PS.valueOf(location));
+                if (faction != mPlayer.getFaction()) {
+                    return false;
+                }
+            } else if (mainClass.equals("com.massivecraft.factions.SavageFactions")) {
+                FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+                FLocation fLoc = new FLocation(location);
+                com.massivecraft.factions.Faction faction = Board.getInstance().getFactionAt(fLoc);
+                if (faction != fPlayer.getFaction()) {
+                    return false;
+                }
             }
         }
-
         return true;
     }
 
@@ -645,11 +655,23 @@ public class WandEvents implements Listener {
 
         Plugin factionsPlugin = getExternalPlugin("Factions");
         if (factionsPlugin != null) {
-            MPlayer mPlayer = MPlayer.get(player);
-            for (Block selectionBlock : selection) {
-                Faction faction = BoardColl.get().getFactionAt(PS.valueOf(selectionBlock.getLocation()));
-                if (faction == mPlayer.getFaction()) {
-                    return false;
+            String mainClass = factionsPlugin.getDescription().getMain();
+            if (mainClass.equals("com.massivecraft.factions.Factions")) {
+                MPlayer mPlayer = MPlayer.get(player);
+                for (Block selectionBlock : selection) {
+                    Faction faction = BoardColl.get().getFactionAt(PS.valueOf(selectionBlock.getLocation()));
+                    if (faction == mPlayer.getFaction()) {
+                        return false;
+                    }
+                }
+            } else if (mainClass.equals("com.massivecraft.factions.SavageFactions")) {
+                FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+                for (Block selectionBlock : selection) {
+                    FLocation fLoc = new FLocation(selectionBlock.getLocation());
+                    com.massivecraft.factions.Faction faction = Board.getInstance().getFactionAt(fLoc);
+                    if (faction != fPlayer.getFaction()) {
+                        return false;
+                    }
                 }
             }
         }
