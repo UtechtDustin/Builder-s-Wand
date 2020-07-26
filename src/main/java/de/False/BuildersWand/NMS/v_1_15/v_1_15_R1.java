@@ -1,19 +1,11 @@
-package de.False.BuildersWand.NMS.v_1_14;
+package de.False.BuildersWand.NMS.v_1_15;
 
 import de.False.BuildersWand.Main;
 import de.False.BuildersWand.NMS.NMS;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import net.minecraft.server.v1_14_R1.NBTTagCompound;
+import net.minecraft.server.v1_15_R1.NBTTagCompound;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -21,12 +13,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-public class v_1_14_R1 implements NMS
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+public class v_1_15_R1 implements NMS
 {
     private Main plugin;
     private Random random;
 
-    public v_1_14_R1(Main plugin)
+    public v_1_15_R1(Main plugin)
     {
         this.plugin = plugin;
         this.random = new Random();
@@ -103,7 +100,7 @@ public class v_1_14_R1 implements NMS
     @Override
     public ItemStack setTag(ItemStack itemStack, String path, String value)
     {
-        net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        net.minecraft.server.v1_15_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound compound = nmsStack.getTag();
         if (compound == null) {
             compound = new NBTTagCompound();
@@ -121,7 +118,7 @@ public class v_1_14_R1 implements NMS
     @Override
     public String getTag(ItemStack itemStack, String path)
     {
-        net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        net.minecraft.server.v1_15_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound compound = nmsStack.getTag();
         if (compound == null) {
             compound = new NBTTagCompound();
