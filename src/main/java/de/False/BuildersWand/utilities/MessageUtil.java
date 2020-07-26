@@ -48,7 +48,7 @@ public class MessageUtil {
 
     private static String getPlayerLocale(CommandSender player) {
         if (player instanceof Player) {
-            return ((Player) player).spigot().getLocale();
+            return ((Player) player).getLocale();
         }
 
         return defaultLocale;

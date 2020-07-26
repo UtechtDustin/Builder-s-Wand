@@ -1,12 +1,6 @@
 package de.False.BuildersWand.events;
 
-import com.github.intellectualsites.plotsquared.api.PlotAPI;
-import com.github.intellectualsites.plotsquared.plot.object.Plot;
 import com.gmail.nossr50.mcMMO;
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MPlayer;
@@ -544,12 +538,13 @@ public class WandEvents implements Listener {
 
         Plugin plotSquared = getExternalPlugin("PlotSquared");
         if (plotSquared != null) {
-            PlotAPI plotAPI = new PlotAPI();
-            com.github.intellectualsites.plotsquared.plot.object.Location plotSquaredLocation = new com.github.intellectualsites.plotsquared.plot.object.Location(location.getWorld().toString(), (int) location.getX(), (int) location.getY(), (int) location.getZ());
-            Plot plot = plotAPI.getPlotSquared().getApplicablePlotArea(plotSquaredLocation).getPlot(plotSquaredLocation);
-            if (plot != null && !plot.isAdded(player.getUniqueId())) {
-                return false;
-            }
+//
+//            PlotAPI plotAPI = new PlotAPI();
+//            com.github.intellectualsites.plotsquared.plot.object.Location plotSquaredLocation = new com.github.intellectualsites.plotsquared.plot.object.Location(location.getWorld().toString(), (int) location.getX(), (int) location.getY(), (int) location.getZ());
+//            Plot plot = plotAPI.getPlotSquared().getApplicablePlotArea(plotSquaredLocation).getPlot(plotSquaredLocation);
+//            if (plot != null && !plot.isAdded(player.getUniqueId())) {
+//                return false;
+//            }
         }
 
         Plugin aSkyBlock = getExternalPlugin("ASkyBlock");
@@ -570,21 +565,22 @@ public class WandEvents implements Listener {
 
         Plugin factionsPlugin = getExternalPlugin("Factions");
         if (factionsPlugin != null) {
-            String mainClass = factionsPlugin.getDescription().getMain();
-            if (mainClass.equals("com.massivecraft.factions.Factions")) {
-                MPlayer mPlayer = MPlayer.get(player);
-                Faction faction = BoardColl.get().getFactionAt(PS.valueOf(location));
-                if (faction != mPlayer.getFaction()) {
-                    return false;
-                }
-            } else if (mainClass.equals("com.massivecraft.factions.SavageFactions")) {
-                FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
-                FLocation fLoc = new FLocation(location);
-                com.massivecraft.factions.Faction faction = Board.getInstance().getFactionAt(fLoc);
-                if (faction != fPlayer.getFaction()) {
-                    return false;
-                }
-            }
+//            String mainClass = factionsPlugin.getDescription().getMain();
+//            if (mainClass.equals("com.massivecraft.factions.Factions")) {
+//                MPlayer mPlayer = MPlayer.get(player);
+//                Faction faction = BoardColl.get().getFactionAt(PS.valueOf(location));
+//                if (faction != mPlayer.getFaction()) {
+//                    return false;
+//                }
+//            } else if (mainClass.equals("com.massivecraft.factions.SavageFactions")) {
+//                FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+//                FLocation fLoc = new FLocation(location);
+//                com.massivecraft.factions.event.
+//                com.massivecraft.factions.Faction faction = Board.getInstance().getFactionAt(fLoc);
+//                if (faction != fPlayer.getFaction()) {
+//                    return false;
+//                }
+//            }
         }
         return true;
     }
@@ -622,15 +618,15 @@ public class WandEvents implements Listener {
 
         Plugin plotSquared = getExternalPlugin("PlotSquared");
         if (plotSquared != null) {
-            PlotAPI plotAPI = new PlotAPI();
-            for (Block selectionBlock : selection) {
-                Location location = selectionBlock.getLocation();
-                com.github.intellectualsites.plotsquared.plot.object.Location plotSquaredLocation = new com.github.intellectualsites.plotsquared.plot.object.Location(location.getWorld().toString(), (int) location.getX(), (int) location.getY(), (int) location.getZ());
-                Plot plot = plotAPI.getPlotSquared().getApplicablePlotArea(plotSquaredLocation).getPlot(plotSquaredLocation);
-                if (plot != null && !plot.isAdded(player.getUniqueId())) {
-                    return false;
-                }
-            }
+//            PlotAPI plotAPI = new PlotAPI();
+//            for (Block selectionBlock : selection) {
+//                Location location = selectionBlock.getLocation();
+//                com.github.intellectualsites.plotsquared.plot.object.Location plotSquaredLocation = new com.github.intellectualsites.plotsquared.plot.object.Location(location.getWorld().toString(), (int) location.getX(), (int) location.getY(), (int) location.getZ());
+//                Plot plot = plotAPI.getPlotSquared().getApplicablePlotArea(plotSquaredLocation).getPlot(plotSquaredLocation);
+//                if (plot != null && !plot.isAdded(player.getUniqueId())) {
+//                    return false;
+//                }
+//            }
         }
 
         Plugin aSkyBlock = getExternalPlugin("ASkyBlock");
@@ -665,14 +661,14 @@ public class WandEvents implements Listener {
                     }
                 }
             } else if (mainClass.equals("com.massivecraft.factions.SavageFactions")) {
-                FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
-                for (Block selectionBlock : selection) {
-                    FLocation fLoc = new FLocation(selectionBlock.getLocation());
-                    com.massivecraft.factions.Faction faction = Board.getInstance().getFactionAt(fLoc);
-                    if (faction != fPlayer.getFaction()) {
-                        return false;
-                    }
-                }
+//                FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+//                for (Block selectionBlock : selection) {
+//                    FLocation fLoc = new FLocation(selectionBlock.getLocation());
+//                    com.massivecraft.factions.Faction faction = Board.getInstance().getFactionAt(fLoc);
+//                    if (faction != fPlayer.getFaction()) {
+//                        return false;
+//                    }
+//                }
             }
         }
 
