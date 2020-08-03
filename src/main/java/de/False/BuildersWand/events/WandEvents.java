@@ -7,6 +7,8 @@ import com.massivecraft.factions.entity.MPlayer;
 import com.massivecraft.massivecore.ps.PS;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.plotsquared.core.api.PlotAPI;
+import com.plotsquared.core.plot.Plot;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import de.False.BuildersWand.ConfigurationFiles.Config;
@@ -538,13 +540,12 @@ public class WandEvents implements Listener {
 
         Plugin plotSquared = getExternalPlugin("PlotSquared");
         if (plotSquared != null) {
-//
-//            PlotAPI plotAPI = new PlotAPI();
-//            com.github.intellectualsites.plotsquared.plot.object.Location plotSquaredLocation = new com.github.intellectualsites.plotsquared.plot.object.Location(location.getWorld().toString(), (int) location.getX(), (int) location.getY(), (int) location.getZ());
-//            Plot plot = plotAPI.getPlotSquared().getApplicablePlotArea(plotSquaredLocation).getPlot(plotSquaredLocation);
-//            if (plot != null && !plot.isAdded(player.getUniqueId())) {
-//                return false;
-//            }
+            PlotAPI plotAPI = new PlotAPI();
+            com.plotsquared.core.location.Location plotSquaredLocation = new com.plotsquared.core.location.Location(location.getWorld().toString(), (int) location.getX(), (int) location.getY(), (int) location.getZ());
+            Plot plot = plotAPI.getPlotSquared().getApplicablePlotArea(plotSquaredLocation).getPlot(plotSquaredLocation);
+            if (plot != null && !plot.isAdded(player.getUniqueId())) {
+                return false;
+            }
         }
 
         Plugin aSkyBlock = getExternalPlugin("ASkyBlock");
