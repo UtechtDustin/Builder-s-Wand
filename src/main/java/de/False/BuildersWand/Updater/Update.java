@@ -53,9 +53,7 @@ public class Update {
             newVersion = Integer.parseInt(getNewVersion().replaceAll("[^\\d]", ""));
             lastVersion = newVersion;
             lastVersionTimestamp = Instant.now().getEpochSecond();
-            player.sendMessage("Fetch version from api");
         } else {
-            player.sendMessage("use cached version");
             newVersion = lastVersion;
         }
 
