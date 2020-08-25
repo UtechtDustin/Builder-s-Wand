@@ -21,6 +21,8 @@ public class Wand
     private boolean craftingEnabled;
     private boolean craftingShapeless;
     private List<String> craftingRecipe;
+    private List<String> blacklist;
+    private List<String> whitelist;
     private HashMap<String, Material> ingredient = new HashMap<>();
 
     private boolean particleEnabled;
@@ -111,6 +113,26 @@ public class Wand
     public void setCraftingRecipe(List<String> craftingRecipe)
     {
         this.craftingRecipe = craftingRecipe;
+    }
+
+    public List<String> getBlacklist()
+    {
+        return blacklist;
+    }
+
+    public void setBlacklist(List<String> blacklist)
+    {
+        this.blacklist = blacklist;
+    }
+
+    public List<String> getWhitelist()
+    {
+        return whitelist;
+    }
+
+    public void setWhitelist(List<String> whitelist)
+    {
+        this.whitelist = whitelist;
     }
 
     public HashMap<String, Material> getIngredient()

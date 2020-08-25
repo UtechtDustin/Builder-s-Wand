@@ -367,6 +367,8 @@ public class WandEvents implements Listener {
         List<Block> selection = blockSelection.get(startBlock);
         List<Block> replacementsList = tmpReplacements.get(startBlock);
 
+        List<String> blacklist = wand.getBlacklist();
+        List<String> whitelist = wand.getWhitelist();
         if (
                 startLocation.distance(checkLocation) >= wand.getMaxSize()
                         || !(startMaterial.equals(blockToCheckMaterial))
@@ -374,6 +376,8 @@ public class WandEvents implements Listener {
                         || blockToCheckData != startBlockData
                         || selection.contains(blockToCheck)
                         || !relativeBlock.equals(Material.AIR)
+                        || whitelist.size() == 0 && blacklist.size() > 0 && blacklist.contains(startMaterial.toString())
+                        || blacklist.size() == 0 && whitelist.size() > 0 && !whitelist.contains(startMaterial.toString())
                         || (!isAllowedToBuildForExternalPlugins(player, checkLocation) && !player.hasPermission("buildersWand.bypass"))
                         || !canBuildHandlerCheck(player, checkLocation)
                         || !player.hasPermission("buildersWand.use")
