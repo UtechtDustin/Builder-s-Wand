@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.Instant;
 import java.util.logging.Logger;
 
 public class Update {
@@ -18,6 +19,9 @@ public class Update {
     private final Main plugin;
     private final Logger logger;
     private final int resourceId;
+
+    private int lastVersion;
+    private long lastVersionTimestamp = 0;
 
     public Update(Main plugin, int resourceId) {
         this.REQUEST_URL = "https://api.spiget.org/v2/resources/" + resourceId + "/versions?sort=-releaseDate";
@@ -43,7 +47,18 @@ public class Update {
     }
 
     public void sendUpdateMessage(Player player) {
-        int newVersion = Integer.parseInt(getNewVersion().replaceAll("[^\\d]", ""));
+        int newVersion;
+        long now = Instant.now().getEpochSecond();
+        if (lastVersionTimestamp == 0 || now - 18000 > lastVersionTimestamp) {
+            newVersion = Integer.parseInt(getNewVersion().replaceAll("[^\\d]", ""));
+            lastVersion = newVersion;
+            lastVersionTimestamp = Instant.now().getEpochSecond();
+            player.sendMessage("Fetch version from api");
+        } else {
+            player.sendMessage("use cached version");
+            newVersion = lastVersion;
+        }
+
         int currentVersion = Integer.parseInt(getCurrentVersion().replaceAll("[^\\d]", ""));
 
         if (newVersion > currentVersion) {
