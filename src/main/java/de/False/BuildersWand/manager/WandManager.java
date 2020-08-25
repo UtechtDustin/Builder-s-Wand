@@ -56,6 +56,8 @@ public class WandManager
         wand.setCraftingEnabled(config.getBoolean(configPrefix + "crafting.enabled"));
         wand.setCraftingShapeless(config.getBoolean(configPrefix + "crafting.shapeless"));
         wand.setCraftingRecipe(config.getStringList(configPrefix +"crafting.recipe"));
+        wand.setBlacklist(config.getStringList(configPrefix +"blacklist"));
+        wand.setWhitelist(config.getStringList(configPrefix +"whitelist"));
         wand.setIngredient(getIngredientList(key));
         wand.setParticleEnabled(config.getBoolean(configPrefix + "particles.enabled"));
         wand.setParticle(config.getString(configPrefix + "particles.type"));
