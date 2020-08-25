@@ -366,9 +366,9 @@ public class WandEvents implements Listener {
         Material relativeBlock = blockToCheck.getRelative(blockFace).getType();
         List<Block> selection = blockSelection.get(startBlock);
         List<Block> replacementsList = tmpReplacements.get(startBlock);
-
         List<String> blacklist = wand.getBlacklist();
         List<String> whitelist = wand.getWhitelist();
+
         if (
                 startLocation.distance(checkLocation) >= wand.getMaxSize()
                         || !(startMaterial.equals(blockToCheckMaterial))
