@@ -145,6 +145,7 @@ public class Main extends JavaPlugin
                     break;
                 case "v1_16_R1":
                     nms = new v_1_16_R1(this);
+                    break;
                 case "v1_16_R2":
                     nms = new v_1_16_R2(this);
                     break;
