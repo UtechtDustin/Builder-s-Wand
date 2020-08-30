@@ -174,7 +174,16 @@
             <artifactId>coreprotect</artifactId>
             <version>2.14.2</version>
         </dependency>
-        
+
+        <dependency>
+            <groupId>com.residence</groupId>
+            <artifactId>residence</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>
+                ${project.basedir}/external/Residence.jar
+            </systemPath>
+        </dependency>
     </dependencies>
 
     <build>

@@ -4,10 +4,10 @@ import de.False.BuildersWand.NMS.NMS;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -119,5 +119,9 @@ public class v_1_8_R3 implements NMS
         }
 
         return compound.getString(path);
+    }
+
+    public Block setBlockData(Block against, Block SelectionBlock) {
+        return SelectionBlock;
     }
 }

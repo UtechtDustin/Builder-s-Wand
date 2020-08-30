@@ -1,5 +1,8 @@
 package de.False.BuildersWand.events;
 
+import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.residence.protection.ClaimedResidence;
+import com.bekvon.bukkit.residence.protection.ResidencePermissions;
 import com.gmail.nossr50.mcMMO;
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
@@ -166,6 +169,7 @@ public class WandEvents implements Listener {
                 }
 
                 selectionBlock.setType(blockType);
+                selectionBlock = nms.setBlockData(against, selectionBlock);
 
                 Plugin coreProtect = getExternalPlugin("CoreProtect");
                 if (coreProtect != null) {
@@ -523,6 +527,19 @@ public class WandEvents implements Listener {
             }
         }
 
+        Plugin residencePlugin = getExternalPlugin("Residence");
+        if (residencePlugin != null) {
+            ClaimedResidence res = Residence.getInstance().getResidenceManager().getByLoc(location);
+            if(res == null) {
+                return false;
+            }
+
+            ResidencePermissions perms = res.getPermissions();
+            if (!perms.playerHas(player, com.bekvon.bukkit.residence.containers.Flags.build, false)) {
+                return false;
+            }
+        }
+
         Plugin worldGuardPlugin = getExternalPlugin("WorldGuard");
         if (worldGuardPlugin instanceof WorldGuardPlugin) {
             if (!WorldGuardAPI.getWorldGuardAPI().allows(player, location)) {
@@ -594,6 +611,21 @@ public class WandEvents implements Listener {
         if (townyPlugin != null) {
             for (Block selectionBlock : selection) {
                 if (!PlayerCacheUtil.getCachePermission(player, selectionBlock.getLocation(), Material.STONE, TownyPermission.ActionType.BUILD)) {
+                    return false;
+                }
+            }
+        }
+
+        Plugin residencePlugin = getExternalPlugin("Residence");
+        if (residencePlugin != null) {
+            for (Block selectionBlock : selection) {
+                ClaimedResidence res = Residence.getInstance().getResidenceManager().getByLoc(selectionBlock.getLocation());
+                if(res == null) {
+                    return false;
+                }
+
+                ResidencePermissions perms = res.getPermissions();
+                if (!perms.playerHas(player, com.bekvon.bukkit.residence.containers.Flags.build, false)) {
                     return false;
                 }
             }

@@ -2,6 +2,7 @@ package de.False.BuildersWand.NMS;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -29,4 +30,6 @@ public interface NMS
     ItemStack setTag(ItemStack itemStack, String path, String value);
 
     String getTag(ItemStack itemStack, String path);
+
+    Block setBlockData(Block against, Block SelectionBlock);
 }
