@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -122,5 +123,9 @@ public class v_1_8_R2 implements NMS
         }
 
         return compound.getString(path);
+    }
+
+    public Block setBlockData(Block against, Block SelectionBlock) {
+        return SelectionBlock;
     }
 }

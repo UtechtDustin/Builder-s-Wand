@@ -166,6 +166,7 @@ public class WandEvents implements Listener {
                 }
 
                 selectionBlock.setType(blockType);
+                selectionBlock = nms.setBlockData(against, selectionBlock);
 
                 Plugin coreProtect = getExternalPlugin("CoreProtect");
                 if (coreProtect != null) {
