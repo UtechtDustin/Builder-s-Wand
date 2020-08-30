@@ -243,13 +243,19 @@ public class WandEvents implements Listener {
         int count = 0;
         Inventory inventory = player.getInventory();
         Material blockMaterial = block.getType();
+        ItemStack[] inventoryContents = inventory.getContents();
+        ItemStack helmet = inventory.getItem(39);
+
+        if(helmet != null) {
+            inventoryContents = (ItemStack[]) ArrayUtils.removeElement(inventoryContents, helmet);
+        }
 
         if (mainHand.getType() == Material.AIR) {
             return 0;
         }
 
         String uuid = nms.getTag(mainHand, "uuid");
-        ItemStack[] itemStacks = (ItemStack[]) ArrayUtils.addAll(inventory.getContents(), inventoryManager.getInventory(uuid));
+        ItemStack[] itemStacks = (ItemStack[]) ArrayUtils.addAll(inventoryContents, inventoryManager.getInventory(uuid));
 
         if (player.getGameMode() == GameMode.CREATIVE) {
             return Integer.MAX_VALUE;
