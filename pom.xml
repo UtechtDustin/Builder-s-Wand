@@ -190,6 +190,13 @@
             <artifactId>ItemsAdder-API</artifactId>
             <version>0.1.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.angeschossen</groupId>
+            <artifactId>LandsAPI</artifactId>
+            <version>4.12.12</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -24,6 +24,12 @@ import de.False.BuildersWand.manager.WandManager;
 import de.False.BuildersWand.utilities.MessageUtil;
 import de.False.BuildersWand.utilities.ParticleUtil;
 import dev.lone.itemsadder.api.ItemsAdder;
+import me.angeschossen.lands.api.integration.LandsIntegration;
+import me.angeschossen.lands.api.land.Area;
+import me.angeschossen.lands.api.land.Land;
+import me.angeschossen.lands.api.player.TrustedPlayer;
+import me.angeschossen.lands.api.role.enums.ManagementSetting;
+import me.angeschossen.lands.api.role.enums.RoleSetting;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.coreprotect.CoreProtect;
 import net.coreprotect.CoreProtectAPI;
@@ -657,6 +663,17 @@ public class WandEvents implements Listener {
     }
 
     private boolean isAllowedToBuildForExternalPlugins(Player player, Location location) {
+        Plugin LandsPlugin = getExternalPlugin("Lands");
+        if(LandsPlugin != null) {
+            LandsIntegration landsIntegration = new LandsIntegration(plugin);
+            Area area = landsIntegration.getAreaByLoc(location);
+            if(area == null) {
+                return true;
+            }
+            return area.canSetting(player.getUniqueId(), RoleSetting.BLOCK_PLACE);
+        }
+
+
         Plugin townyPlugin = getExternalPlugin("Towny");
         if (townyPlugin != null) {
             if (!PlayerCacheUtil.getCachePermission(player, location, Material.STONE, TownyPermission.ActionType.BUILD)) {
@@ -744,6 +761,21 @@ public class WandEvents implements Listener {
     }
 
     private boolean isAllowedToBuildForExternalPlugins(Player player, List<Block> selection) {
+        Plugin LandsPlugin = getExternalPlugin("Lands");
+        if(LandsPlugin != null) {
+            LandsIntegration landsIntegration = new LandsIntegration(plugin);
+            for (Block selectionBlock : selection) {
+                Area area = landsIntegration.getAreaByLoc(selectionBlock.getLocation());
+                if(area == null) {
+                    continue;
+                }
+
+                if(!area.canSetting(player.getUniqueId(), RoleSetting.BLOCK_PLACE)) {
+                    return false;
+                };
+            }
+        }
+
         Plugin townyPlugin = getExternalPlugin("Towny");
         if (townyPlugin != null) {
             for (Block selectionBlock : selection) {

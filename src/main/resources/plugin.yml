@@ -1,8 +1,8 @@
 name: BuildersWand
 author: Wythe
-version: 2.17.0
+version: 2.18.0
 main: de.False.BuildersWand.Main
-softdepend: [ItemsAdder, ASkyBlock, WorldGuard, Towny, GriefPrevention, Factions, mcMMO, BentoBox, PlotSquared, CoreProtect]
+softdepend: [Lands, ItemsAdder, ASkyBlock, WorldGuard, Towny, GriefPrevention, Factions, mcMMO, BentoBox, PlotSquared, CoreProtect]
 api-version: 1.13
 commands:
   builderswand:
