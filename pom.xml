@@ -184,6 +184,12 @@
                 ${project.basedir}/external/Residence.jar
             </systemPath>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.LoneDev6</groupId>
+            <artifactId>ItemsAdder-API</artifactId>
+            <version>0.1.2</version>
+        </dependency>
     </dependencies>
 
     <build>

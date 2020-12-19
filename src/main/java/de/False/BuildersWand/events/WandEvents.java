@@ -23,6 +23,7 @@ import de.False.BuildersWand.manager.InventoryManager;
 import de.False.BuildersWand.manager.WandManager;
 import de.False.BuildersWand.utilities.MessageUtil;
 import de.False.BuildersWand.utilities.ParticleUtil;
+import dev.lone.itemsadder.api.ItemsAdder;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.coreprotect.CoreProtect;
 import net.coreprotect.CoreProtectAPI;
@@ -97,7 +98,14 @@ public class WandEvents implements Listener {
                         continue;
                     }
 
-                    int itemCount = getItemCount(player, block, mainHand);
+                    int itemCount = 0;
+                    if (getExternalPlugin("ItemsAdder") != null && ItemsAdder.isCustomBlock(block)) {
+                        ItemStack customBlockItemStack = ItemsAdder.getCustomBlock(block);
+                        itemCount = getCustomBlockCount(player, block, mainHand, customBlockItemStack);
+                    } else {
+                        itemCount = getItemCount(player, block, mainHand);
+                    }
+
                     blockSelection.put(block, new ArrayList<>());
                     tmpReplacements.put(block, new ArrayList<>());
 
@@ -160,16 +168,27 @@ public class WandEvents implements Listener {
         materialData.setData(blockSubId);
         itemStack.setData(materialData);
         event.setCancelled(true);
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
 
+        ItemStack customItemStack = null;
+        if(getExternalPlugin("ItemsAdder") != null) {
+            customItemStack = ItemsAdder.getCustomBlock(against);
+        }
+
+        ItemStack finalCustomItemStack = customItemStack;
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
             for (Block selectionBlock : selection) {
                 Plugin mcMMOPlugin = getExternalPlugin("mcMMO");
                 if (mcMMOPlugin != null) {
                     mcMMO.getPlaceStore().setTrue(selectionBlock);
                 }
 
-                selectionBlock.setType(blockType);
-                selectionBlock = nms.setBlockData(against, selectionBlock);
+                if (getExternalPlugin("ItemsAdder") != null && ItemsAdder.isCustomBlock(against)) {
+                    ItemsAdder.placeCustomBlock(selectionBlock.getLocation(), finalCustomItemStack);
+                } else {
+                    selectionBlock.setType(blockType);
+                    selectionBlock = nms.setBlockData(against, selectionBlock);
+                }
+
 
                 Plugin coreProtect = getExternalPlugin("CoreProtect");
                 if (coreProtect != null) {
@@ -191,7 +210,12 @@ public class WandEvents implements Listener {
 
         Integer amount = selection.size();
         if (wand.isConsumeItems()) {
-            removeItemStack(itemStack, amount, player, mainHand);
+            if (getExternalPlugin("ItemsAdder") != null && ItemsAdder.isCustomBlock(against)) {
+                removeCustomItemStack(ItemsAdder.getCustomBlock(against), amount, player, mainHand, customItemStack);
+            } else {
+                removeItemStack(itemStack, amount, player, mainHand);
+            }
+
         }
         if (wand.isDurabilityEnabled() && amount >= 1) {
             removeDurability(mainHand, player, wand);
@@ -246,7 +270,7 @@ public class WandEvents implements Listener {
         ItemStack[] inventoryContents = inventory.getContents();
         ItemStack helmet = inventory.getItem(39);
 
-        if(helmet != null) {
+        if (helmet != null) {
             inventoryContents = (ItemStack[]) ArrayUtils.removeElement(inventoryContents, helmet);
         }
 
@@ -268,6 +292,43 @@ public class WandEvents implements Listener {
             Material itemMaterial = itemStack.getType();
 
             if (!itemMaterial.equals(blockMaterial) || block.getData() != itemStack.getData().getData()) {
+                continue;
+            }
+
+            count += itemStack.getAmount();
+        }
+
+        return count;
+    }
+
+    private int getCustomBlockCount(Player player, Block block, ItemStack mainHand, ItemStack customBlockItemStack) {
+        int count = 0;
+        Inventory inventory = player.getInventory();
+        Material blockMaterial = block.getType();
+        ItemStack[] inventoryContents = inventory.getContents();
+        ItemStack helmet = inventory.getItem(39);
+
+        if (helmet != null) {
+            inventoryContents = (ItemStack[]) ArrayUtils.removeElement(inventoryContents, helmet);
+        }
+
+        if (mainHand.getType() == Material.AIR) {
+            return 0;
+        }
+
+        String uuid = nms.getTag(mainHand, "uuid");
+        ItemStack[] itemStacks = (ItemStack[]) ArrayUtils.addAll(inventoryContents, inventoryManager.getInventory(uuid));
+
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            return Integer.MAX_VALUE;
+        }
+
+        for (ItemStack itemStack : itemStacks) {
+            if (itemStack == null || !ItemsAdder.isCustomItem(itemStack)) {
+                continue;
+            }
+
+            if (!ItemsAdder.getCustomItemName(itemStack).equalsIgnoreCase(ItemsAdder.getCustomItemName(customBlockItemStack))) {
                 continue;
             }
 
@@ -366,6 +427,64 @@ public class WandEvents implements Listener {
         inventoryManager.setInventory(uuid, inventoryItemStacksList.toArray(new ItemStack[inventoryItemStacksList.size()]));
     }
 
+    private void removeCustomItemStack(ItemStack itemStack, int amount, Player player, ItemStack mainHand, ItemStack customBlockItemStack) {
+
+        Inventory inventory = player.getInventory();
+        Material material = itemStack.getType();
+        ItemStack[] itemStacks = inventory.getContents();
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
+        for (ItemStack inventoryItemStack : itemStacks) {
+            if (inventoryItemStack == null || !ItemsAdder.isCustomItem(inventoryItemStack) || !ItemsAdder.getCustomItemName(inventoryItemStack).equalsIgnoreCase(ItemsAdder.getCustomItemName(customBlockItemStack)))
+            {
+                continue;
+            }
+
+            int itemAmount = inventoryItemStack.getAmount();
+            if (amount >= itemAmount) {
+                HashMap<Integer, ItemStack> didntRemovedItems = inventory.removeItem(inventoryItemStack);
+
+                if (didntRemovedItems.size() == 1) {
+                    player.getInventory().setItemInOffHand(null);
+                }
+
+                amount -= itemAmount;
+                player.updateInventory();
+            } else {
+                inventoryItemStack.setAmount(itemAmount - amount);
+                player.updateInventory();
+                return;
+            }
+        }
+
+        String uuid = nms.getTag(mainHand, "uuid");
+        ItemStack[] inventoryItemStacks = inventoryManager.getInventory(uuid);
+        ArrayList<ItemStack> inventoryItemStacksList = new ArrayList<>(Arrays.asList(inventoryItemStacks));
+        for (ItemStack inventoryItemStack : inventoryItemStacks) {
+            if (inventoryItemStack == null) {
+                continue;
+            }
+            Material itemMaterial = inventoryItemStack.getType();
+            if (!itemMaterial.equals(material) || itemStack.getData().getData() != inventoryItemStack.getData().getData()) {
+                continue;
+            }
+            int itemAmount = inventoryItemStack.getAmount();
+            if (amount >= itemAmount) {
+                inventoryItemStacksList.remove(inventoryItemStack);
+                amount -= itemAmount;
+            } else {
+                int index = inventoryItemStacksList.indexOf(inventoryItemStack);
+                inventoryItemStack.setAmount(itemAmount - amount);
+                inventoryItemStacksList.set(index, inventoryItemStack);
+                inventoryManager.setInventory(uuid, inventoryItemStacksList.toArray(new ItemStack[inventoryItemStacksList.size()]));
+                return;
+            }
+        }
+        inventoryManager.setInventory(uuid, inventoryItemStacksList.toArray(new ItemStack[inventoryItemStacksList.size()]));
+    }
+
+
     private void setBlockSelection(Player player, BlockFace blockFace, int maxLocations, Block startBlock, Block blockToCheck, Wand wand) {
         int blockToCheckData = blockToCheck.getData();
         int startBlockData = startBlock.getData();
@@ -378,6 +497,17 @@ public class WandEvents implements Listener {
         List<Block> replacementsList = tmpReplacements.get(startBlock);
         List<String> blacklist = wand.getBlacklist();
         List<String> whitelist = wand.getWhitelist();
+
+        boolean customBlockAllowed = true;
+
+        if(
+                getExternalPlugin("ItemsAdder") != null
+                && ItemsAdder.isCustomBlock(startBlock)
+                && ItemsAdder.isCustomBlock(blockToCheck)
+                && !ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(startBlock)).equalsIgnoreCase(ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(blockToCheck)))
+        ) {
+            customBlockAllowed = false;
+        }
 
         if (
                 startLocation.distance(checkLocation) >= wand.getMaxSize()
@@ -392,6 +522,7 @@ public class WandEvents implements Listener {
                         || !canBuildHandlerCheck(player, checkLocation)
                         || !player.hasPermission("buildersWand.use")
                         || wand.hasPermission() && !player.hasPermission(wand.getPermission())
+                        || !customBlockAllowed
         ) {
             return;
         }
@@ -536,7 +667,7 @@ public class WandEvents implements Listener {
         Plugin residencePlugin = getExternalPlugin("Residence");
         if (residencePlugin != null) {
             ClaimedResidence res = Residence.getInstance().getResidenceManager().getByLoc(location);
-            if(res == null) {
+            if (res == null) {
                 return false;
             }
 
@@ -626,7 +757,7 @@ public class WandEvents implements Listener {
         if (residencePlugin != null) {
             for (Block selectionBlock : selection) {
                 ClaimedResidence res = Residence.getInstance().getResidenceManager().getByLoc(selectionBlock.getLocation());
-                if(res == null) {
+                if (res == null) {
                     return false;
                 }
 
