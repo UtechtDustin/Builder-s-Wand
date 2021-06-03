@@ -26,9 +26,6 @@ import de.False.BuildersWand.utilities.ParticleUtil;
 import dev.lone.itemsadder.api.ItemsAdder;
 import me.angeschossen.lands.api.integration.LandsIntegration;
 import me.angeschossen.lands.api.land.Area;
-import me.angeschossen.lands.api.land.Land;
-import me.angeschossen.lands.api.player.TrustedPlayer;
-import me.angeschossen.lands.api.role.enums.ManagementSetting;
 import me.angeschossen.lands.api.role.enums.RoleSetting;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.coreprotect.CoreProtect;
@@ -69,6 +66,7 @@ public class WandEvents implements Listener {
     private HashMap<Block, List<Block>> replacements = new HashMap<Block, List<Block>>();
     private HashMap<Block, List<Block>> tmpReplacements = new HashMap<Block, List<Block>>();
     public static ArrayList<canBuildHandler> canBuildHandlers = new ArrayList<canBuildHandler>();
+    private List<Material> ignoreList = new ArrayList<>();
 
     public WandEvents(Main plugin, Config config, ParticleUtil particleUtil, NMS nms, WandManager wandManager, InventoryManager inventoryManager) {
         this.plugin = plugin;
@@ -77,6 +75,11 @@ public class WandEvents implements Listener {
         this.nms = nms;
         this.wandManager = wandManager;
         this.inventoryManager = inventoryManager;
+
+        ignoreList.add(Material.AIR);
+        ignoreList.add(Material.LAVA);
+        ignoreList.add(Material.WATER);
+
         startScheduler();
     }
 
@@ -90,14 +93,19 @@ public class WandEvents implements Listener {
 
                     ItemStack mainHand = nms.getItemInHand(player);
                     Wand wand = wandManager.getWand(mainHand);
-                    Block block = player.getTargetBlock((Set<Material>) null, 5);
+                    Set<Material> ignoreBlockTypes = new HashSet<>(Arrays.asList(Material.AIR, Material.WATER, Material.LAVA));
+                    Block block = player.getTargetBlock(ignoreBlockTypes, 5);
+                    Material blockType = block.getType();
+                    Material blockAbove = player.getLocation().add(0, 1, 0).getBlock().getType();
                     if (
-                            block.getType().equals(Material.AIR) || wand == null || player.getLocation().add(0, 1, 0).getBlock().getType() != Material.AIR
+                            ignoreList.contains(blockType)
+                            || wand == null
+                            || (!ignoreList.contains(blockAbove))
                     ) {
                         continue;
                     }
 
-                    List<Block> lastBlocks = player.getLastTwoTargetBlocks((Set<Material>) null, 5);
+                    List<Block> lastBlocks = player.getLastTwoTargetBlocks(ignoreBlockTypes, 5);
                     BlockFace blockFace = lastBlocks.get(1).getFace(lastBlocks.get(0));
                     Block blockNext = block.getRelative(blockFace);
                     if (blockNext == null) {
@@ -521,7 +529,7 @@ public class WandEvents implements Listener {
                         || maxLocations <= selection.size()
                         || blockToCheckData != startBlockData
                         || selection.contains(blockToCheck)
-                        || !relativeBlock.equals(Material.AIR)
+                        || !ignoreList.contains(relativeBlock)
                         || whitelist.size() == 0 && blacklist.size() > 0 && blacklist.contains(startMaterial.toString())
                         || blacklist.size() == 0 && whitelist.size() > 0 && !whitelist.contains(startMaterial.toString())
                         || (!isAllowedToBuildForExternalPlugins(player, checkLocation) && !player.hasPermission("buildersWand.bypass"))
