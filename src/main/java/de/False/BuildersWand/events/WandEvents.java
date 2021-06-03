@@ -39,8 +39,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -99,8 +102,8 @@ public class WandEvents implements Listener {
                     Material blockAbove = player.getLocation().add(0, 1, 0).getBlock().getType();
                     if (
                             ignoreList.contains(blockType)
-                            || wand == null
-                            || (!ignoreList.contains(blockAbove))
+                                    || wand == null
+                                    || (!ignoreList.contains(blockAbove))
                     ) {
                         continue;
                     }
@@ -184,7 +187,7 @@ public class WandEvents implements Listener {
         event.setCancelled(true);
 
         ItemStack customItemStack = null;
-        if(getExternalPlugin("ItemsAdder") != null) {
+        if (getExternalPlugin("ItemsAdder") != null) {
             customItemStack = ItemsAdder.getCustomBlock(against);
         }
 
@@ -273,6 +276,25 @@ public class WandEvents implements Listener {
 
         if (!player.hasPermission("buildersWand.craft")) {
             MessageUtil.sendMessage(player, "noPermissions");
+            event.setCancelled(true);
+        }
+
+        Inventory inventory = event.getInventory();
+        ItemStack itemStack = event.getInventory().getResult();
+        itemStack = nms.setTag(itemStack, "uuid", UUID.randomUUID() + "");
+        inventory.setItem(0, itemStack);
+        player.updateInventory();
+    }
+
+    @EventHandler
+    public void inventoryClickEvent(InventoryClickEvent event) {
+        Inventory inventory = event.getView().getTopInventory();
+        if (!(inventory instanceof CraftingInventory)) {
+            return;
+        }
+
+        ClickType clickType = event.getClick();
+        if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
             event.setCancelled(true);
         }
     }
@@ -450,8 +472,7 @@ public class WandEvents implements Listener {
             return;
         }
         for (ItemStack inventoryItemStack : itemStacks) {
-            if (inventoryItemStack == null || !ItemsAdder.isCustomItem(inventoryItemStack) || !ItemsAdder.getCustomItemName(inventoryItemStack).equalsIgnoreCase(ItemsAdder.getCustomItemName(customBlockItemStack)))
-            {
+            if (inventoryItemStack == null || !ItemsAdder.isCustomItem(inventoryItemStack) || !ItemsAdder.getCustomItemName(inventoryItemStack).equalsIgnoreCase(ItemsAdder.getCustomItemName(customBlockItemStack))) {
                 continue;
             }
 
@@ -514,11 +535,11 @@ public class WandEvents implements Listener {
 
         boolean customBlockAllowed = true;
 
-        if(
+        if (
                 getExternalPlugin("ItemsAdder") != null
-                && ItemsAdder.isCustomBlock(startBlock)
-                && ItemsAdder.isCustomBlock(blockToCheck)
-                && !ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(startBlock)).equalsIgnoreCase(ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(blockToCheck)))
+                        && ItemsAdder.isCustomBlock(startBlock)
+                        && ItemsAdder.isCustomBlock(blockToCheck)
+                        && !ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(startBlock)).equalsIgnoreCase(ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(blockToCheck)))
         ) {
             customBlockAllowed = false;
         }
@@ -672,10 +693,10 @@ public class WandEvents implements Listener {
 
     private boolean isAllowedToBuildForExternalPlugins(Player player, Location location) {
         Plugin LandsPlugin = getExternalPlugin("Lands");
-        if(LandsPlugin != null) {
+        if (LandsPlugin != null) {
             LandsIntegration landsIntegration = new LandsIntegration(plugin);
             Area area = landsIntegration.getAreaByLoc(location);
-            if(area == null) {
+            if (area == null) {
                 return true;
             }
             return area.canSetting(player.getUniqueId(), RoleSetting.BLOCK_PLACE);
@@ -770,17 +791,18 @@ public class WandEvents implements Listener {
 
     private boolean isAllowedToBuildForExternalPlugins(Player player, List<Block> selection) {
         Plugin LandsPlugin = getExternalPlugin("Lands");
-        if(LandsPlugin != null) {
+        if (LandsPlugin != null) {
             LandsIntegration landsIntegration = new LandsIntegration(plugin);
             for (Block selectionBlock : selection) {
                 Area area = landsIntegration.getAreaByLoc(selectionBlock.getLocation());
-                if(area == null) {
+                if (area == null) {
                     continue;
                 }
 
-                if(!area.canSetting(player.getUniqueId(), RoleSetting.BLOCK_PLACE)) {
+                if (!area.canSetting(player.getUniqueId(), RoleSetting.BLOCK_PLACE)) {
                     return false;
-                };
+                }
+                ;
             }
         }
 

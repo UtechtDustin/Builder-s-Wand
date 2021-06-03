@@ -60,7 +60,6 @@ public class Wand
         }
 
         buildersWand.setItemMeta(itemMeta);
-        buildersWand = nms.setTag(buildersWand, "uuid", UUID.randomUUID() + "");
 
         return buildersWand;
     }
