@@ -293,6 +293,12 @@ public class WandEvents implements Listener {
             return;
         }
 
+        ItemStack itemStack = event.getCurrentItem();
+        Wand wand = wandManager.getWand(itemStack);
+        if (wand == null) {
+            return;
+        }
+
         ClickType clickType = event.getClick();
         if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
             event.setCancelled(true);
