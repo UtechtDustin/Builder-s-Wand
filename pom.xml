@@ -8,6 +8,11 @@
     <artifactId>Builders_Wand</artifactId>
     <version>3.0.0-SNAPSHOT</version>
 
+    <properties>
+        <maven.compiler.target>1.16</maven.compiler.target>
+        <maven.compiler.source>1.16</maven.compiler.source>
+    </properties>
+
     <repositories>
         <repository>
             <id>spigot-repo</id>
@@ -17,12 +22,12 @@
         <repository>
             <id>bintray-tastybento-maven-repo</id>
             <name>bintray</name>
-            <url>http://dl.bintray.com/tastybento/maven-repo</url>
+            <url>https://dl.bintray.com/tastybento/maven-repo</url>
         </repository>
 
         <repository>
             <id>sk89q-repo</id>
-            <url>http://maven.sk89q.com/repo/</url>
+            <url>https://maven.sk89q.com/repo/</url>
         </repository>
 
         <repository>
@@ -57,7 +62,7 @@
 
         <repository>
             <id>coreprotect-repo</id>
-            <url>http://maven.playpro.com/</url>
+            <url>https://maven.playpro.com/</url>
         </repository>
     </repositories>
 
@@ -70,22 +75,6 @@
             <version>LATEST</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/../all-spigot-nms/all-spigot-nms.jar</systemPath>
-        </dependency>
-
-        <!--Spigot API-->
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.14-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--Bukkit API-->
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.14-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -217,8 +206,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
         </plugins>

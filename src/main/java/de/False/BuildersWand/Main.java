@@ -13,6 +13,7 @@ import de.False.BuildersWand.NMS.v_1_15.v_1_15_R1;
 import de.False.BuildersWand.NMS.v_1_16.v_1_16_R1;
 import de.False.BuildersWand.NMS.v_1_16.v_1_16_R2;
 import de.False.BuildersWand.NMS.v_1_16.v_1_16_R3;
+import de.False.BuildersWand.NMS.v_1_17.v_1_17_R1;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R1;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R2;
 import de.False.BuildersWand.NMS.v_1_8.v_1_8_R3;
@@ -153,6 +154,9 @@ public class Main extends JavaPlugin
                     break;
                 case "v1_16_R3":
                     nms = new v_1_16_R3(this);
+                    break;
+                case "v1_17_R1":
+                    nms = new v_1_17_R1(this);
                     break;
             }
         } catch (ArrayIndexOutOfBoundsException exn) {
