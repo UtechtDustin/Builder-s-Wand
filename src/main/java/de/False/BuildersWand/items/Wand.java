@@ -17,6 +17,7 @@ public class Wand
 
     private String name;
     private Material material;
+    private int customModelData = -1;
 
     private boolean craftingEnabled;
     private boolean craftingShapeless;
@@ -57,6 +58,10 @@ public class Wand
             List<String> lore = new ArrayList<>();
             lore.add(MessageUtil.colorize(getDurabilityText().replace("{durability}", getDurability() + "")));
             itemMeta.setLore(lore);
+        }
+
+        if(customModelData != -1){
+            itemMeta.setCustomModelData(customModelData);
         }
 
         buildersWand.setItemMeta(itemMeta);
@@ -224,6 +229,8 @@ public class Wand
         this.durabilityText = durabilityText;
     }
 
+    public void setCustomModelData(int customModelData) { this.customModelData = customModelData; }
+    
     public boolean isInventoryEnabled()
     {
         return inventoryEnabled;
