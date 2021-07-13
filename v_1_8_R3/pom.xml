@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.False</groupId>
+        <artifactId>Builders_Wand</artifactId>
+        <version>2.20.1</version>
+    </parent>
+
+    <artifactId>Builders_Wand_1_8_R3</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_abstraction</artifactId>
+            <version>2.20.1</version>
+        </dependency>
+    </dependencies>
+</project>

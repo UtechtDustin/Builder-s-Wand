@@ -1,0 +1,11 @@
+name: BuildersWand
+author: Wythe
+version: ${project.version}
+main: de.False.BuildersWand.Main
+softdepend: [Lands, ItemsAdder, WorldGuard, Towny, GriefPrevention, Factions, mcMMO, BentoBox, PlotSquared, CoreProtect, SuperiorSkyblock2]
+api-version: 1.13
+commands:
+  builderswand:
+    description: The general BuildersWand command.
+    usage: /builderswand
+    aliases: [bw]

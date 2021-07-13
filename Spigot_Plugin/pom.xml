@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.False</groupId>
+        <version>2.20.1</version>
+        <artifactId>Builders_Wand</artifactId>
+    </parent>
+
+    <artifactId>Spigot_Plugin</artifactId>
+
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+
+        <repository>
+            <id>nms-repo</id>
+            <url>https://repo.codemc.org/repository/nms/</url>
+        </repository>
+
+        <!--   Worldedit     -->
+        <repository>
+            <id>enginehub-maven</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
+
+        <repository>
+            <id>sk89q-repo</id>
+            <url>https://maven.sk89q.com/repo/</url>
+        </repository>
+
+        <repository>
+            <id>factions</id>
+            <url>https://repo.minebench.de/</url>
+        </repository>
+
+        <repository>
+            <id>mcmmo</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
+        </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
+        </repository>
+
+        <repository>
+            <id>IntellectualSites</id>
+            <url>https://mvn.intellectualsites.com/content/groups/public/</url>
+        </repository>
+
+        <repository>
+            <id>coreprotect-repo</id>
+            <url>https://maven.playpro.com/</url>
+        </repository>
+
+        <repository>
+            <id>bg-repo</id>
+            <url>https://repo.bg-software.com/repository/api/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.bgsoftware</groupId>
+            <artifactId>SuperiorSkyblockAPI</artifactId>
+            <version>latest</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>7.0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q.worldguard</groupId>
+            <artifactId>worldguard-legacy</artifactId>
+            <version>6.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q.worldguard</groupId>
+            <artifactId>worldguard-bukkit</artifactId>
+            <version>7.0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.massivecraft.factions</groupId>
+            <artifactId>factions</artifactId>
+            <version>2.12.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.massivecraft.massivecore</groupId>
+            <artifactId>massivecore</artifactId>
+            <version>2.12.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gmail.nossr50.mcMMO</groupId>
+            <artifactId>mcMMO</artifactId>
+            <version>2.1.178</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>world.bentobox</groupId>
+            <artifactId>bentobox</artifactId>
+            <version>1.5.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.TechFortress</groupId>
+            <artifactId>GriefPrevention</artifactId>
+            <version>16.7.1</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sk89q</groupId>
+                    <artifactId>worldguard</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Add this yourself to your local Maven repo! -->
+        <dependency>
+            <groupId>com.github.TownyAdvanced</groupId>
+            <artifactId>Towny</artifactId>
+            <version>0.96.2.7</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.plotsquared</groupId>
+            <artifactId>PlotSquared-Core</artifactId>
+            <version>5.13.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.coreprotect</groupId>
+            <artifactId>coreprotect</artifactId>
+            <version>2.14.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.residence</groupId>
+            <artifactId>residence</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>
+                ${pom.basedir}/external/Residence.jar
+            </systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.LoneDev6</groupId>
+            <artifactId>ItemsAdder-API</artifactId>
+            <version>0.1.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.angeschossen</groupId>
+            <artifactId>LandsAPI</artifactId>
+            <version>4.12.12</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_abstraction</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_8_R1</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_8_R2</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_8_R3</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_9_R1</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_9_R2</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_10</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_11</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_12</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_13_R1</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_13_R2</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_14</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_15</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_16_R1</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_16_R2</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_16_R3</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.False</groupId>
+            <artifactId>Builders_Wand_1_17</artifactId>
+            <version>2.20.1</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>plugin.yml</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <finalName>Buiders_Wand-${project.version}</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

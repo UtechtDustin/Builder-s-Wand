@@ -1,6 +1,7 @@
 #IDE
 .idea/
 out/
-target/*
+*/target/*
 *.iml
-external/*.jar
+*/external/*.jar
+dependency-reduced-pom.xml
