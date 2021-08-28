@@ -81,6 +81,7 @@ public class WandEvents implements Listener {
         this.inventoryManager = inventoryManager;
 
         ignoreList.add(Material.AIR);
+        ignoreList.add(Material.CAVE_AIR);
         ignoreList.add(Material.LAVA);
         ignoreList.add(Material.WATER);
 
@@ -97,7 +98,7 @@ public class WandEvents implements Listener {
 
                     ItemStack mainHand = nms.getItemInHand(player);
                     Wand wand = wandManager.getWand(mainHand);
-                    Set<Material> ignoreBlockTypes = new HashSet<>(Arrays.asList(Material.AIR, Material.WATER, Material.LAVA));
+                    Set<Material> ignoreBlockTypes = new HashSet<>(Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.WATER, Material.LAVA));
                     Block block = player.getTargetBlock(ignoreBlockTypes, 5);
                     Material blockType = block.getType();
                     Material blockAbove = player.getLocation().add(0, 1, 0).getBlock().getType();

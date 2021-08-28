@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class v_1_17_R1 implements NMS
+public class v_1_17_R1 implements de.False.BuildersWand.version.NMS
 {
     private JavaPlugin plugin;
     private Random random;
