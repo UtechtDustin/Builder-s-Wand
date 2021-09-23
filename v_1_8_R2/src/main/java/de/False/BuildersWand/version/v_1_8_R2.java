@@ -14,11 +14,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class v_1_8_R2 implements NMS
+public class v_1_8_R2 implements de.False.BuildersWand.version.NMS
 {
     @Override
     public void spawnParticle(String particle, Location location){
@@ -125,5 +126,13 @@ public class v_1_8_R2 implements NMS
 
     public Block setBlockData(Block against, Block SelectionBlock) {
         return SelectionBlock;
+    }
+
+    @Override
+    public List<Material> getAirMaterials() {
+        List<Material> airBlocks = new ArrayList<Material>();
+        airBlocks.add(Material.AIR);
+
+        return airBlocks;
     }
 }

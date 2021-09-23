@@ -1,9 +1,7 @@
 package de.False.BuildersWand.version;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -21,7 +19,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class v_1_14_R1 implements NMS
+public class v_1_14_R1 implements de.False.BuildersWand.version.NMS
 {
     private JavaPlugin plugin;
     private Random random;
@@ -139,5 +137,14 @@ public class v_1_14_R1 implements NMS
 
     public Block setBlockData(Block against, Block SelectionBlock) {
         return SelectionBlock;
+    }
+
+    @Override
+    public List<Material> getAirMaterials() {
+        List<Material> airBlocks = new ArrayList<Material>();
+        airBlocks.add(Material.AIR);
+        airBlocks.add(Material.CAVE_AIR);
+
+        return airBlocks;
     }
 }
