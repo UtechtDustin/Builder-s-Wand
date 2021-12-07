@@ -31,4 +31,6 @@ public interface NMS
     String getTag(ItemStack itemStack, String path);
 
     Block setBlockData(Block against, Block SelectionBlock);
+
+    List<Material> getAirMaterials();
 }

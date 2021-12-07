@@ -2,7 +2,7 @@ name: BuildersWand
 author: Wythe
 version: ${project.version}
 main: de.False.BuildersWand.Main
-softdepend: [Lands, ItemsAdder, WorldGuard, Towny, GriefPrevention, Factions, mcMMO, BentoBox, PlotSquared, CoreProtect, SuperiorSkyblock2]
+softdepend: [Lands, ItemsAdder, WorldGuard, Towny, GriefPrevention, Factions, mcMMO, BentoBox, PlotSquared, CoreProtect, SuperiorSkyblock2, Residence]
 api-version: 1.13
 commands:
   builderswand:

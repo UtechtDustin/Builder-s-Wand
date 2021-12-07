@@ -1,10 +1,10 @@
 package de.False.BuildersWand.version;
 
-import net.minecraft.server.v1_13_R1.NBTTagCompound;
+import net.minecraft.nbt.CompoundTag;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -15,12 +15,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
-public class v_1_13_R1 implements de.False.BuildersWand.version.NMS
+public class v_1_18_R1 implements de.False.BuildersWand.version.NMS
 {
     private JavaPlugin plugin;
     private Random random;
 
-    public v_1_13_R1(JavaPlugin plugin)
+    public v_1_18_R1(JavaPlugin plugin)
     {
         this.plugin = plugin;
         this.random = new Random();
@@ -97,15 +97,15 @@ public class v_1_13_R1 implements de.False.BuildersWand.version.NMS
     @Override
     public ItemStack setTag(ItemStack itemStack, String path, String value)
     {
-        net.minecraft.server.v1_13_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound compound = nmsStack.getTag();
+        net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        CompoundTag compound = nmsStack.getTag();
         if (compound == null) {
-            compound = new NBTTagCompound();
+            compound = new CompoundTag();
             nmsStack.setTag(compound);
             compound = nmsStack.getTag();
         }
 
-        compound.setString(path, value);
+        compound.putString(path, value);
         nmsStack.setTag(compound);
         itemStack = CraftItemStack.asBukkitCopy(nmsStack);
 
@@ -115,15 +115,16 @@ public class v_1_13_R1 implements de.False.BuildersWand.version.NMS
     @Override
     public String getTag(ItemStack itemStack, String path)
     {
-        net.minecraft.server.v1_13_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound compound = nmsStack.getTag();
+
+        net.minecraft.world.item.ItemStack nmsStack = org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack.asNMSCopy(itemStack);
+        CompoundTag compound = nmsStack.getTag();
         if (compound == null) {
-            compound = new NBTTagCompound();
+            compound = new CompoundTag();
             nmsStack.setTag(compound);
             compound = nmsStack.getTag();
         }
 
-        if(!compound.hasKey(path))
+        if(!compound.contains(path))
         {
             return null;
         }
@@ -132,6 +133,7 @@ public class v_1_13_R1 implements de.False.BuildersWand.version.NMS
     }
 
     public Block setBlockData(Block against, Block SelectionBlock) {
+        SelectionBlock.setBlockData(against.getBlockData());
         return SelectionBlock;
     }
 

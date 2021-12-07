@@ -13,12 +13,9 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
-public class v_1_12_R1 implements NMS
+public class v_1_12_R1 implements de.False.BuildersWand.version.NMS
 {
     private final JavaPlugin plugin;
     private final Random random;
@@ -136,5 +133,13 @@ public class v_1_12_R1 implements NMS
 
     public Block setBlockData(Block against, Block SelectionBlock) {
         return SelectionBlock;
+    }
+
+    @Override
+    public List<Material> getAirMaterials() {
+        List<Material> airBlocks = new ArrayList<Material>();
+        airBlocks.add(Material.AIR);
+
+        return airBlocks;
     }
 }

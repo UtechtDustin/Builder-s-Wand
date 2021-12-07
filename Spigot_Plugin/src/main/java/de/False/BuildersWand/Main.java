@@ -23,7 +23,7 @@ public class Main extends JavaPlugin
     private final Locales locales = new Locales(this);
     private Config config;
     private ParticleUtil particleUtil;
-    private NMS nms;
+    private de.False.BuildersWand.version.NMS nms;
     private WandManager wandManager;
     private InventoryManager inventoryManager;
     private Update update;
@@ -140,6 +140,9 @@ public class Main extends JavaPlugin
                     break;
                 case "v1_17_R1":
                     nms = new v_1_17_R1(this);
+                    break;
+                case "v1_18_R1":
+                    nms = new v_1_18_R1(this);
                     break;
             }
         } catch (ArrayIndexOutOfBoundsException exn) {
