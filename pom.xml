@@ -6,7 +6,7 @@
 
     <groupId>de.False</groupId>
     <artifactId>Builders_Wand</artifactId>
-    <version>2.21.0</version>
+    <version>2.22.0</version>
     <packaging>pom</packaging>
 
     <properties>

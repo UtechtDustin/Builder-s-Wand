@@ -100,7 +100,14 @@ public class WandEvents implements Listener {
 
                     ItemStack mainHand = nms.getItemInHand(player);
                     Wand wand = wandManager.getWand(mainHand);
-                    Block block = player.getTargetBlock(ignoreBlockTypes, 5);
+
+                    Block block;
+                    try {
+                        block = player.getTargetBlock(ignoreBlockTypes, 5);
+                    } catch (Exception e) {
+                        continue;
+                    }
+
                     Material blockType = block.getType();
                     Material blockAbove = player.getLocation().add(0, 1, 0).getBlock().getType();
                     if (
@@ -112,6 +119,10 @@ public class WandEvents implements Listener {
                     }
 
                     List<Block> lastBlocks = player.getLastTwoTargetBlocks(ignoreBlockTypes, 5);
+                    if (lastBlocks.size() < 2) {
+                        continue;
+                    }
+
                     BlockFace blockFace = lastBlocks.get(1).getFace(lastBlocks.get(0));
                     Block blockNext = block.getRelative(blockFace);
                     if (blockNext == null) {
