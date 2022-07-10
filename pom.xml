@@ -6,7 +6,7 @@
 
     <groupId>de.False</groupId>
     <artifactId>Builders_Wand</artifactId>
-    <version>2.22.0</version>
+    <version>2.24.0</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -33,6 +33,8 @@
         <module>v_1_16_R3</module>
         <module>v_1_17</module>
         <module>v_1_18</module>
+        <module>v_1_18_R2</module>
+        <module>v_1_19</module>
     </modules>
 
     <repositories>

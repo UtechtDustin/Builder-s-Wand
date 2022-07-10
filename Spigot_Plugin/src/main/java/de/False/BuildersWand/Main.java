@@ -144,6 +144,14 @@ public class Main extends JavaPlugin
                 case "v1_18_R1":
                     nms = new v_1_18_R1(this);
                     break;
+                case "v1_18_R2":
+                    nms = new v_1_18_R2(this);
+                    break;
+                case "v1_19_R1":
+                    nms = new v_1_19_R1(this);
+                    break;
+                default:
+                    throw new RuntimeException("Could not found nms for version " + version);
             }
         } catch (ArrayIndexOutOfBoundsException exn) {
             exn.printStackTrace();
